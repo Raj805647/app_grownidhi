@@ -1,3 +1,6 @@
+import 'package:app_grownidhi/routes/app_routes.dart';
+import 'package:app_grownidhi/routes/route_names.dart';
+import 'package:base_module/core/models/base_model.dart';
 import 'package:base_module/providers/base_providers.dart';
 import 'package:flutter/material.dart';
 
@@ -5,7 +8,6 @@ class SignInProvider extends BaseProvider {
   final mobileController = TextEditingController();
   final otpController = TextEditingController();
   bool isLoad = false;
-  bool isOtpSent = false;
 
   void sendOtp(BuildContext context) async {
     Map<String, dynamic> body = {
@@ -14,8 +16,8 @@ class SignInProvider extends BaseProvider {
     };
 
     final response = await authRepository.signInSendOtp(body);
+    print('adjsvhfdsavf=>${response.data}');
     if (response.isSuccess) {
-      isOtpSent = true;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("OTP sent successfully"),
@@ -28,6 +30,44 @@ class SignInProvider extends BaseProvider {
           content: Text(response.error ?? "Failed to send OTP"),
           backgroundColor: Colors.red,
         ),
+      );
+    }
+  }
+
+  Future<void> sendOtpVerify(BuildContext context) async {
+    try {
+      isLoad = true;
+      notifyListeners();
+
+      Map<String, dynamic> body = {
+        "mobile": mobileController.text.trim(),
+        "otp": otpController.text,
+      };
+
+      isLoad = false;
+      final response = await authRepository.signInVerifyOtp(body);
+      print("Login Success → Token: ${response.data}");
+      print("Login Success → Token: ${response.isSuccess}");
+
+      if (response.isSuccess == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(response.data ?? "Login successful")),
+        );
+
+        navigateAndClearStack(context, RouteNames.bottomNavigationScreen);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(response.data ?? "Something went wrong")),
+        );
+      }
+    } catch (e) {
+      isLoad = false;
+      notifyListeners();
+
+      print("Error: $e");
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Server error. Please try again.")),
       );
     }
   }

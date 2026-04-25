@@ -178,7 +178,6 @@ class SignInScreen extends StatelessWidget {
             keyboardType: TextInputType.number,
             maxLength: 10,
               onChanged: (value) {
-                provider.isOtpSent = false; // reset
                 if (value.length == 10) {
                   provider.sendOtp(context);
                 }
@@ -192,7 +191,7 @@ class SignInScreen extends StatelessWidget {
           spaceHeight(20),
           InkWell(
             onTap: () {
-              provider.sendOtp(context);
+              provider.sendOtpVerify(context);
             },
             child: Container(
               width: double.infinity,

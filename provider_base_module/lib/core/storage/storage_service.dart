@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/sign_in_response.dart';
+import '../models/user_response.dart';
 
 class StorageService {
   static const String _userIdKey = 'userId';
