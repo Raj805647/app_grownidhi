@@ -1,6 +1,8 @@
 import 'package:app_grownidhi/routes/app_routes.dart';
 import 'package:app_grownidhi/routes/route_names.dart';
 import 'package:base_module/core/models/base_model.dart';
+import 'package:base_module/core/models/user_response.dart';
+import 'package:base_module/core/storage/storage_service.dart';
 import 'package:base_module/providers/base_providers.dart';
 import 'package:flutter/material.dart';
 
@@ -43,21 +45,26 @@ class SignInProvider extends BaseProvider {
         "mobile": mobileController.text.trim(),
         "otp": otpController.text,
       };
-
-      isLoad = false;
       final response = await authRepository.signInVerifyOtp(body);
-      print("Login Success → Token: ${response.data}");
-      print("Login Success → Token: ${response.isSuccess}");
 
       if (response.isSuccess == true) {
+        final userMap = response.data['data']; // ✅ correct level
+        final user = UserData.fromJson(userMap); // ✅ convert
+
+        StorageService.setUserData(user); // ✅ FIXED
+        StorageService.setUserId(user.id ?? 0);
+        StorageService.setUserType(user.role ?? '');
+        StorageService.setToken(user.token ?? '');
+
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(response.data ?? "Login successful")),
+          const SnackBar(content: Text("Login successful")),
         );
 
         navigateAndClearStack(context, RouteNames.bottomNavigationScreen);
+
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(response.data ?? "Something went wrong")),
+          SnackBar(content: Text(response.data['message'] ?? "Something went wrong")),
         );
       }
     } catch (e) {

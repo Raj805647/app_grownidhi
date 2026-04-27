@@ -1,5 +1,7 @@
 import 'package:app_grownidhi/features/screens/profile/profile_provider.dart';
+import 'package:app_grownidhi/routes/route_names.dart';
 import 'package:app_grownidhi/widget/ui_design.dart';
+import 'package:base_module/core/app_dialog.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
@@ -56,7 +58,7 @@ class ProfileScreen extends StatelessWidget {
 
                 pageEntryAnimation(
                   direction: SlideDirection.bottom,
-                  child: _buildLogoutButton(),
+                  child: _buildLogoutButton(context),
                 ),
               ],
             ),
@@ -308,22 +310,25 @@ class ProfileScreen extends StatelessWidget {
   }
 
   /// ---------------- LOGOUT ----------------
-  Widget _buildLogoutButton() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Colors.red, Colors.redAccent],
+  Widget _buildLogoutButton(BuildContext context) {
+    return InkWell(
+      onTap: ()=> AppDialogs.showLogoutDialog(context, RouteNames.signInScreen),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Colors.red, Colors.redAccent],
+          ),
+          borderRadius: BorderRadius.circular(25),
         ),
-        borderRadius: BorderRadius.circular(25),
-      ),
-      child: const Center(
-        child: Text(
-          "Logout",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+        child: const Center(
+          child: Text(
+            "Logout",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

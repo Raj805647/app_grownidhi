@@ -22,14 +22,24 @@ class StorageService {
   }
 
   //get set userToken
-  static  Future<void> setToken(String token) async {
+  static Future<void> setToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
+
+    print("Saving Token: $token");
+    print("Token Type (set): ${token.runtimeType}");
+
     await prefs.setString(_token, token);
   }
 
   static Future<String?> getUserToken() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_token);
+
+    final token = prefs.getString(_token);
+
+    print("User Token: $token");
+    print("Token Type: ${token.runtimeType}");
+
+    return token;
   }
 
   //get set user Types

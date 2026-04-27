@@ -72,4 +72,6 @@ class BaseProvider with ChangeNotifier {
   void back(BuildContext context) {
     Navigator.pop(context);
   }
+
+
 }

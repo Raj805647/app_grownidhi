@@ -17,11 +17,16 @@ class SplashProvider extends BaseProvider {
       parent: progressController,
       curve: Curves.easeInOut,
     );
-
     progressController.forward();
 
-    Future.delayed(const Duration(seconds: 4), () {
-      navigateAndClearStack(context, RouteNames.onBoardingScreen);
+    Future.delayed(const Duration(seconds: 4), () async{
+      final userToken = await StorageService.getUserToken();
+      print('mbhvdvjvfhdkhdb=> ${userToken}');
+      if(userToken!.isNotEmpty){
+        navigateAndClearStack(context, RouteNames.bottomNavigationScreen);
+      }else {
+        navigateAndClearStack(context, RouteNames.onBoardingScreen);
+      }
     });
     notifyListeners();
   }
