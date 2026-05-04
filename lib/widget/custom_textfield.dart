@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final int maxLength;
   final ValueChanged<String>? onChanged;
+  final Widget? suffixIcon;
 
   const CustomTextField({
     super.key,
@@ -22,6 +23,7 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.maxLength = 50,
     this.onChanged,
+    this.suffixIcon,
   });
 
   @override
@@ -39,6 +41,7 @@ class CustomTextField extends StatelessWidget {
           color: Colors.grey.shade500,
           fontSize: 14,
         ),
+        suffix: suffixIcon,
         prefixIcon: prefixIcon != null
             ? Icon(
           prefixIcon,

@@ -1,4 +1,5 @@
 import 'package:base_module/core/app_config.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../core/network/api_client.dart';
 import '../core/network/base_repository.dart';
@@ -9,32 +10,30 @@ class AuthRepository extends BaseRepository {
 
   AuthRepository(this.apiClient);
 
-  Future<Result<dynamic>> signInSendOtp(Map<String, dynamic> body) {
-    return safeApiCall(() async {
-      final response = await apiClient.postDio(
-        AppConfig.actionSendOtp,
-        body: body,
-      );
-      return response.data;
-    });
-  }
-
-  Future<Result<dynamic>> signInVerifyOtp(Map<String, dynamic> body) {
+  Future<Result<dynamic>> signIn(Map<String, dynamic> body) {
     return safeApiCall(() async {
       final response =
-          await apiClient.postDio(AppConfig.actionVerifyOtp, body: body);
+          await apiClient.postDio(AppConfig.actionSignIn, body: body);
       return response.data;
     });
   }
 
   Future<Result<dynamic>> signUp(Map<String, dynamic> body) {
     return safeApiCall(() async {
+      // 🔹 Log request
+      debugPrint("SIGN UP REQUEST → ${AppConfig.actionSignUp}");
+      debugPrint("BODY → $body");
+
       final response =
-          await apiClient.postDio(AppConfig.actionSignUp, body: body);
+      await apiClient.postDio(AppConfig.actionSignUp, body: body);
+
+      // 🔹 Log response
+      debugPrint("RESPONSE STATUS → ${response.statusCode}");
+      debugPrint("RESPONSE DATA → ${response.data}");
+
       return response.data;
     });
   }
-
   Future<Result<dynamic>> userProfile(String userToken) {
     return safeApiCall(() async {
       final response = await apiClient.getDio(AppConfig.actionProfile,

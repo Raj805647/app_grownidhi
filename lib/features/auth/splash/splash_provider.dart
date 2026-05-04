@@ -22,7 +22,7 @@ class SplashProvider extends BaseProvider {
     Future.delayed(const Duration(seconds: 4), () async{
       final userToken = await StorageService.getUserToken();
       print('mbhvdvjvfhdkhdb=> ${userToken}');
-      if(userToken!.isNotEmpty){
+      if(userToken != null && userToken.isNotEmpty){
         navigateAndClearStack(context, RouteNames.bottomNavigationScreen);
       }else {
         navigateAndClearStack(context, RouteNames.onBoardingScreen);

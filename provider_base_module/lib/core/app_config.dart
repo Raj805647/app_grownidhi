@@ -1,6 +1,6 @@
 class AppConfig {
-  static const String apiTestUrl = "http://192.168.1.27:8000/api";
-  static const String apiProdUrl = "http://192.168.1.27:8000/api";
+  static const String apiTestUrl = "http://192.168.1.12:8000/api";
+  static const String apiProdUrl = "http://192.168.1.12:8000/api";
   static const String apiTestKey = "";
   static const String apiProdKey = "";
   static const reverseAddressApi = "";
@@ -12,8 +12,7 @@ class AppConfig {
   static String get apiKey => isProduction ? apiProdKey : apiTestKey;
 
   //auth api call
-  static const String actionSendOtp = '/sendOtp';
-  static const String actionVerifyOtp = '/verifyOtp';
+  static const String actionSignIn = '/login';
   static const String actionSignUp = '/register';
   static const String actionProfile = '/profile';
   static const String actionUpdateProfile = '/profile/update';

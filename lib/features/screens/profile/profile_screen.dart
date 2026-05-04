@@ -103,16 +103,14 @@ class ProfileScreen extends StatelessWidget {
               beginOffset.dx * (1 - value) * 100,
               beginOffset.dy * (1 - value) * 100,
             ),
-            child: Transform.scale(
-              scale: 0.95 + (value * 0.05),
-              child: child,
-            ),
+            child: Transform.scale(scale: 0.95 + (value * 0.05), child: child),
           ),
         );
       },
       child: child,
     );
   }
+
   /// ---------------- HEADER ----------------
   Widget _buildHeader() {
     return Container(
@@ -159,10 +157,7 @@ class ProfileScreen extends StatelessWidget {
           ),
           spaceHeight(10),
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 6,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
@@ -197,26 +192,17 @@ class ProfileScreen extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-          ),
+          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10),
         ],
       ),
       child: Column(
         children: [
           Text(
             value,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           spaceHeight(4),
-          Text(
-            label,
-            style: const TextStyle(color: Colors.grey),
-          ),
+          Text(label, style: const TextStyle(color: Colors.grey)),
         ],
       ),
     );
@@ -227,49 +213,66 @@ class ProfileScreen extends StatelessWidget {
     return Column(
       children: [
         _expandTile(context, Icons.person, "Account Settings", Colors.blue),
-        _expandTile(context, Icons.notifications, "Notifications", Colors.purple),
+        _expandTile(
+          context,
+          Icons.notifications,
+          "Notifications",
+          Colors.purple,
+        ),
         _expandTile(context, Icons.lock, "Security & Privacy", Colors.green),
       ],
     );
   }
 
-  Widget _expandTile(BuildContext context, IconData icon, String title, Color color) {
+  Widget _expandTile(
+    BuildContext context,
+    IconData icon,
+    String title,
+    Color color,
+  ) {
     return Theme(
       data: Theme.of(context).copyWith(
         dividerColor: Colors.transparent,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
-        ),
-        child: ExpansionTile(
-          tilePadding: const EdgeInsets.symmetric(horizontal: 16),
-          collapsedShape: RoundedRectangleBorder(
+      child: Consumer<ProfileProvider>(
+        builder: (context, provider, child) =>  Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          decoration: BoxDecoration(
+            color: Colors.white,
             borderRadius: BorderRadius.circular(18),
-            side: BorderSide.none,
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-            side: BorderSide.none,
+          child: ExpansionTile(
+            tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+            collapsedShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+              side: BorderSide.none,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+              side: BorderSide.none,
+            ),
+            leading: CircleAvatar(
+              backgroundColor: color,
+              child: Icon(icon, color: Colors.white),
+            ),
+            title: Text(title),
+            children: [
+              _buildTile(Icons.person, "My Profile", () {}),
+              _divider(),
+              _buildTile(Icons.verified_user, "KYC Documents", ()=> provider.navigateTo(context, RouteNames.kycScreen)),
+              _divider(),
+              _buildTile(Icons.lock, "Change Password", () {}),
+              _divider(),
+              _buildTile(Icons.privacy_tip, "Privacy Settings", () {}),
+            ],
           ),
-          leading: CircleAvatar(
-            backgroundColor: color,
-            child: Icon(icon, color: Colors.white),
-          ),
-          title: Text(title),
-          children: const [
-            ListTile(title: Text("Change Password")),
-            Divider(),
-            ListTile(title: Text("Privacy Settings")),
-          ],
         ),
       ),
     );
   }
+
   /// ---------------- QUICK LINKS ----------------
   Widget _buildQuickLinks() {
     return Column(
@@ -279,10 +282,7 @@ class ProfileScreen extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             "Quick Links",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
         spaceHeight(10),
@@ -309,10 +309,51 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildTile(IconData icon, String title, VoidCallback onTap) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Color(0xFF1DBF73).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: Color(0xFF1DBF73)),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            const Icon(Icons.arrow_forward_ios, size: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _divider() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Divider(height: 1),
+    );
+  }
+
   /// ---------------- LOGOUT ----------------
   Widget _buildLogoutButton(BuildContext context) {
     return InkWell(
-      onTap: ()=> AppDialogs.showLogoutDialog(context, RouteNames.signInScreen),
+      onTap: () =>
+          AppDialogs.showLogoutDialog(context, RouteNames.signInScreen),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -325,10 +366,7 @@ class ProfileScreen extends StatelessWidget {
         child: const Center(
           child: Text(
             "Logout",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
       ),

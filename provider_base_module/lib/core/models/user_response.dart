@@ -2,7 +2,7 @@ import 'package:base_module/base_module.dart';
 
 class UserResponse extends BaseModel {
   UserResponse({
-      super.success,
+      super.status,
       super.message,
       this.data,});
 
@@ -13,7 +13,7 @@ class UserResponse extends BaseModel {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['success'] = success;
+    map['status'] = status;
     map['message'] = message;
     if (data != null) {
       map['data'] = data?.toJson();
@@ -27,34 +27,38 @@ class UserData {
   UserData({
       this.id, 
       this.name, 
-      this.mobile, 
       this.email, 
-      this.role, 
-      this.token,});
+      this.type, 
+      this.status, 
+      this.token, 
+      this.createdAt,});
 
   UserData.fromJson(dynamic json) {
     id = json['id'];
     name = json['name'];
-    mobile = json['mobile'];
     email = json['email'];
-    role = json['role'];
+    type = json['type'];
+    status = json['status'];
     token = json['token'];
+    createdAt = json['created_at'];
   }
   int? id;
   String? name;
-  String? mobile;
   String? email;
-  String? role;
+  String? type;
+  bool? status;
   String? token;
+  String? createdAt;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = id;
     map['name'] = name;
-    map['mobile'] = mobile;
     map['email'] = email;
-    map['role'] = role;
+    map['type'] = type;
+    map['status'] = status;
     map['token'] = token;
+    map['created_at'] = createdAt;
     return map;
   }
 

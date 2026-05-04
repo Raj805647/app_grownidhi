@@ -150,7 +150,6 @@ class SignInScreen extends StatelessWidget {
     );
   }
 
-  // ---------------- CARD ----------------
 
   Widget _buildCard(BuildContext context, SignInProvider provider) {
     return Container(
@@ -170,28 +169,35 @@ class SignInScreen extends StatelessWidget {
             "Get Started",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          spaceHeight(20),
+
+          const SizedBox(height: 20),
+
+          /// 🔹 EMAIL FIELD
           CustomTextField(
-            hintText: "Mobile Number",
-            controller: provider.mobileController,
-            prefixIcon: Icons.phone,
-            keyboardType: TextInputType.number,
-            maxLength: 10,
-              onChanged: (value) {
-                if (value.length == 10) {
-                  provider.sendOtp(context);
-                }
-              },
+            hintText: "Email",
+            controller: provider.emailController,
+            prefixIcon: Icons.email,
+            keyboardType: TextInputType.emailAddress,
           ),
-          spaceHeight(20),
-          buildOtpField(
-            controller: provider.otpController,
-            onCompleted: (value) {},
+
+          const SizedBox(height: 15),
+
+          /// 🔹 PASSWORD FIELD
+          CustomTextField(
+            hintText: "Password",
+            controller: provider.passwordController,
+            prefixIcon: Icons.lock,
+            obscureText: true,
           ),
-          spaceHeight(20),
+
+          const SizedBox(height: 20),
+
+          /// 🔹 SUBMIT BUTTON WITH LOADING
           InkWell(
-            onTap: () {
-              provider.sendOtpVerify(context);
+            onTap: provider.isLoading
+                ? null
+                : () {
+              provider.loginWithEmail(context);
             },
             child: Container(
               width: double.infinity,
@@ -203,8 +209,17 @@ class SignInScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
               alignment: Alignment.center,
-              child: const Text(
-                "Continue",
+              child: provider.isLoading
+                  ? const SizedBox(
+                height: 22,
+                width: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.white,
+                ),
+              )
+                  : const Text(
+                "Login",
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -212,11 +227,32 @@ class SignInScreen extends StatelessWidget {
               ),
             ),
           ),
+
+          const SizedBox(height: 15),
+
+          /// 🔹 SIGNUP NAVIGATION
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("Don't have an account? "),
+              GestureDetector(
+                onTap: () {
+                  provider.navigateTo(context, RouteNames.signUpScreen);
+                },
+                child: const Text(
+                  "Sign Up",
+                  style: TextStyle(
+                    color: Color(0xFF1DBF73),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
-
   // ---------------- GOOGLE BUTTON ----------------
 
   Widget _buildGoogleButton() {
