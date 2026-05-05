@@ -15,24 +15,16 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  late SplashProvider provider;
 
   @override
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      provider = context.read<SplashProvider>();
-      provider.init(context, this);
+    Future.microtask(() {
+      context.read<SplashProvider>().init(context, this); // ✅ correct
     });
   }
-
-  @override
-  void dispose() {
-    provider.dispose();
-    super.dispose();
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Consumer<SplashProvider>(

@@ -9,11 +9,11 @@ class BaseProvider with ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
 
-  bool get isLoading => _isLoading;
+  bool get isLoaded => _isLoading;
   String? get errorMessage => _errorMessage;
 
   /// Set loading state
-  void setLoading(bool value) {
+  void setLoad(bool value) {
     _isLoading = value;
     notifyListeners();
   }
@@ -33,13 +33,13 @@ class BaseProvider with ChangeNotifier {
   /// Helper method to handle async calls safely
   Future<void> execute(Future<void> Function() task) async {
     try {
-      setLoading(true);
+      setLoad(true);
       clearError();
       await task();
     } catch (e) {
       setError(e.toString());
     } finally {
-      setLoading(false);
+      setLoad(false);
     }
   }
 

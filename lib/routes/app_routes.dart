@@ -10,6 +10,7 @@ import '../features/screens/add_product_details/add_product_details_screen.dart'
 import '../features/screens/bottom_bar/bottom_bar_screen.dart';
 import '../features/screens/calender/calender_screen.dart';
 import '../features/screens/portfolio/portfolio_screen.dart';
+import '../features/screens/product/product_screen.dart';
 import '../features/screens/product_details/product_details_screen.dart';
 import '../features/screens/profile/profile_screen.dart';
 import 'route_names.dart';
@@ -32,6 +33,7 @@ class AppRoutes {
     RouteNames.calendarScreen: (context) => CalendarScreen(),
     RouteNames.profileScreen: (context) => ProfileScreen(),
     RouteNames.kycScreen: (context) => KycUpdateScreen(),
+    RouteNames.productScreen: (context) => ProductScreen(),
   };
 
 }

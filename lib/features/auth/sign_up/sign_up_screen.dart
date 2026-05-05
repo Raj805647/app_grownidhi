@@ -153,7 +153,7 @@ class SignUpScreen extends StatelessWidget {
 
             spaceHeight(20),
 
-            CustomTextField(
+            customTextField(
               hintText: "Full Name",
               controller: provider.nameController,
               prefixIcon: Icons.person,
@@ -161,7 +161,7 @@ class SignUpScreen extends StatelessWidget {
 
             spaceHeight(15),
 
-            CustomTextField(
+            customTextField(
               hintText: "Email",
               controller: provider.emailController,
               prefixIcon: Icons.email,
@@ -170,7 +170,7 @@ class SignUpScreen extends StatelessWidget {
 
             spaceHeight(15),
 
-            CustomTextField(
+            customTextField(
               hintText: "Mobile Number",
               controller: provider.numberController,
               prefixIcon: Icons.phone,
@@ -180,7 +180,7 @@ class SignUpScreen extends StatelessWidget {
 
             spaceHeight(15),
 
-            CustomTextField(
+            customTextField(
               hintText: "Password",
               controller: provider.passwordController,
               prefixIcon: Icons.lock,
@@ -197,7 +197,7 @@ class SignUpScreen extends StatelessWidget {
 
             spaceHeight(15),
 
-            CustomTextField(
+            customTextField(
               hintText: "Confirm Password",
               controller: provider.confirmPasswordController,
               prefixIcon: Icons.lock_outline,
@@ -260,7 +260,7 @@ class SignUpScreen extends StatelessWidget {
             spaceHeight(25),
 
             InkWell(
-              onTap: provider.isLoad
+              onTap: provider.isLoaded
                   ? null
                   : () {
                 provider.submitRegister(context);
@@ -275,7 +275,7 @@ class SignUpScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 alignment: Alignment.center,
-                child: provider.isLoad
+                child: provider.isLoaded
                     ? const SizedBox(
                   height: 24,
                   width: 24,

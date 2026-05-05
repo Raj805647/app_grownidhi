@@ -13,7 +13,7 @@ class SignUpProvider extends BaseProvider {
   final emailController = TextEditingController();
   final numberController = TextEditingController();
 
-  bool isLoad = false;
+  bool isLoaded = false;
   String selectedType = "individual";
 
 
@@ -39,7 +39,7 @@ class SignUpProvider extends BaseProvider {
 
   Future<void> submitRegister(BuildContext context) async {
     try {
-      isLoad = true;
+      isLoaded = true;
       notifyListeners();
 
       final Map<String, dynamic> bodyData = {
@@ -56,7 +56,7 @@ class SignUpProvider extends BaseProvider {
       print("✅ Success: ${response.isSuccess}");
       print("📥 Response Data: ${response.data}");
 
-      isLoad = false;
+      isLoaded = false;
       notifyListeners();
       if (response.isSuccess == true) {
         final resData = response.data;
@@ -92,7 +92,7 @@ class SignUpProvider extends BaseProvider {
         controllerClear();
       }
     } catch (error, stackTrace) {
-      isLoad = false;
+      isLoaded = false;
       notifyListeners();
       print("❌ Error: $error");
       print("📍 StackTrace: $stackTrace");

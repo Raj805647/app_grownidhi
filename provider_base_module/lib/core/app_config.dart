@@ -1,6 +1,7 @@
 class AppConfig {
   static const String apiTestUrl = "http://192.168.1.12:8000/api";
   static const String apiProdUrl = "http://192.168.1.12:8000/api";
+  static const String imageUrl = "http://192.168.1.12:8000";
   static const String apiTestKey = "";
   static const String apiProdKey = "";
   static const reverseAddressApi = "";
@@ -15,9 +16,7 @@ class AppConfig {
   static const String actionSignIn = '/login';
   static const String actionSignUp = '/register';
   static const String actionProfile = '/profile';
+  static const String actionServiceCategory = '/categories';
+  static const String actionServiceSubsCategory = '/subcategories';
   static const String actionUpdateProfile = '/profile/update';
-  static const String actionCoursesDetails = '/courses';
-  static const String actionCoursesLanguage = '/courses/course_languages';
-  static const String actionCoursesCategory = '/courses/course_categories';
-  static const String actionCoursesLevel = '/courses/course_levels';
 }

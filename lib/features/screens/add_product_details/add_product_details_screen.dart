@@ -37,11 +37,11 @@ class _AddProductDetailsScreenState extends State<AddProductDetailsScreen> {
                   title: "Basic Information",
                   color: Colors.green,
                   children: [
-                    CustomTextField(hintText: "Product Name"),
+                    customTextField(hintText: "Product Name"),
                     spaceHeight(8),
-                    CustomTextField(hintText: "Company/Provider"),
+                    customTextField(hintText: "Company/Provider"),
                     spaceHeight(8),
-                    CustomTextField(hintText: "Policy/Account Number"),
+                    customTextField(hintText: "Policy/Account Number"),
                   ],
                 ),
 
@@ -50,7 +50,7 @@ class _AddProductDetailsScreenState extends State<AddProductDetailsScreen> {
                 _buildSectionCard(
                   title: "Financial Information",
                   color: Colors.blue,
-                  children: [CustomTextField(hintText: "Premium/EMI Amount")],
+                  children: [customTextField(hintText: "Premium/EMI Amount")],
                 ),
 
                 spaceHeight(16),
@@ -59,11 +59,11 @@ class _AddProductDetailsScreenState extends State<AddProductDetailsScreen> {
                   title: "Important Dates",
                   color: Colors.purple,
                   children: [
-                    CustomTextField(hintText: "Start Date"),
+                    customTextField(hintText: "Start Date"),
                     spaceHeight(8),
-                    CustomTextField(hintText: "End Date"),
+                    customTextField(hintText: "End Date"),
                     spaceHeight(8),
-                    CustomTextField(hintText: "Next Payment Date"),
+                    customTextField(hintText: "Next Payment Date"),
                     spaceHeight(8),
                   ],
                 ),

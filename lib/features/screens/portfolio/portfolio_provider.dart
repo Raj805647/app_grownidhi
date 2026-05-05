@@ -1,46 +1,62 @@
 import 'package:base_module/base_module.dart';
-
-import 'package:flutter/material.dart';
+import 'package:base_module/core/models/service_category_response.dart';
+import 'package:base_module/core/models/service_sub_category_response.dart';
 
 class PortfolioProvider extends BaseProvider {
-  final List<String> filters = [
-    "All",
-    "Insurance",
-    "Loans",
-    "Investments",
-  ];
+  bool isLoading = false;
+  bool isSubLoading = false;
+  List<ServiceCategoryData> categoryList = [];
+  List<ServiceSubCategoryData> subCategoryList = [];
 
-  final List<Map<String, dynamic>> products = [
-    {
-      "avatar": "H",
-      "title": "HDFC Life Insurance",
-      "subtitle": "HDFC Life",
-      "amount": "₹12,500",
-      "payment": "15 Mar 2026",
-      "color": Colors.blue,
-    },
-    {
-      "avatar": "H",
-      "title": "Home Loan",
-      "subtitle": "ICICI Bank",
-      "amount": "₹45,000",
-      "payment": "22 Feb 2026",
-      "color": Colors.purple,
-    },
-    {
-      "avatar": "S",
-      "title": "SBI Bluechip Fund",
-      "subtitle": "SBI Mutual Fund",
-      "amount": "₹5,000",
-      "payment": "SIP Active",
-      "color": Colors.green,
-    },
-  ];
+  int selectedFilter = 0;
 
-  String selectedFilter = "All";
-
-  void changeFilter(String value) {
+  void changeFilter(int value) {
     selectedFilter = value;
+    fetchSubCategory(value);
     notifyListeners();
   }
+
+  Future<void> fetchServiceCategory() async {
+    try {
+      isLoading = true;
+      notifyListeners();
+
+      final response = await authRepository.courseCategory();
+
+      if (response.isSuccess == true && response.data != null) {
+        final List data = response.data['data'] ?? [];
+
+        categoryList = data.map((e) => ServiceCategoryData.fromJson(e)).toList();
+      }
+    } catch (error, stackTrace) {
+      print("🔥 Error: $error");
+      print("📍 StackTrace: $stackTrace");
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchSubCategory(int categoryId) async {
+    try {
+      isSubLoading = true;
+      notifyListeners();
+
+      final response = await authRepository.subCategory(categoryId);
+
+      if (response.isSuccess == true && response.data != null) {
+        final List data = response.data['data'] ?? [];
+
+        subCategoryList = data.map((e) => ServiceSubCategoryData.fromJson(e)).toList();
+      }
+    } catch (error, stackTrace) {
+      print("🔥 Error: $error");
+      print("📍 StackTrace: $stackTrace");
+    } finally {
+      isSubLoading = false;
+      notifyListeners();
+    }
+  }
+
+
 }

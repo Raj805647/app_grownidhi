@@ -20,20 +20,13 @@ class AuthRepository extends BaseRepository {
 
   Future<Result<dynamic>> signUp(Map<String, dynamic> body) {
     return safeApiCall(() async {
-      // 🔹 Log request
-      debugPrint("SIGN UP REQUEST → ${AppConfig.actionSignUp}");
-      debugPrint("BODY → $body");
 
       final response =
       await apiClient.postDio(AppConfig.actionSignUp, body: body);
-
-      // 🔹 Log response
-      debugPrint("RESPONSE STATUS → ${response.statusCode}");
-      debugPrint("RESPONSE DATA → ${response.data}");
-
       return response.data;
     });
   }
+
   Future<Result<dynamic>> userProfile(String userToken) {
     return safeApiCall(() async {
       final response = await apiClient.getDio(AppConfig.actionProfile,
@@ -41,6 +34,23 @@ class AuthRepository extends BaseRepository {
             'Accept': 'application/json',
             'Authorization': 'Bearer $userToken'
           });
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> courseCategory() {
+    return safeApiCall(() async {
+      final response =
+      await apiClient.getDio(AppConfig.actionServiceCategory);
+
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> subCategory(int subId) {
+    return safeApiCall(() async {
+      final response =
+      await apiClient.getDio('${AppConfig.actionServiceSubsCategory}/$subId');
       return response.data;
     });
   }
@@ -56,35 +66,5 @@ class AuthRepository extends BaseRepository {
       return response.data;
     });
   }
-
- Future<Result<dynamic>> courseDetails(Map<String,dynamic> queryParameters) {
-    return safeApiCall(() async {
-      final response = await apiClient.getDio(AppConfig.actionCoursesDetails,
-         queryParameters:queryParameters );
-      return response.data;
-    });
-  }
-
- Future<Result<dynamic>> courseCategory() {
-    return safeApiCall(() async {
-      final response = await apiClient.getDio(AppConfig.actionCoursesCategory);
-      return response.data;
-    });
-  }
-
- Future<Result<dynamic>> courseLevel() {
-    return safeApiCall(() async {
-      final response = await apiClient.getDio(AppConfig.actionCoursesLevel);
-      return response.data;
-    });
-  }
-
- Future<Result<dynamic>> courseLanguage() {
-    return safeApiCall(() async {
-      final response = await apiClient.getDio(AppConfig.actionCoursesLanguage);
-      return response.data;
-    });
-  }
-
 
 }

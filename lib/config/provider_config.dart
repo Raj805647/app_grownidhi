@@ -12,6 +12,7 @@ import '../features/screens/add_product/add_product_provider.dart';
 import '../features/screens/add_product_details/add_product_details_provider.dart';
 import '../features/screens/bottom_bar/bottom_bar_provider.dart';
 import '../features/screens/portfolio/portfolio_provider.dart';
+import '../features/screens/product/product_provider.dart';
 import '../features/screens/product_details/product_details_provider.dart';
 
 class ProviderConfig {
@@ -32,6 +33,7 @@ class ProviderConfig {
     ChangeNotifierProvider<CalenderProvider>(create: (_) => CalenderProvider()),
     ChangeNotifierProvider<ProfileProvider>(create: (_) => ProfileProvider()),
     ChangeNotifierProvider<KycUpdateProvider>(create: (_) => KycUpdateProvider()),
+    ChangeNotifierProvider<ProductProvider>(create: (_) => ProductProvider()),
 
   ];
 }

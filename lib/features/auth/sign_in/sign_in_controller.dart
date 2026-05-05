@@ -9,11 +9,11 @@ import 'package:flutter/material.dart';
 class SignInProvider extends BaseProvider {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  bool isLoad = false;
+  bool isLoaded = false;
 
   Future<void> loginWithEmail(BuildContext context) async {
     try {
-      isLoad = true;
+      isLoaded = true;
       notifyListeners();
 
       final body = {
@@ -25,7 +25,7 @@ class SignInProvider extends BaseProvider {
       print('akbdkfbjdsafbdsabf=> ${response.isSuccess}');
       print('akbdkfbjdsafbdsabf=> ${response.data}');
 
-      isLoad = false;
+      isLoaded = false;
       notifyListeners();
       if (response.isSuccess) {
         final userDataMap = response.data['data'];
@@ -44,14 +44,14 @@ class SignInProvider extends BaseProvider {
         // Navigate
       }
     } catch (e) {
-      isLoad = false;
+      isLoaded = false;
       notifyListeners();
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error: $e")),
       );
     } finally {
-      isLoad = false;
+      isLoaded = false;
       notifyListeners();
     }
   }

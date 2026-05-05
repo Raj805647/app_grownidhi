@@ -1,13 +1,7 @@
 import 'package:base_module/base_module.dart';
 import 'package:flutter/material.dart';
+
 class KycUpdateProvider extends BaseProvider {
-
-  bool isLoading = false;
-
-  /// FILES
-  String? panFront, panBack, aadhaarFront, aadhaarBack, selfie;
-
-  /// CONTROLLERS
   final dobController = TextEditingController();
   final panController = TextEditingController();
   final aadhaarController = TextEditingController();
@@ -25,46 +19,45 @@ class KycUpdateProvider extends BaseProvider {
   final accountNumberController = TextEditingController();
   final ifscController = TextEditingController();
   final branchController = TextEditingController();
-
+  bool isLoading = false;
   String? gender;
+
+
+  final Map<String, String?> _images = {};
+
+  /// Get image
+  String? getImagePath(String type) {
+    return _images[type];
+  }
+
+  /// Set image
+  void setImage(String type, String path) {
+    _images[type] = path;
+    notifyListeners();
+  }
 
   void setGender(String? value) {
     gender = value;
     notifyListeners();
   }
 
-  /// FILE PICKER (mock)
-  void pickFile(String type) {
-    // integrate file_picker here
-    switch (type) {
-      case "pan_front":
-        panFront = "file_selected.pdf";
-        break;
-      case "pan_back":
-        panBack = "file_selected.pdf";
-        break;
-      case "aadhaar_front":
-        aadhaarFront = "file_selected.pdf";
-        break;
-      case "aadhaar_back":
-        aadhaarBack = "file_selected.pdf";
-        break;
-      case "selfie":
-        selfie = "image.png";
-        break;
-    }
+
+  /// Remove image
+  void removeImage(String type) {
+    _images[type] = null; // or use remove(type)
     notifyListeners();
   }
 
+
+
+
   Future<void> submitKyc() async {
-    isLoading = true;
     notifyListeners();
 
     // 🔥 API call here
 
     await Future.delayed(const Duration(seconds: 2));
 
-    isLoading = false;
     notifyListeners();
   }
 }

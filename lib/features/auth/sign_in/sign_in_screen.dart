@@ -1,7 +1,6 @@
 import 'package:app_grownidhi/features/auth/sign_in/sign_in_controller.dart';
 import 'package:app_grownidhi/routes/route_names.dart';
 import 'package:flutter/material.dart';
-import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_icons.dart';
@@ -170,31 +169,31 @@ class SignInScreen extends StatelessWidget {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
 
-          const SizedBox(height: 20),
+       spaceHeight(20),
 
           /// 🔹 EMAIL FIELD
-          CustomTextField(
+          customTextField(
             hintText: "Email",
             controller: provider.emailController,
             prefixIcon: Icons.email,
             keyboardType: TextInputType.emailAddress,
           ),
 
-          const SizedBox(height: 15),
+       spaceHeight(15),
 
           /// 🔹 PASSWORD FIELD
-          CustomTextField(
+          customTextField(
             hintText: "Password",
             controller: provider.passwordController,
             prefixIcon: Icons.lock,
             obscureText: true,
           ),
 
-          const SizedBox(height: 20),
+       spaceHeight(20),
 
           /// 🔹 SUBMIT BUTTON WITH LOADING
           InkWell(
-            onTap: provider.isLoading
+            onTap: provider.isLoaded
                 ? null
                 : () {
               provider.loginWithEmail(context);
@@ -209,7 +208,7 @@ class SignInScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
               alignment: Alignment.center,
-              child: provider.isLoading
+              child: provider.isLoaded
                   ? const SizedBox(
                 height: 22,
                 width: 22,
@@ -228,7 +227,7 @@ class SignInScreen extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 15),
+       spaceHeight(15),
 
           /// 🔹 SIGNUP NAVIGATION
           Row(

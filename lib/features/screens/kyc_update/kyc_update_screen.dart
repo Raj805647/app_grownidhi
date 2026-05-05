@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:app_grownidhi/widget/custom_textfield.dart';
+import 'package:base_module/image_file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../widget/help_widget.dart';
 import 'kyc_update_provider.dart';
 
 class KycUpdateScreen extends StatelessWidget {
@@ -11,16 +15,6 @@ class KycUpdateScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
-      appBar: AppBar(
-        title: const Text(
-          "KYC Update",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        foregroundColor: Colors.black87,
-        centerTitle: false,
-      ),
       body: Consumer<KycUpdateProvider>(
         builder: (context, provider, child) {
           return SingleChildScrollView(
@@ -40,24 +34,39 @@ class KycUpdateScreen extends StatelessWidget {
                       bottomRight: Radius.circular(24),
                     ),
                   ),
-                  child: Column(
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "Complete Your KYC",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                      CircleAvatar(
+                        backgroundColor: Colors.white24,
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                          ),
+                          onPressed: () => Navigator.pop(context),
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        "Please verify your identity to unlock all features",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white.withOpacity(0.9),
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Complete Your KYC",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          spaceHeight(8),
+                          Text(
+                            "Please verify your identity to unlock all features",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white.withOpacity(0.9),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -73,32 +82,41 @@ class KycUpdateScreen extends StatelessWidget {
                         title: "Personal Details",
                         icon: Icons.person_outline,
                         children: [
-                          CustomTextField(
+                          customTextField(
                             hintText: "Date of Birth (YYYY-MM-DD)",
                             controller: provider.dobController,
                             prefixIcon: Icons.calendar_today,
+                            isRead: true,
+                            onTap: () => pickDateTime(
+                              context,
+                              provider.dobController,
+                              includeTime: false,
+                            ),
                           ),
-                          const SizedBox(height: 12),
+                          spaceHeight(12),
                           customDropdown(
                             label: "Gender",
                             value: provider.gender,
                             items: ["male", "female"],
                             onChanged: provider.setGender,
                           ),
-                          const SizedBox(height: 12),
-                          CustomTextField(
+                          spaceHeight(12),
+                          customTextField(
                             hintText: "PAN Number",
                             controller: provider.panController,
                             prefixIcon: Icons.credit_card,
+                            maxLength: 10,
                           ),
-                          const SizedBox(height: 12),
-                          CustomTextField(
+                          spaceHeight(12),
+                          customTextField(
                             hintText: "Aadhaar Number",
                             controller: provider.aadhaarController,
                             prefixIcon: Icons.fingerprint,
+                            maxLength: 12,
+                            keyboardType: TextInputType.number,
                           ),
-                          const SizedBox(height: 12),
-                          CustomTextField(
+                          spaceHeight(12),
+                          customTextField(
                             hintText: "Father's Name",
                             controller: provider.fatherController,
                             prefixIcon: Icons.family_restroom,
@@ -106,29 +124,29 @@ class KycUpdateScreen extends StatelessWidget {
                         ],
                       ),
 
-                      const SizedBox(height: 20),
+                      spaceHeight(20),
 
                       /// 🔹 ADDRESS
                       _sectionCard(
                         title: "Address Details",
                         icon: Icons.location_city_outlined,
                         children: [
-                          CustomTextField(
+                          customTextField(
                             hintText: "Address Line 1",
                             controller: provider.address1Controller,
                             prefixIcon: Icons.home,
                           ),
-                          const SizedBox(height: 12),
-                          CustomTextField(
+                          spaceHeight(12),
+                          customTextField(
                             hintText: "Address Line 2",
                             controller: provider.address2Controller,
                             prefixIcon: Icons.home_work,
                           ),
-                          const SizedBox(height: 12),
+                          spaceHeight(12),
                           Row(
                             children: [
                               Expanded(
-                                child: CustomTextField(
+                                child: customTextField(
                                   hintText: "City",
                                   controller: provider.cityController,
                                   prefixIcon: Icons.location_city,
@@ -136,7 +154,7 @@ class KycUpdateScreen extends StatelessWidget {
                               ),
                               const SizedBox(width: 12),
                               Expanded(
-                                child: CustomTextField(
+                                child: customTextField(
                                   hintText: "State",
                                   controller: provider.stateController,
                                   prefixIcon: Icons.map,
@@ -144,20 +162,21 @@ class KycUpdateScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 12),
+                          spaceHeight(12),
                           Row(
                             children: [
                               Expanded(
-                                child: CustomTextField(
+                                child: customTextField(
                                   hintText: "Pincode",
                                   controller: provider.pincodeController,
                                   prefixIcon: Icons.pin_drop,
+                                  maxLength: 6,
                                   keyboardType: TextInputType.number,
                                 ),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
-                                child: CustomTextField(
+                                child: customTextField(
                                   hintText: "Country",
                                   controller: provider.countryController,
                                   prefixIcon: Icons.public,
@@ -168,36 +187,37 @@ class KycUpdateScreen extends StatelessWidget {
                         ],
                       ),
 
-                      const SizedBox(height: 20),
+                      spaceHeight(20),
 
                       /// 🔹 BANK DETAILS
                       _sectionCard(
                         title: "Bank Details",
                         icon: Icons.account_balance_outlined,
                         children: [
-                          CustomTextField(
+                          customTextField(
                             hintText: "Account Holder Name",
                             controller: provider.accountNameController,
                             prefixIcon: Icons.person,
                           ),
-                          const SizedBox(height: 12),
-                          CustomTextField(
+                          spaceHeight(12),
+                          customTextField(
                             hintText: "Bank Name",
                             controller: provider.bankController,
                             prefixIcon: Icons.account_balance,
                           ),
-                          const SizedBox(height: 12),
-                          CustomTextField(
+                          spaceHeight(12),
+                          customTextField(
                             hintText: "Account Number",
                             controller: provider.accountNumberController,
                             prefixIcon: Icons.numbers,
                             keyboardType: TextInputType.number,
+                            maxLength: 13,
                           ),
-                          const SizedBox(height: 12),
+                          spaceHeight(12),
                           Row(
                             children: [
                               Expanded(
-                                child: CustomTextField(
+                                child: customTextField(
                                   hintText: "IFSC Code",
                                   controller: provider.ifscController,
                                   prefixIcon: Icons.code,
@@ -205,7 +225,7 @@ class KycUpdateScreen extends StatelessWidget {
                               ),
                               const SizedBox(width: 12),
                               Expanded(
-                                child: CustomTextField(
+                                child: customTextField(
                                   hintText: "Branch Name",
                                   controller: provider.branchController,
                                   prefixIcon: Icons.business,
@@ -216,92 +236,98 @@ class KycUpdateScreen extends StatelessWidget {
                         ],
                       ),
 
-                      const SizedBox(height: 20),
-
-                      /// 🔹 DOCUMENT UPLOAD SECTION (MOVED TO BOTTOM)
+                      spaceHeight(20),
                       Container(
+                        padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 10,
-                              offset: const Offset(0, 2),
+                              color: Colors.black.withOpacity(0.04),
+                              blurRadius: 20,
+                              offset: const Offset(0, 4),
                             ),
                           ],
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFF1DBF73).withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Icon(
-                                      Icons.upload_file,
-                                      color: Color(0xFF1DBF73),
-                                      size: 20,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  const Text(
-                                    "Upload Documents",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                            // PAN Card Section
+                            _buildSectionHeader(
+                              icon: Icons.credit_card,
+                              title: "PAN Card",
+                              subtitle: "Upload front and back side of your PAN card",
                             ),
-                            const Divider(height: 1),
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Expanded(child: _buildModernImageUpload(
+                                  context: context,
+                                  label: "Front Side",
+                                  type: "pan_front",
+                                )),
+                                const SizedBox(width: 16),
+                                Expanded(child: _buildModernImageUpload(
+                                  context: context,
+                                  label: "Back Side",
+                                  type: "pan_back",
+                                )),
+                              ],
+                            ),
 
-                            // Document upload items
-                            _buildDocumentTile(
-                              title: "PAN Card (Front)",
-                              fileName: provider.panFront,
-                              onTap: () => provider.pickFile("pan_front"),
-                              required: true,
+                            const SizedBox(height: 32),
+
+                            // Aadhaar Card Section
+                            _buildSectionHeader(
+                              icon: Icons.assignment_ind,
+                              title: "Aadhaar Card",
+                              subtitle: "Upload front and back side of your Aadhaar card",
                             ),
-                            _buildDocumentTile(
-                              title: "PAN Card (Back)",
-                              fileName: provider.panBack,
-                              onTap: () => provider.pickFile("pan_back"),
-                              required: true,
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Expanded(child: _buildModernImageUpload(
+                                  context: context,
+                                  label: "Front Side",
+                                  type: "aadhaar_front",
+                                )),
+                                const SizedBox(width: 16),
+                                Expanded(child: _buildModernImageUpload(
+                                  context: context,
+                                  label: "Back Side",
+                                  type: "aadhaar_back",
+                                )),
+                              ],
                             ),
-                            _buildDocumentTile(
-                              title: "Aadhaar Card (Front)",
-                              fileName: provider.aadhaarFront,
-                              onTap: () => provider.pickFile("aadhaar_front"),
-                              required: true,
+
+                            const SizedBox(height: 32),
+
+                            // Selfie Section
+                            _buildSectionHeader(
+                              icon: Icons.camera_alt,
+                              title: "Selfie Verification",
+                              subtitle: "Take a clear selfie holding your ID proof",
                             ),
-                            _buildDocumentTile(
-                              title: "Aadhaar Card (Back)",
-                              fileName: provider.aadhaarBack,
-                              onTap: () => provider.pickFile("aadhaar_back"),
-                              required: true,
-                            ),
-                            _buildDocumentTile(
-                              title: "Selfie with ID Proof",
-                              fileName: provider.selfie,
-                              onTap: () => provider.pickFile("selfie"),
-                              required: true,
+                            const SizedBox(height: 16),
+                            Center(
+                              child: SizedBox(
+                                width: 180,
+                                child: _buildModernImageUpload(
+                                  context: context,
+                                  label: "Take Your Selfie",
+                                  type: "selfie",
+                                  isSelfie: true,
+                                ),
+                              ),
                             ),
                           ],
                         ),
                       ),
 
-                      const SizedBox(height: 30),
 
-                      /// 🔹 SUBMIT BUTTON
+                      spaceHeight(30),
+
                       InkWell(
                         onTap: provider.submitKyc,
                         child: Container(
@@ -321,27 +347,27 @@ class KycUpdateScreen extends StatelessWidget {
                             ],
                           ),
                           alignment: Alignment.center,
-                          child: provider.isLoading
+                          child: provider.isLoaded
                               ? const SizedBox(
-                            height: 24,
-                            width: 24,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            ),
-                          )
+                                  height: 24,
+                                  width: 24,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
                               : const Text(
-                            "Submit KYC",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                                  "Submit KYC",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                         ),
                       ),
 
-                      const SizedBox(height: 20),
+                      spaceHeight(20),
                     ],
                   ),
                 ),
@@ -353,7 +379,6 @@ class KycUpdateScreen extends StatelessWidget {
     );
   }
 
-  /// 🔹 Section Card Widget
   Widget _sectionCard({
     required String title,
     required IconData icon,
@@ -411,86 +436,275 @@ class KycUpdateScreen extends StatelessWidget {
     );
   }
 
-  /// 🔹 Document Tile with Better UI
-  Widget _buildDocumentTile({
+  Widget _buildSectionHeader({
+    required IconData icon,
     required String title,
-    required String? fileName,
-    required VoidCallback onTap,
-    required bool required,
+    required String subtitle,
   }) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: Colors.grey.shade100),
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                const Color(0xFF1DBF73).withOpacity(0.15),
+                const Color(0xFF1DBF73).withOpacity(0.05),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: const Color(0xFF1DBF73), size: 24),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ],
           ),
         ),
-        child: Row(
+      ],
+    );
+  }
+
+  Widget _buildModernImageUpload({
+    required BuildContext context,
+    required String label,
+    required String type,
+    bool isSelfie = false,
+  }) {
+    return Consumer<KycUpdateProvider>(
+      builder: (context, provider, child) {
+        final imagePath = provider.getImagePath(type);
+        return Column(
           children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: fileName != null
-                    ? const Color(0xFF1DBF73).withOpacity(0.1)
-                    : Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                fileName != null ? Icons.check_circle : Icons.cloud_upload,
-                color: fileName != null
-                    ? const Color(0xFF1DBF73)
-                    : Colors.grey.shade600,
-                size: 20,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            // Upload Container
+            GestureDetector(
+              onTap: () async {},
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.grey.shade800,
-                        ),
+                  // Main Container
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    height: isSelfie ? 180 : 140,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade50,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: imagePath != null
+                            ? const Color(0xFF1DBF73).withOpacity(0.5)
+                            : Colors.grey.shade200,
+                        width: imagePath != null ? 2 : 1,
                       ),
-                      if (required) ...[
-                        const SizedBox(width: 4),
-                        Text(
-                          "*",
-                          style: TextStyle(color: Colors.red.shade500),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.02),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
                         ),
                       ],
-                    ],
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    fileName ?? "No file selected",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: fileName != null
-                          ? const Color(0xFF1DBF73)
-                          : Colors.grey.shade500,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: imagePath != null
+                          ? Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Image.file(
+                            File(imagePath),
+                            fit: isSelfie ? BoxFit.cover : BoxFit.contain,
+                          ),
+                          // Overlay gradient
+                          Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.black.withOpacity(0.3),
+                                  Colors.transparent,
+                                  Colors.black.withOpacity(0.2),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                          : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF1DBF73).withOpacity(0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              isSelfie ? Icons.camera_alt : Icons.cloud_upload,
+                              size: 32,
+                              color: const Color(0xFF1DBF73),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            isSelfie ? "Tap to capture" : "Tap to upload",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
+
+                  // Loading Overlay
+                    Container(
+                      height: isSelfie ? 180 : 140,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: Color(0xFF1DBF73),
+                        ),
+                      ),
+                    ),
+
+                  // Badge for uploaded status
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1DBF73),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Icon(
+                          Icons.check,
+                          size: 12,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 14,
-              color: Colors.grey.shade400,
+
+            const SizedBox(height: 12),
+
+            // Label Row with Remove Option
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.image_outlined,
+                      size: 14,
+                      color: Colors.grey.shade600,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                  ],
+                ),
+
+                if (imagePath != null)
+                  GestureDetector(
+                    onTap: () {
+                      _showDeleteConfirmation(context, () {
+                        provider.removeImage(type);
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.delete_outline,
+                            size: 12,
+                            color: Colors.red.shade400,
+                          ),
+                          const SizedBox(width: 2),
+                          Text(
+                            "Remove",
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.red.shade400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ],
+        );
+      },
+    );
+  }
+  void _showDeleteConfirmation(BuildContext context, VoidCallback onDelete) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
         ),
+        title: const Text("Remove Image"),
+        content: const Text("Are you sure you want to remove this image?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              "Cancel",
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              onDelete();
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.red,
+            ),
+            child: const Text("Remove"),
+          ),
+        ],
       ),
     );
   }

@@ -4,75 +4,57 @@ import 'help_widget.dart';
 
 import 'package:flutter/material.dart';
 
-class CustomTextField extends StatelessWidget {
-  final String hintText;
-  final IconData? prefixIcon;
-  final TextEditingController? controller;
-  final TextInputType keyboardType;
-  final bool obscureText;
-  final int maxLength;
-  final ValueChanged<String>? onChanged;
-  final Widget? suffixIcon;
+Widget customTextField({
+  required String hintText,
+  IconData? prefixIcon,
+  TextEditingController? controller,
+  TextInputType keyboardType = TextInputType.text,
+  bool obscureText = false,
+  bool isRead = false,
+  int maxLength = 50,
+  ValueChanged<String>? onChanged,
+  VoidCallback? onTap,
+  Widget? suffixIcon,
+}) {
+  return TextField(
+    controller: controller,
+    keyboardType: keyboardType,
+    obscureText: obscureText,
+    maxLength: maxLength,
+    onChanged: onChanged,
+    readOnly: isRead,
+    onTap: onTap,
+    decoration: InputDecoration(
+      counterText: "",
+      hintText: hintText,
+      hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 14),
 
-  const CustomTextField({
-    super.key,
-    required this.hintText,
-    this.prefixIcon,
-    this.controller,
-    this.keyboardType = TextInputType.text,
-    this.obscureText = false,
-    this.maxLength = 50,
-    this.onChanged,
-    this.suffixIcon,
-  });
+      /// ✅ FIXED (important)
+      suffixIcon: suffixIcon,
 
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      keyboardType: keyboardType,
-      obscureText: obscureText,
-      maxLength: maxLength,
-      onChanged: onChanged,
-      decoration: InputDecoration(
-        counterText: "",
-        hintText: hintText,
-        hintStyle: TextStyle(
-          color: Colors.grey.shade500,
-          fontSize: 14,
-        ),
-        suffix: suffixIcon,
-        prefixIcon: prefixIcon != null
-            ? Icon(
-          prefixIcon,
-          color: Colors.grey.shade600,
-        )
-            : null,
-        filled: true,
-        fillColor: Colors.grey.shade200,
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 18,
-          horizontal: 16,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: Colors.green,
-            width: 1.5,
-          ),
-        ),
+      prefixIcon: prefixIcon != null
+          ? Icon(prefixIcon, color: Colors.grey.shade600)
+          : null,
+
+      filled: true,
+      fillColor: Colors.white,
+      contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
       ),
-    );
-  }
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(color: Colors.green, width: 1.5),
+      ),
+    ),
+  );
 }
+
 Widget customDropdown({
   required String? value,
   required String label,
@@ -83,7 +65,6 @@ Widget customDropdown({
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-
       /// 🔹 Label
       Text(
         label,
@@ -102,10 +83,7 @@ Widget customDropdown({
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: Colors.grey.shade300,
-            width: 1,
-          ),
+          border: Border.all(color: Colors.grey.shade300, width: 1),
         ),
         child: DropdownButtonHideUnderline(
           child: DropdownButton<String>(
@@ -113,15 +91,9 @@ Widget customDropdown({
             value: items.contains(value) ? value : null,
             hint: Text(
               hintText,
-              style: TextStyle(
-                color: Colors.grey.shade400,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.grey.shade400, fontSize: 14),
             ),
-            icon: const Icon(
-              Icons.keyboard_arrow_down,
-              color: Colors.grey,
-            ),
+            icon: const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
             borderRadius: BorderRadius.circular(14),
             dropdownColor: Colors.white,
             style: const TextStyle(
@@ -131,11 +103,9 @@ Widget customDropdown({
             ),
             items: items
                 .map(
-                  (item) => DropdownMenuItem<String>(
-                value: item,
-                child: Text(item),
-              ),
-            )
+                  (item) =>
+                      DropdownMenuItem<String>(value: item, child: Text(item)),
+                )
                 .toList(),
             onChanged: onChanged,
           ),
@@ -145,3 +115,42 @@ Widget customDropdown({
   );
 }
 
+Future<void> pickDateTime(
+  BuildContext context,
+  TextEditingController controller, {
+  bool includeTime = false,
+}) async {
+  // Pick Date
+  final DateTime? date = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(1950),
+    lastDate: DateTime(2100),
+  );
+
+  if (date == null) return;
+
+  DateTime finalDateTime = date;
+
+  if (includeTime) {
+    final TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (time == null) return;
+
+    finalDateTime = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+  }
+
+  // Set value in controller (formatted)
+  controller.text = includeTime
+      ? "${finalDateTime.toLocal()}".split('.')[0]
+      : "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+}
