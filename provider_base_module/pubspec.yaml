@@ -13,3 +13,5 @@ dependencies:
   dio: ^5.4.3
   http: ^1.2.2
   shared_preferences: ^2.2.3
+  image_picker: ^1.2.2
+  file_picker: ^11.0.2

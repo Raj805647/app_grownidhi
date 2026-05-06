@@ -1,3 +1,4 @@
+import 'package:app_grownidhi/features/screens/form_submit_details/form_submit_details_screen.dart';
 import 'package:app_grownidhi/features/screens/home/home_screen.dart';
 import 'package:app_grownidhi/features/screens/kyc_update/kyc_update_screen.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,6 @@ class AppRoutes {
     RouteNames.calendarScreen: (context) => CalendarScreen(),
     RouteNames.profileScreen: (context) => ProfileScreen(),
     RouteNames.kycScreen: (context) => KycUpdateScreen(),
-    RouteNames.productScreen: (context) => ProductScreen(),
   };
 
 }

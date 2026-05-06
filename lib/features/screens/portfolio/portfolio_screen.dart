@@ -1,4 +1,5 @@
 import 'package:app_grownidhi/features/screens/portfolio/portfolio_provider.dart';
+import 'package:app_grownidhi/features/screens/product/product_screen.dart';
 import 'package:app_grownidhi/routes/route_names.dart';
 import 'package:base_module/core/app_config.dart';
 import 'package:base_module/core/models/service_sub_category_response.dart';
@@ -15,7 +16,6 @@ class PortfolioScreen extends StatefulWidget {
 }
 
 class _PortfolioScreenState extends State<PortfolioScreen> {
-  late PortfolioProvider provider;
 
   @override
   void initState() {
@@ -83,7 +83,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                       ),
                                     );
                                   },
-                                  child: _productCard(item, context),
+                                  child: _productCard(item,provider, context),
                                 );
                               },
                             ),
@@ -181,13 +181,9 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
   }
 
 
-  Widget _productCard(ServiceSubCategoryData item, BuildContext context) {
+  Widget _productCard(ServiceSubCategoryData item, PortfolioProvider provider, BuildContext context) {
     return InkWell(
-      onTap: () => provider.navigateTo(
-        context,
-        RouteNames.productDetailScreen,
-        arguments: item,
-      ),
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ProductScreen(item: item),)),
       child: Card(
         elevation: 2,
         margin: const EdgeInsets.symmetric(vertical: 6),

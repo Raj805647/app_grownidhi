@@ -1,5 +1,6 @@
 import 'package:app_grownidhi/features/auth/sign_up/sign_up_provider.dart';
 import 'package:app_grownidhi/features/screens/calender/calender_provider.dart';
+import 'package:app_grownidhi/features/screens/form_submit_details/form_submit_details_provider.dart';
 import 'package:app_grownidhi/features/screens/home/home_provider.dart';
 import 'package:app_grownidhi/features/screens/kyc_update/kyc_update_provider.dart';
 import 'package:app_grownidhi/features/screens/profile/profile_provider.dart';
@@ -34,6 +35,7 @@ class ProviderConfig {
     ChangeNotifierProvider<ProfileProvider>(create: (_) => ProfileProvider()),
     ChangeNotifierProvider<KycUpdateProvider>(create: (_) => KycUpdateProvider()),
     ChangeNotifierProvider<ProductProvider>(create: (_) => ProductProvider()),
+    ChangeNotifierProvider<FormSubmitDetailsProvider>(create: (_) => FormSubmitDetailsProvider()),
 
   ];
 }

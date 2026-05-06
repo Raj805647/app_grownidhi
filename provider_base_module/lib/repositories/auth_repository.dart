@@ -13,58 +13,63 @@ class AuthRepository extends BaseRepository {
   Future<Result<dynamic>> signIn(Map<String, dynamic> body) {
     return safeApiCall(() async {
       final response =
-          await apiClient.postDio(AppConfig.actionSignIn, body: body);
+          await apiClient.postDio(AppConfig.actionSignIn,requiresAuth: false, body: body);
       return response.data;
     });
   }
 
   Future<Result<dynamic>> signUp(Map<String, dynamic> body) {
     return safeApiCall(() async {
-
       final response =
-      await apiClient.postDio(AppConfig.actionSignUp, body: body);
+          await apiClient.postDio(AppConfig.actionSignUp,requiresAuth: false, body: body);
       return response.data;
     });
   }
 
-  Future<Result<dynamic>> userProfile(String userToken) {
+  Future<Result<dynamic>> userProfile() {
     return safeApiCall(() async {
-      final response = await apiClient.getDio(AppConfig.actionProfile,
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $userToken'
-          });
+      final response = await apiClient.getDio(AppConfig.actionProfile);
       return response.data;
     });
   }
 
   Future<Result<dynamic>> courseCategory() {
     return safeApiCall(() async {
-      final response =
-      await apiClient.getDio(AppConfig.actionServiceCategory);
-
+      final response = await apiClient.getDio(AppConfig.actionServiceCategory);
+      print('akdbfkjdsa=> ${response.statusCode}');
+      print('akdbfkjdsa=> ${response.data}');
       return response.data;
     });
   }
 
   Future<Result<dynamic>> subCategory(int subId) {
     return safeApiCall(() async {
-      final response =
-      await apiClient.getDio('${AppConfig.actionServiceSubsCategory}/$subId');
+      final response = await apiClient
+          .getDio('${AppConfig.actionServiceSubsCategory}/$subId');
       return response.data;
     });
   }
 
-    Future<Result<dynamic>> updateProfile(String userToken, Map<String,dynamic> body) {
+  Future<Result<dynamic>> productDetails(int categoryId, int subCategoryId, int pageNo, pageLimit) {
     return safeApiCall(() async {
-      final response = await apiClient.postDio(AppConfig.actionUpdateProfile,
-          body: body,
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $userToken'
-          });
+      final response = await apiClient
+          .getDio('${AppConfig.actionServiceProductDetails}/category_id=$categoryId/subCategory_id=$subCategoryId?page=$pageNo&limit=$pageLimit');
       return response.data;
     });
   }
 
+  Future<Result<dynamic>> formStateDetails(int productId) {
+    return safeApiCall(() async {
+      final response = await apiClient
+          .getDio('${AppConfig.actionFormStateDetails}/product_id=$productId');
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> updateProfile(Map<String, dynamic> body) {
+    return safeApiCall(() async {
+      final response = await apiClient.postDio(AppConfig.actionUpdateProfile,body: body);
+      return response.data;
+    });
+  }
 }

@@ -18,5 +18,7 @@ class AppConfig {
   static const String actionProfile = '/profile';
   static const String actionServiceCategory = '/categories';
   static const String actionServiceSubsCategory = '/subcategories';
+  static const String actionServiceProductDetails = '/products';
+  static const String actionFormStateDetails = '/apply-form';
   static const String actionUpdateProfile = '/profile/update';
 }

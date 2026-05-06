@@ -22,6 +22,9 @@ class PortfolioProvider extends BaseProvider {
       notifyListeners();
 
       final response = await authRepository.courseCategory();
+      print('akdjbfkjbdsakbf=> ${response.isSuccess}');
+      print('akdjbfkjbdsakbf=> ${response.data}');
+      print('akdjbfkjbdsakbf=> ${response.error}');
 
       if (response.isSuccess == true && response.data != null) {
         final List data = response.data['data'] ?? [];
@@ -43,6 +46,9 @@ class PortfolioProvider extends BaseProvider {
       notifyListeners();
 
       final response = await authRepository.subCategory(categoryId);
+      print('akdjbfkjbdsakbf=> ${response.isSuccess}');
+      print('akdjbfkjbdsakbf=> ${response.data}');
+      print('akdjbfkjbdsakbf=> ${response.error}');
 
       if (response.isSuccess == true && response.data != null) {
         final List data = response.data['data'] ?? [];
