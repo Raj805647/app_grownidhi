@@ -12,6 +12,7 @@ Widget customTextField({
   bool obscureText = false,
   bool isRead = false,
   int maxLength = 50,
+  int maxLines = 1,
   ValueChanged<String>? onChanged,
   VoidCallback? onTap,
   Widget? suffixIcon,
@@ -24,6 +25,7 @@ Widget customTextField({
     onChanged: onChanged,
     readOnly: isRead,
     onTap: onTap,
+    maxLines: maxLines,
     decoration: InputDecoration(
       counterText: "",
       hintText: hintText,

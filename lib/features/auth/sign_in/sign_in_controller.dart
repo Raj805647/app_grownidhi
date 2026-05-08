@@ -1,10 +1,10 @@
-import 'package:app_grownidhi/routes/app_routes.dart';
-import 'package:app_grownidhi/routes/route_names.dart';
 import 'package:base_module/core/models/base_model.dart';
 import 'package:base_module/core/models/user_response.dart';
 import 'package:base_module/core/storage/storage_service.dart';
 import 'package:base_module/providers/base_providers.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../routes/route_names.dart';
 
 class SignInProvider extends BaseProvider {
   final emailController = TextEditingController();
@@ -24,6 +24,7 @@ class SignInProvider extends BaseProvider {
       final response = await authRepository.signIn(body);
       print('akbdkfbjdsafbdsabf=> ${response.isSuccess}');
       print('akbdkfbjdsafbdsabf=> ${response.data}');
+      print('akbdkfbjdsafbdsabf=> ${response.error}');
 
       isLoaded = false;
       notifyListeners();
@@ -36,27 +37,37 @@ class SignInProvider extends BaseProvider {
         await StorageService.setUserType(user.type);
         await StorageService.setUserData(user);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Login successful ✅")),
-        );
-        navigateAndClearStack(context, RouteNames.bottomNavigationScreen);
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("Login successful ✅")));
         controllerClear();
-        // Navigate
+        if (user.type == 'individual') {
+          navigateAndClearStack(
+            context,
+            RouteNames.bottomNavigationScreen,
+          ); // Navigate
+        } else {
+          navigateAndClearStack(
+            context,
+            RouteNames.agentBottomNavigationScreen,
+          ); // Navigate
+        }
       }
     } catch (e) {
       isLoaded = false;
       notifyListeners();
       print(e);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
     } finally {
       isLoaded = false;
       notifyListeners();
     }
   }
+
   void controllerClear() {
-    emailController.dispose();
-    passwordController.dispose();
+    emailController.clear();
+    passwordController.clear();
   }
 }

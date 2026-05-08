@@ -1,7 +1,7 @@
 import 'package:base_module/base_module.dart';
 import 'package:flutter/material.dart';
-import '../../../core/utils.dart';
-import '../../../routes/route_names.dart';
+import '../../../../core/utils.dart';
+import '../../../../routes/route_names.dart';
 
 import 'package:flutter/material.dart';
 

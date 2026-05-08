@@ -2,8 +2,8 @@ import 'package:app_grownidhi/routes/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../widget/help_widget.dart';
-import '../../../widget/ui_design.dart';
+import '../../../../widget/help_widget.dart';
+import '../../../../widget/ui_design.dart';
 import 'onboarding_provider.dart';
 
 import 'package:flutter/material.dart';

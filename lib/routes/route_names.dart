@@ -5,7 +5,7 @@ class RouteNames {
   static const String signUpScreen = "/signUpScreen";
   static const String onBoardingScreen = "/onBoardingScreen";
 
-  //others Screens
+  //individual Screens
   static const String bottomNavigationScreen = "/bottomNavigationScreen";
   static const String homeScreen = "/homeScreen";
   static const String profileScreen = '/profileScreen';
@@ -17,5 +17,13 @@ class RouteNames {
   static const String kycScreen = '/kycScreen';
   static const String productScreen = '/productScreen';
   static const String formSubmitDetailsScreen = '/formSubmitDetailsScreen';
+
+  // agent Screen
+  static const String agentBottomNavigationScreen = '/agentBottomNavigationScreen';
+  static const String agentDashBoardScreen = '/agentDashBoardScreen';
+  static const String agentEarningScreen = '/agentEarningScreen';
+  static const String agentPortfolioScreen = '/agentPortfolioScreen';
+  static const String agentReportScreen = '/agentReportScreen';
+  static const String agentMyProfileScreen = '/agentMyProfileScreen';
 
 }

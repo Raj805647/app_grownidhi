@@ -3,7 +3,7 @@ import 'package:app_grownidhi/features/auth/splash/splash_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../widget/help_widget.dart';
+import '../../../../widget/help_widget.dart';
 
 
 class SplashScreen extends StatefulWidget {

@@ -2,11 +2,11 @@ import 'package:app_grownidhi/features/auth/sign_up/sign_up_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/constants/app_images.dart';
-import '../../../widget/custom_textfield.dart';
-import '../../../widget/help_widget.dart';
-import '../../../widget/page_entry_animation.dart';
-import '../../../widget/ui_design.dart';
+import '../../../../core/constants/app_images.dart';
+import '../../../../widget/custom_textfield.dart';
+import '../../../../widget/help_widget.dart';
+import '../../../../widget/page_entry_animation.dart';
+import '../../../../widget/ui_design.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});

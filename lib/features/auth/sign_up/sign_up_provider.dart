@@ -1,3 +1,4 @@
+import 'package:app_grownidhi/core/utils.dart';
 import 'package:app_grownidhi/routes/route_names.dart';
 import 'package:base_module/base_module.dart';
 import 'package:base_module/core/models/user_response.dart';
@@ -73,8 +74,12 @@ class SignUpProvider extends BaseProvider {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Account created successfully 🎉")),
           );
-
+          if(user.type == 'individual'){
           navigateAndClearStack(context, RouteNames.bottomNavigationScreen);
+          }else{
+          navigateAndClearStack(context, RouteNames.agentBottomNavigationScreen);
+          }
+
           controllerClear();
         } else {
           // ❌ API LEVEL FAILURE (like Already Registered)

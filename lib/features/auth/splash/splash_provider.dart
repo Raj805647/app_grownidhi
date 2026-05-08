@@ -1,7 +1,7 @@
 import 'package:base_module/base_module.dart';
 import 'package:flutter/material.dart';
 
-import '../../../routes/route_names.dart';
+import '../../../../routes/route_names.dart';
 
 class SplashProvider extends BaseProvider {
   late AnimationController progressController;
@@ -19,12 +19,23 @@ class SplashProvider extends BaseProvider {
     );
     progressController.forward();
 
-    Future.delayed(const Duration(seconds: 4), () async{
+    Future.delayed(const Duration(seconds: 4), () async {
       final userToken = await StorageService.getUserToken();
+      final userType = await StorageService.getUserType();
       print('mbhvdvjvfhdkhdb=> ${userToken}');
-      if(userToken != null && userToken.isNotEmpty){
-        navigateAndClearStack(context, RouteNames.bottomNavigationScreen);
-      }else {
+      if (userToken != null &&
+          userToken.isNotEmpty &&
+          userType != null &&
+          userType.isNotEmpty) {
+        if (userType == 'Individual') {
+          navigateAndClearStack(context, RouteNames.bottomNavigationScreen);
+        } else  {
+          navigateAndClearStack(
+            context,
+            RouteNames.agentBottomNavigationScreen,
+          );
+        }
+      } else {
         navigateAndClearStack(context, RouteNames.onBoardingScreen);
       }
     });

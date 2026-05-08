@@ -1,65 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerService {
-  static final ImagePicker _picker = ImagePicker();
+  final ImagePicker _picker = ImagePicker();
 
-  static Future<String?> pickImage({bool fromCamera = false}) async {
-    final XFile? image = await _picker.pickImage(
-      source: fromCamera ? ImageSource.camera : ImageSource.gallery,
-      imageQuality: 70,
+  XFile? selectedImage;
+
+  Future<XFile?> pickImage(ImageSource source) async {
+    final pickedFile = await _picker.pickImage(
+      source: source,
+      imageQuality: 20,
     );
 
-    return image?.path;
+    selectedImage = pickedFile;
+    return pickedFile;
   }
-}
 
-class FilePickerService {
-  static Future<String?> pickFile() async {
-    final result = await FilePicker.pickFiles();
-
-    if (result != null && result.files.single.path != null) {
-      return result.files.single.path!;
-    }
-    return null;
+  void clearImage() {
+    selectedImage = null;
   }
-}
 
-
-Future<String?> showPickerDialog(BuildContext context) async {
-  final choice = await showModalBottomSheet<String>(
-    context: context,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (context) {
-      return SafeArea(
-        child: Wrap(
+  Future<void> showImageSourceDialog({
+    required BuildContext context,
+    required Function(XFile? image) onImagePicked,
+  }) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Select Image Source'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(Icons.camera_alt),
-              title: Text("Camera"),
-              onTap: () => Navigator.pop(context, "camera"),
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Gallery'),
+              onTap: () async {
+                Navigator.pop(context);
+
+                final image = await pickImage(ImageSource.gallery);
+                onImagePicked(image);
+              },
             ),
             ListTile(
-              leading: Icon(Icons.photo),
-              title: Text("Gallery"),
-              onTap: () => Navigator.pop(context, "gallery"),
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Camera'),
+              onTap: () async {
+                Navigator.pop(context);
+
+                final image = await pickImage(ImageSource.camera);
+                onImagePicked(image);
+              },
             ),
           ],
         ),
-      );
-    },
-  );
-
-  if (choice == null) return null;
-
-  if (choice == "camera") {
-    return await ImagePickerService.pickImage(fromCamera: true);
-  } else if (choice == "gallery") {
-    return await ImagePickerService.pickImage();
-  } else {
-    return await FilePickerService.pickFile();
+      ),
+    );
   }
 }

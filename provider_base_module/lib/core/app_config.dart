@@ -20,5 +20,7 @@ class AppConfig {
   static const String actionServiceSubsCategory = '/subcategories';
   static const String actionServiceProductDetails = '/products';
   static const String actionFormStateDetails = '/apply-form';
+  static const String actionPolicyDetails = '/policy-details';
   static const String actionUpdateProfile = '/profile/update';
+  static const String actionSubmitFormDetails = '/individualKycAddOrUpdate';
 }

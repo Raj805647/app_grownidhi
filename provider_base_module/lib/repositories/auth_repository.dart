@@ -12,8 +12,16 @@ class AuthRepository extends BaseRepository {
 
   Future<Result<dynamic>> signIn(Map<String, dynamic> body) {
     return safeApiCall(() async {
-      final response =
-          await apiClient.postDio(AppConfig.actionSignIn,requiresAuth: false, body: body);
+      debugPrint("SIGN IN REQUEST: $body");
+
+      final response = await apiClient.postDio(
+        AppConfig.actionSignIn,
+        requiresAuth: false,
+        body: body,
+      );
+
+      debugPrint("SIGN IN RESPONSE: ${response.data}");
+
       return response.data;
     });
   }
@@ -66,9 +74,24 @@ class AuthRepository extends BaseRepository {
     });
   }
 
+  Future<Result<dynamic>> policyDetails() {
+    return safeApiCall(() async {
+      final response = await apiClient
+          .getDio(AppConfig.actionPolicyDetails);
+      return response.data;
+    });
+  }
+
   Future<Result<dynamic>> updateProfile(Map<String, dynamic> body) {
     return safeApiCall(() async {
       final response = await apiClient.postDio(AppConfig.actionUpdateProfile,body: body);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> submitFormDetails(Map<String, dynamic> body) {
+    return safeApiCall(() async {
+      final response = await apiClient.postDio(AppConfig.actionSubmitFormDetails,body: body, isFormData: true);
       return response.data;
     });
   }
