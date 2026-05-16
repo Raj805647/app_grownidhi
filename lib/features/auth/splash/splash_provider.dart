@@ -27,9 +27,9 @@ class SplashProvider extends BaseProvider {
           userToken.isNotEmpty &&
           userType != null &&
           userType.isNotEmpty) {
-        if (userType == 'Individual') {
+        if (userType == 'individual') {
           navigateAndClearStack(context, RouteNames.bottomNavigationScreen);
-        } else  {
+        } else if(userType == 'agent') {
           navigateAndClearStack(
             context,
             RouteNames.agentBottomNavigationScreen,

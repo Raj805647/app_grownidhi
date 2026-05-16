@@ -7,9 +7,24 @@ import 'package:provider/provider.dart';
 import '../../../../routes/route_names.dart';
 import 'agent_dashboard_provider.dart';
 
-class AgentDashboardScreen extends StatelessWidget {
+class AgentDashboardScreen extends StatefulWidget {
   AgentDashboardScreen({super.key});
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  State<AgentDashboardScreen> createState() => _AgentDashboardScreenState();
+}
+
+class _AgentDashboardScreenState extends State<AgentDashboardScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    Future.microtask(() {
+      context.read<AgentDashboardProvider>().fetchAgentDashboard();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AgentDashboardProvider>();
@@ -18,42 +33,37 @@ class AgentDashboardScreen extends StatelessWidget {
       drawer: CustomDrawer.build(context),
       body: Stack(
         children: [
-          // AppGradientBackground(),
+          AppGradientBackground(),
           RefreshIndicator(
             onRefresh: () => provider.fetchDashboardData(),
-            child: CustomScrollView(
-              slivers: [
-                _buildAppBar(context),
-                if (provider.isLoading)
-                  const SliverFillRemaining(
-                    child: Center(child: CircularProgressIndicator()),
-                  )
-                else if (provider.error != null)
-                  SliverFillRemaining(child: _buildErrorWidget(provider.error!))
-                else if (provider.dashboardData != null)
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      const SizedBox(height: 8),
-                      _buildSummaryCards(provider.dashboardData!.summaryCards),
-                      const SizedBox(height: 24),
-                      _buildQuickActions(provider, context, provider.dashboardData!.quickActions),
-                      const SizedBox(height: 24),
-                      _buildUpcomingRenewals(
-                        provider.dashboardData!.upcomingRenewals,
-                      ),
-                      const SizedBox(height: 24),
-                      _buildPendingCommissions(
-                        provider.dashboardData!.pendingCommissions,
-                      ),
-                      const SizedBox(height: 24),
-                      _buildNotifications(
-                        provider.dashboardData!.notifications,
-                        provider,
-                      ),
-                      const SizedBox(height: 80),
-                    ]),
-                  ),
-              ],
+            child: Consumer<AgentDashboardProvider>(
+              builder: (context, provider, child) =>  CustomScrollView(
+                slivers: [
+                  _buildAppBar(context),
+                    SliverList(
+                      delegate: SliverChildListDelegate([
+                        const SizedBox(height: 8),
+                        _buildSummaryCards(provider),
+                       /* const SizedBox(height: 24),
+                        _buildQuickActions(provider, context, provider.dashboardData!.quickActions),
+                        const SizedBox(height: 24),
+                        _buildUpcomingRenewals(
+                          provider.dashboardData!.upcomingRenewals,
+                        ),
+                        const SizedBox(height: 24),
+                        _buildPendingCommissions(
+                          provider.dashboardData!.pendingCommissions,
+                        ),
+                        const SizedBox(height: 24),
+                        _buildNotifications(
+                          provider.dashboardData!.notifications,
+                          provider,
+                        ),*/
+                        const SizedBox(height: 80),
+                      ]),
+                    ),
+                ],
+              ),
             ),
           ),
         ],
@@ -139,104 +149,181 @@ class AgentDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryCards(List<SummaryCard> cards) {
+  Widget _buildSummaryCards(AgentDashboardProvider provider) {
+    final data = provider.agentDashboardData;
+
     return SizedBox(
-      height: 120,
-      child: ListView.builder(
+      height: 130,
+
+      child: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: cards.length,
-        itemBuilder: (context, index) {
-          final card = cards[index];
-          return Container(
-            width: 200,
-            margin: const EdgeInsets.only(right: 12),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  card.color.withOpacity(0.1),
-                  card.color.withOpacity(0.05),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: card.color.withOpacity(0.2)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(card.icon, color: card.color, size: 24),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: card.trend == Trend.up
-                              ? Colors.green.shade50
-                              : Colors.red.shade50,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              card.trend == Trend.up
-                                  ? Icons.trending_up
-                                  : Icons.trending_down,
-                              size: 12,
-                              color: card.trend == Trend.up
-                                  ? Colors.green
-                                  : Colors.red,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              card.change,
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                color: card.trend == Trend.up
-                                    ? Colors.green
-                                    : Colors.red,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+
+        children: [
+          _buildSummaryCard(
+            title: "Clients",
+            value: "${data.totalClients ?? 0}",
+            icon: Icons.people_alt_outlined,
+            color: const Color(0xFF3B82F6),
+            change: "+12%",
+            isUp: true,
+          ),
+
+          _buildSummaryCard(
+            title: "Commission",
+            value: "₹${data.totalCommission ?? 0}",
+            icon: Icons.account_balance_wallet_outlined,
+            color: const Color(0xFF00C896),
+            change: "+8%",
+            isUp: true,
+          ),
+
+          _buildSummaryCard(
+            title: "Policies",
+            value: "${data.totalPolicies ?? 0}",
+            icon: Icons.description_outlined,
+            color: const Color(0xFFFFB020),
+            change: "-2%",
+            isUp: false,
+          ),
+
+          _buildSummaryCard(
+            title: "Earnings",
+            value: "₹${data.totalEarning ?? 0}",
+            icon: Icons.trending_up,
+            color: const Color(0xFF7C3AED),
+            change: "+18%",
+            isUp: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSummaryCard({
+    required String title,
+    required String value,
+    required IconData icon,
+    required Color color,
+    required String change,
+    required bool isUp,
+  }) {
+    return Container(
+      width: 210,
+      margin: const EdgeInsets.only(right: 14),
+
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xFF0D1B2A),
+            color.withOpacity(0.85),
+          ],
+        ),
+
+        borderRadius: BorderRadius.circular(24),
+
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.25),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+              children: [
+                CircleAvatar(
+                  radius: 22,
+                  backgroundColor: Colors.white12,
+
+                  child: Icon(
+                    icon,
+                    color: Colors.white,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+
+                  decoration: BoxDecoration(
+                    color: isUp
+                        ? Colors.greenAccent.withOpacity(0.15)
+                        : Colors.red.withOpacity(0.15),
+
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+
+                  child: Row(
                     children: [
+                      Icon(
+                        isUp
+                            ? Icons.trending_up
+                            : Icons.trending_down,
+
+                        size: 14,
+
+                        color: isUp
+                            ? Colors.greenAccent
+                            : Colors.redAccent,
+                      ),
+
+                      const SizedBox(width: 4),
+
                       Text(
-                        card.title,
+                        change,
+
                         style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        card.value,
-                        style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 11,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A1A1A),
+
+                          color: isUp
+                              ? Colors.greenAccent
+                              : Colors.redAccent,
                         ),
                       ),
                     ],
                   ),
-                ],
+                ),
+              ],
+            ),
+
+            const Spacer(),
+
+            Text(
+              title,
+
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 11,
               ),
             ),
-          );
-        },
+
+            Text(
+              value,
+
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

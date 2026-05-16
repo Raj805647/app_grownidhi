@@ -20,28 +20,42 @@ class ApiClient {
   }
 
   Future<Response> postDio(
-    String endpoint, {
-    dynamic body,
-    Map<String, dynamic>? headers,
-    Map<String, dynamic>? queryParameters,
-    bool isFormData = false,
-    bool requiresAuth = true,
-  }) async {
-    final data = isFormData && body is Map<String, dynamic>
-        ? FormData.fromMap(body)
-        : body;
+      String endpoint, {
+        dynamic body,
+        Map<String, dynamic>? headers,
+        Map<String, dynamic>? queryParameters,
+        bool isFormData = false,
+        bool requiresAuth = true,
+      }) async {
+    try {
+      final data = isFormData && body is Map<String, dynamic>
+          ? FormData.fromMap(body)
+          : body;
 
-    final updatedHeaders = await _attachAuthHeader(
-      headers,
-      requiresAuth: requiresAuth,
-    );
+      final updatedHeaders = await _attachAuthHeader(
+        headers,
+        requiresAuth: requiresAuth,
+      );
 
-    return await dio.post(
-      endpoint,
-      data: data,
-      queryParameters: queryParameters,
-      options: Options(headers: updatedHeaders),
-    );
+      print("ENDPOINT: $endpoint");
+      print("BODY: $body");
+      print("HEADERS: $updatedHeaders");
+
+      final response = await dio.post(
+        endpoint,
+        data: data,
+        queryParameters: queryParameters,
+        options: Options(headers: updatedHeaders),
+      );
+
+      print("RESPONSE: ${response.data}");
+
+      return response;
+    } on DioException catch (e) {
+      print("ERROR STATUS: ${e.response?.statusCode}");
+      print("ERROR DATA: ${e.response?.data}");
+      rethrow;
+    }
   }
 
   Future<Response> getDio(

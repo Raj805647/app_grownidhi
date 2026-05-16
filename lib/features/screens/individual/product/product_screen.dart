@@ -23,8 +23,8 @@ class _ProductScreenState extends State<ProductScreen> {
     super.initState();
     Future.microtask(() {
       context.read<ProductProvider>().fetchSubCategory(
-        widget.item.id ?? 0,
         widget.item.categoryId ?? 0,
+        widget.item.id ?? 0,
       );
     });
   }
@@ -111,7 +111,7 @@ class _ProductScreenState extends State<ProductScreen> {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  FormSubmitDetailsScreen(id: product.id ?? 0),
+                  FormSubmitDetailsScreen(productDetails: product),
             ),
           );
         },

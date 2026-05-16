@@ -28,8 +28,8 @@ class AuthRepository extends BaseRepository {
 
   Future<Result<dynamic>> signUp(Map<String, dynamic> body) {
     return safeApiCall(() async {
-      final response =
-          await apiClient.postDio(AppConfig.actionSignUp,requiresAuth: false, body: body);
+      final response = await apiClient.postDio(AppConfig.actionSignUp,
+          requiresAuth: false, body: body);
       return response.data;
     });
   }
@@ -58,10 +58,11 @@ class AuthRepository extends BaseRepository {
     });
   }
 
-  Future<Result<dynamic>> productDetails(int categoryId, int subCategoryId, int pageNo, pageLimit) {
+  Future<Result<dynamic>> productDetails(
+      int categoryId, int subCategoryId, int pageNo, pageLimit) {
     return safeApiCall(() async {
-      final response = await apiClient
-          .getDio('${AppConfig.actionServiceProductDetails}/category_id=$categoryId/subCategory_id=$subCategoryId?page=$pageNo&limit=$pageLimit');
+      final response = await apiClient.getDio(
+          '${AppConfig.actionServiceProductDetails}/category_id=$categoryId/subCategory_id=$subCategoryId?page=$pageNo&limit=$pageLimit');
       return response.data;
     });
   }
@@ -76,22 +77,50 @@ class AuthRepository extends BaseRepository {
 
   Future<Result<dynamic>> policyDetails() {
     return safeApiCall(() async {
-      final response = await apiClient
-          .getDio(AppConfig.actionPolicyDetails);
+      final response = await apiClient.getDio(AppConfig.actionPolicyDetails);
       return response.data;
     });
   }
 
   Future<Result<dynamic>> updateProfile(Map<String, dynamic> body) {
     return safeApiCall(() async {
-      final response = await apiClient.postDio(AppConfig.actionUpdateProfile,body: body);
+      final response =
+          await apiClient.postDio(AppConfig.actionUpdateProfile, body: body);
       return response.data;
     });
   }
 
   Future<Result<dynamic>> submitFormDetails(Map<String, dynamic> body) {
     return safeApiCall(() async {
-      final response = await apiClient.postDio(AppConfig.actionSubmitFormDetails,body: body, isFormData: true);
+      final response = await apiClient.postDio(
+          AppConfig.actionSubmitFormDetails,
+          body: body,
+          isFormData: true);
+      return response.data;
+    });
+  }
+
+  // Agent auth repository
+  Future<Result<dynamic>> agentDashboard() {
+    return safeApiCall(() async {
+      final response = await apiClient.getDio(AppConfig.actionAgentDashboard);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> agentProfile() {
+    return safeApiCall(() async {
+      final response = await apiClient.getDio(AppConfig.actionAgentProfile);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> agentUpdateProfile(Map<String, dynamic> data) {
+    return safeApiCall(() async {
+      final response = await apiClient.postDio(
+          AppConfig.actionUpdateAgentProfile,
+          body: data,
+          isFormData: true);
       return response.data;
     });
   }

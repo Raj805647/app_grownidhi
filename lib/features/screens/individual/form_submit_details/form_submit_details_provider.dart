@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:base_module/core/models/service_products_response.dart';
 import 'package:dio/dio.dart';
 
 import 'package:base_module/base_module.dart';
@@ -95,7 +96,7 @@ class FormSubmitDetailsProvider extends BaseProvider{
 
     notifyListeners();
   }
-  Future<void> getFormValues(BuildContext context) async {
+  Future<void> getFormValues(BuildContext context, ServiceProductsData productDetails) async {
     try {
       Map<String, dynamic> formValues = {};
 
@@ -137,16 +138,17 @@ class FormSubmitDetailsProvider extends BaseProvider{
         // Add values to request body
         switch (fieldType) {
           case "image":
-            if (value != null) {
+            if (value != null && value is XFile) {
+
               final file = await MultipartFile.fromFile(
                 value.path,
-                filename: value.path.split('/').last,
+                filename: value.name,
               );
 
-              formValues[fieldName] = file;
+              formValues[fieldName] = value.path;
 
-              print("Image Path : ${value.path}");
-              print("Image Name : ${value.path.split('/').last}");
+              print("Image Path => ${value.path}");
+              print("Image Name => ${value.name}");
             }
             break;
 
@@ -161,6 +163,9 @@ class FormSubmitDetailsProvider extends BaseProvider{
       formValues.forEach((key, value) {
         print("$key : $value");
       });
+      formValues["product_id"] = productDetails.id ?? 0;
+      formValues["service_category_id"] = productDetails.serviceId ?? 0;
+      formValues["service_subcategory_id"] = productDetails.serviceTypeId ?? 0;
 
       // Loader start
       isLoading = true;

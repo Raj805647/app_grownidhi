@@ -12,6 +12,7 @@ import '../features/auth/sign_in/sign_in_screen.dart';
 import '../features/auth/sign_up/sign_up_screen.dart';
 import '../features/auth/splash/splash_screen.dart';
 import '../features/screens/agent/agent_my_profile/agent_my_profile_screen.dart';
+import '../features/screens/agent/agent_my_profile_edit/agent_my_profile_edit_screen.dart';
 import '../features/screens/individual/add_product/add_product_screen.dart';
 import '../features/screens/individual/add_product_details/add_product_details_screen.dart';
 import '../features/screens/individual/all_service/all_service_screen.dart';
@@ -48,6 +49,7 @@ class AppRoutes {
     RouteNames.agentPortfolioScreen: (context) => AgentPortfolioScreen(),
     RouteNames.agentReportScreen: (context) => AgentReportScreen(),
     RouteNames.agentMyProfileScreen: (context) => AgentMyProfileScreen(),
+    RouteNames.agentMyProfileEditScreen: (context) => AgentMyProfileEditScreen(),
 
   };
 

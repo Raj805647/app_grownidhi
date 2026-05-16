@@ -4,14 +4,15 @@ import 'package:app_grownidhi/features/screens/individual/form_submit_details/fo
 import 'package:app_grownidhi/widget/custom_textfield.dart';
 import 'package:app_grownidhi/widget/ui_design.dart';
 import 'package:base_module/core/models/form_state_details_response.dart';
+import 'package:base_module/core/models/service_products_response.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../widget/custom_appbat.dart';
 
 class FormSubmitDetailsScreen extends StatefulWidget {
-  final int id;
-  const FormSubmitDetailsScreen({super.key, required this.id});
+  final ServiceProductsData productDetails;
+  const FormSubmitDetailsScreen({super.key, required this.productDetails});
 
   @override
   State<FormSubmitDetailsScreen> createState() =>
@@ -25,7 +26,7 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
 
     Future.microtask(() {
       context.read<FormSubmitDetailsProvider>().fetchFormStateDetails(
-        widget.id,
+        widget.productDetails.id ?? 0,
       );
     });
   }
@@ -44,126 +45,124 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
             const AppGradientBackground(),
 
             /// FORM UI
-        provider.isLoading
-
-            ? const Center(
-          child: CircularProgressIndicator(),
-        )
-
-            : provider.formDataList.isEmpty
-
-            ? const Center(
-          child: Text(
-            'Data Not Available',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-            ),
-          ),
-        )
-
-            : SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 18,vertical: 50),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-
-              /// TITLE
-              const Text(
-                "Fill Your Details",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
-              Text(
-                "Please complete the form below",
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.white.withOpacity(0.8),
-                ),
-              ),
-
-              const SizedBox(height: 25),
-
-              /// FORM CONTAINER
-              Container(
-                padding: const EdgeInsets.all(18),
-
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.12),
-
-                  borderRadius: BorderRadius.circular(28),
-
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.2),
-                  ),
-
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
-                      blurRadius: 15,
-                      offset: const Offset(0, 8),
+            provider.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : provider.formDataList.isEmpty
+                ? const Center(
+                    child: Text(
+                      'Data Not Available',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
-                  ],
-                ),
+                  )
+                : SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 50,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
 
-                child: Column(
-                  children: List.generate(
-                    provider.formDataList.length,
-                        (index) {
-                      final field = provider.formDataList[index];
+                        /// TITLE
+                        const Text(
+                          "Fill Your Details",
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
 
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 18),
-                        child: _buildField(context, provider, field),
-                      );
-                    },
-                  ),
-                ),
-              ),
+                        const SizedBox(height: 8),
 
-              const SizedBox(height: 30),
+                        Text(
+                          "Please complete the form below",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
+                        ),
 
-              /// SUBMIT BUTTON
-              provider.formDataList.isNotEmpty
-                  ? SizedBox(
-                width: double.infinity,
-                height: 58,
+                        const SizedBox(height: 25),
 
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: const Color(0xFF2575FC),
+                        /// FORM CONTAINER
+                        Container(
+                          padding: const EdgeInsets.all(18),
 
-                    elevation: 10,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.12),
 
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
+                            borderRadius: BorderRadius.circular(28),
+
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.2),
+                            ),
+
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.08),
+                                blurRadius: 15,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+
+                          child: Column(
+                            children: List.generate(
+                              provider.formDataList.length,
+                              (index) {
+                                final field = provider.formDataList[index];
+
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 18),
+                                  child: _buildField(context, provider, field),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        /// SUBMIT BUTTON
+                        provider.formDataList.isNotEmpty
+                            ? SizedBox(
+                                width: double.infinity,
+                                height: 58,
+
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    foregroundColor: const Color(0xFF2575FC),
+
+                                    elevation: 10,
+
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18),
+                                    ),
+                                  ),
+
+                                  onPressed: () {
+                                    provider.getFormValues(
+                                      context,
+                                      widget.productDetails,
+                                    );
+                                  },
+
+                                  child: const Text(
+                                    "Submit Form",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : SizedBox.shrink(),
+                      ],
                     ),
                   ),
-
-                  onPressed: () {
-                  provider.getFormValues(context);
-                  },
-
-                  child: const Text(
-                    "Submit Form",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              )
-                  : SizedBox.shrink(),],
-          ),
-        ),
           ],
         ),
       ),
@@ -178,12 +177,16 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
     switch (field.fieldType) {
       /// TEXT
       case "text":
-        return customTextField(hintText: field.label ?? '');
+        return customTextField(
+          hintText: field.label ?? '',
+          controller: provider.controllers[field.fieldName],
+        );
 
       /// NUMBER
       case "number":
         return customTextField(
           hintText: field.label ?? '',
+          controller: provider.controllers[field.fieldName],
           keyboardType: TextInputType.number,
         );
 
@@ -196,7 +199,6 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
           suffixIcon: const Icon(Icons.calendar_month),
 
           onTap: () async {
-
             DateTime? pickedDate = await showDatePicker(
               context: context,
               firstDate: DateTime(2000),
@@ -205,7 +207,6 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
             );
 
             if (pickedDate != null) {
-
               String formattedDate =
                   "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
 
@@ -217,9 +218,14 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
             }
           },
         );
+
       /// TEXTAREA
       case "textarea":
-        return customTextField(hintText: field.label ?? '',maxLines: 3);
+        return customTextField(
+          hintText: field.label ?? '',
+          controller: provider.controllers[field.fieldName],
+          maxLines: 3,
+        );
 
       /// SELECT
       case "select":
@@ -230,20 +236,15 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
           value: provider.selectedDropdown[field.fieldName],
 
           /// Dropdown items
-          items: field.options is List
-              ? List<String>.from(field.options)
-              : [],
+          items: field.options is List ? List<String>.from(field.options) : [],
 
           onChanged: (value) {
-
-            provider.setDropdownValue(
-              field.fieldName ?? '',
-              value,
-            );
+            provider.setDropdownValue(field.fieldName ?? '', value);
 
             print("Selected => $value");
           },
         );
+
       /// RADIO
       case "radio":
         return Container(

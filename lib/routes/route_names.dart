@@ -25,5 +25,6 @@ class RouteNames {
   static const String agentPortfolioScreen = '/agentPortfolioScreen';
   static const String agentReportScreen = '/agentReportScreen';
   static const String agentMyProfileScreen = '/agentMyProfileScreen';
+  static const String agentMyProfileEditScreen = '/agentMyProfileEditScreen';
 
 }

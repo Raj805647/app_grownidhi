@@ -1,6 +1,6 @@
 class AppConfig {
-  static const String apiTestUrl = "http://192.168.1.12:8000/api";
-  static const String apiProdUrl = "http://192.168.1.12:8000/api";
+  static const String apiTestUrl = "http://192.168.1.11:8000/api";
+  static const String apiProdUrl = "http://192.168.1.11:8000/api";
   static const String imageUrl = "http://192.168.1.12:8000";
   static const String apiTestKey = "";
   static const String apiProdKey = "";
@@ -15,6 +15,8 @@ class AppConfig {
   //auth api call
   static const String actionSignIn = '/login';
   static const String actionSignUp = '/register';
+
+  //individual api endpoints
   static const String actionProfile = '/profile';
   static const String actionServiceCategory = '/categories';
   static const String actionServiceSubsCategory = '/subcategories';
@@ -23,4 +25,9 @@ class AppConfig {
   static const String actionPolicyDetails = '/policy-details';
   static const String actionUpdateProfile = '/profile/update';
   static const String actionSubmitFormDetails = '/individualKycAddOrUpdate';
+
+  // agents api endpoints
+  static const String actionAgentDashboard = '/agent/dashboard_count';
+  static const String actionAgentProfile = '/agentProfile';
+  static const String actionUpdateAgentProfile = '/storeOrUpdateAagentDetails';
 }

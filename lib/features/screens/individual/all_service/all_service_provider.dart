@@ -46,7 +46,8 @@ class AllServiceProvider extends BaseProvider {
       notifyListeners();
 
       final response = await authRepository.subCategory(categoryId);
-      print('akdjbfkjbdsakbf=> ${response.isSuccess}');
+      print('asdiufgudsagugfu=> ${categoryId}');
+      print('asdiufgudsagugfu=> ${response.isSuccess}');
       print('akdjbfkjbdsakbf=> ${response.data}');
       print('akdjbfkjbdsakbf=> ${response.error}');
 

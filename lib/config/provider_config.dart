@@ -4,6 +4,7 @@ import 'package:app_grownidhi/features/screens/agent/agent_dashboard/agent_dashb
 import 'package:app_grownidhi/features/screens/agent/agent_dashboard/agent_dashboard_provider.dart';
 import 'package:app_grownidhi/features/screens/agent/agent_earning/agent_earning_provider.dart';
 import 'package:app_grownidhi/features/screens/agent/agent_earning/agent_earning_provider.dart';
+import 'package:app_grownidhi/features/screens/agent/agent_my_profile_edit/agent_my_profile_edit_provider.dart';
 import 'package:app_grownidhi/features/screens/agent/agent_portfolio/agent_portfolio_provider.dart';
 import 'package:app_grownidhi/features/screens/agent/agent_portfolio/agent_portfolio_provider.dart';
 import 'package:app_grownidhi/features/screens/agent/agent_report/agent_report_provider.dart';
@@ -57,6 +58,7 @@ class ProviderConfig {
     ChangeNotifierProvider<AgentReportProvider>(create: (_) => AgentReportProvider()),
     ChangeNotifierProvider<AgentEarningProvider>(create: (_) => AgentEarningProvider()),
     ChangeNotifierProvider<AgentMyProfileProvider>(create: (_) => AgentMyProfileProvider()),
+    ChangeNotifierProvider<AgentMyProfileEditProvider>(create: (_) => AgentMyProfileEditProvider()),
 
   ];
 }

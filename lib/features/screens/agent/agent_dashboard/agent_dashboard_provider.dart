@@ -1,18 +1,40 @@
 // lib/providers/agent_dashboard_provider.dart
 import 'package:base_module/base_module.dart';
 import 'package:flutter/material.dart';
+import 'package:base_module/core/models/agent_dashboard_response.dart';
 
 class AgentDashboardProvider extends BaseProvider {
+  bool isLoading = false;
+  AgentDashboardData agentDashboardData = AgentDashboardData();
+
   bool _isLoading = false;
   String? _error;
   DashboardData? _dashboardData;
 
-  bool get isLoading => _isLoading;
+
   String? get error => _error;
   DashboardData? get dashboardData => _dashboardData;
 
-  AgentDashboardProvider() {
-    fetchDashboardData();
+  Future<void> fetchAgentDashboard() async {
+    try {
+      isLoading = true;
+
+      final response = await authRepository.agentDashboard();
+      print('adbfhbdsaf=> ${response.data}');
+
+      if (response.isSuccess == true) {
+        agentDashboardData = AgentDashboardData.fromJson(response.data['data']);
+        print('adfbdsakjbf=> $agentDashboardData');
+      } else {
+        print(response.data);
+      }
+    } catch (error) {
+      print("Dashboard Error: $error");
+    } finally {
+      isLoading = false;
+      notifyListeners();
+
+    }
   }
 
   Future<void> fetchDashboardData() async {

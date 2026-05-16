@@ -17,7 +17,6 @@ class AllServiceScreen extends StatefulWidget {
 }
 
 class _AllServiceScreenState extends State<AllServiceScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -54,10 +53,10 @@ class _AllServiceScreenState extends State<AllServiceScreen> {
                     spaceHeight(18),
 
                     Expanded(
-                      child:
-                          (provider.isSubLoading &&
-                              provider.subCategoryList.isEmpty)
-                          ? Center(child: CircularProgressIndicator())
+                      child: provider.isSubLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : provider.subCategoryList.isEmpty
+                          ? const Center(child: Text('No Data Available'))
                           : ListView.builder(
                               itemCount: provider.subCategoryList.length,
                               itemBuilder: (context, index) {
@@ -80,7 +79,7 @@ class _AllServiceScreenState extends State<AllServiceScreen> {
                                       ),
                                     );
                                   },
-                                  child: _productCard(item,provider, context),
+                                  child: _productCard(item, provider, context),
                                 );
                               },
                             ),
@@ -94,7 +93,6 @@ class _AllServiceScreenState extends State<AllServiceScreen> {
       ),
     );
   }
-
 
   Widget _buildSearchBar() {
     return Container(
@@ -150,16 +148,20 @@ class _AllServiceScreenState extends State<AllServiceScreen> {
     );
   }
 
-
-  Widget _productCard(ServiceSubCategoryData item, AllServiceProvider provider, BuildContext context) {
+  Widget _productCard(
+    ServiceSubCategoryData item,
+    AllServiceProvider provider,
+    BuildContext context,
+  ) {
     return InkWell(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ProductScreen(item: item),)),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProductScreen(item: item)),
+      ),
       child: Card(
         elevation: 2,
         margin: const EdgeInsets.symmetric(vertical: 6),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
@@ -170,23 +172,31 @@ class _AllServiceScreenState extends State<AllServiceScreen> {
                 borderRadius: BorderRadius.circular(8),
                 child: item.icon != null && item.icon!.isNotEmpty
                     ? Image.network(
-                  '${AppConfig.imageUrl}/${item.icon}',
-                  width: 60,
-                  height: 60,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    width: 60,
-                    height: 60,
-                    color: Colors.blue[100],
-                    child: const Icon(Icons.health_and_safety, size: 30, color: Colors.blue),
-                  ),
-                )
+                        '${AppConfig.imageUrl}/${item.icon}',
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          width: 60,
+                          height: 60,
+                          color: Colors.blue[100],
+                          child: const Icon(
+                            Icons.health_and_safety,
+                            size: 30,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      )
                     : Container(
-                  width: 60,
-                  height: 60,
-                  color: Colors.blue[100],
-                  child: const Icon(Icons.health_and_safety, size: 30, color: Colors.blue),
-                ),
+                        width: 60,
+                        height: 60,
+                        color: Colors.blue[100],
+                        child: const Icon(
+                          Icons.health_and_safety,
+                          size: 30,
+                          color: Colors.blue,
+                        ),
+                      ),
               ),
 
               const SizedBox(width: 12),
@@ -212,15 +222,22 @@ class _AllServiceScreenState extends State<AllServiceScreen> {
                         ),
                         const SizedBox(width: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
-                            color: item.status! ? Colors.green[100] : Colors.red[100],
+                            color: item.status!
+                                ? Colors.green[100]
+                                : Colors.red[100],
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
                             item.status! ? 'Active' : 'Inactive',
                             style: TextStyle(
-                              color: item.status! ? Colors.green[800] : Colors.red[800],
+                              color: item.status!
+                                  ? Colors.green[800]
+                                  : Colors.red[800],
                               fontSize: 10,
                               fontWeight: FontWeight.w600,
                             ),
@@ -232,13 +249,11 @@ class _AllServiceScreenState extends State<AllServiceScreen> {
                     const SizedBox(height: 4),
 
                     // Description - single line with ellipsis
-                    if (item.description != null && item.description!.isNotEmpty)
+                    if (item.description != null &&
+                        item.description!.isNotEmpty)
                       Text(
                         item.description!,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -261,7 +276,8 @@ class _AllServiceScreenState extends State<AllServiceScreen> {
                           label: _formatDate(item.createdAt),
                           color: Colors.blue,
                         ),
-                        if (item.updatedAt != null && item.updatedAt != item.createdAt)
+                        if (item.updatedAt != null &&
+                            item.updatedAt != item.createdAt)
                           _buildCompactChip(
                             icon: Icons.update,
                             label: _formatDate(item.updatedAt),
@@ -302,7 +318,7 @@ class _AllServiceScreenState extends State<AllServiceScreen> {
     );
   }
 
-// Compact chip for better space utilization
+  // Compact chip for better space utilization
   Widget _buildCompactChip({
     required IconData icon,
     required String label,
@@ -333,7 +349,7 @@ class _AllServiceScreenState extends State<AllServiceScreen> {
     );
   }
 
-// Helper method to format date
+  // Helper method to format date
   String _formatDate(String? dateString) {
     if (dateString == null) return 'N/A';
     try {
