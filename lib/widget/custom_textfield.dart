@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 import 'help_widget.dart';
 
@@ -17,43 +20,53 @@ Widget customTextField({
   VoidCallback? onTap,
   Widget? suffixIcon,
 }) {
-  return TextField(
-    controller: controller,
-    keyboardType: keyboardType,
-    obscureText: obscureText,
-    maxLength: maxLength,
-    onChanged: onChanged,
-    readOnly: isRead,
-    onTap: onTap,
-    maxLines: maxLines,
-    decoration: InputDecoration(
-      counterText: "",
-      hintText: hintText,
-      hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 14),
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(hintText, style: TextStyle(color: Colors.black, fontSize: 12)),
+      spaceHeight(8),
+      TextField(
+        controller: controller,
+        keyboardType: keyboardType,
+        obscureText: obscureText,
+        maxLength: maxLength,
+        onChanged: onChanged,
+        readOnly: isRead,
+        onTap: onTap,
+        maxLines: maxLines,
+        decoration: InputDecoration(
+          counterText: "",
+          hintText: hintText,
+          hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 14),
 
-      /// ✅ FIXED (important)
-      suffixIcon: suffixIcon,
+          /// ✅ FIXED (important)
+          suffixIcon: suffixIcon,
 
-      prefixIcon: prefixIcon != null
-          ? Icon(prefixIcon, color: Colors.grey.shade600)
-          : null,
+          prefixIcon: prefixIcon != null
+              ? Icon(prefixIcon, color: Colors.grey.shade600)
+              : null,
 
-      filled: true,
-      fillColor: Colors.white,
-      contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 18,
+            horizontal: 16,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(color: Colors.green, width: 1.5),
+          ),
+        ),
       ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: Colors.green, width: 1.5),
-      ),
-    ),
+    ],
   );
 }
 
@@ -111,6 +124,61 @@ Widget customDropdown({
                 .toList(),
             onChanged: onChanged,
           ),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget customMultiSelectDropdown({
+  required String title,
+  required List<String> items,
+  required List<String> selectedItems,
+  required Function(List<String>) onConfirm,
+  IconData? prefixIcon,
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        title,
+        style: const TextStyle(
+          fontSize: 12,
+          color: Colors.black,
+        ),
+      ),
+
+      spaceHeight(8),
+      MultiSelectDialogField<String>(
+
+        items: items
+            .map((item) => MultiSelectItem<String>(item, item))
+            .toList(),
+
+        initialValue: selectedItems,
+
+        title: Text(title),
+
+
+        searchable: true,
+
+        buttonText: Text(title),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+        ),
+
+        buttonIcon: Icon(prefixIcon ?? Icons.arrow_drop_down),
+
+        selectedColor: Colors.blue,
+
+        onConfirm: (values) {
+          onConfirm(values);
+        },
+
+        chipDisplay: MultiSelectChipDisplay(
+          chipColor: Colors.blue.shade100,
+          textStyle: const TextStyle(color: Colors.black),
         ),
       ),
     ],

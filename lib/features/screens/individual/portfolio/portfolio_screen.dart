@@ -7,6 +7,8 @@ import 'package:base_module/core/models/portfolio_details_response.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../widget/help_widget.dart';
+
 class PortfolioScreen extends StatefulWidget {
   const PortfolioScreen({super.key});
 
@@ -166,7 +168,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+               spaceHeight( 10),
       
                 // Product Name & Service Type
                 Row(
@@ -185,7 +187,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 2),
+                         spaceHeight( 2),
                           Text(
                             portfolioData.serviceType ?? '',
                             style: TextStyle(
@@ -213,7 +215,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+               spaceHeight( 10),
       
                 // Application Number
                 Container(
@@ -241,7 +243,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
+               spaceHeight( 10),
       
                 // User Info Row
                 Row(
@@ -279,7 +281,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+               spaceHeight( 8),
       
                 // Phone & Date Row
                 Row(

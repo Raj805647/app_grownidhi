@@ -17,6 +17,7 @@ class AgentMyProfileProvider extends BaseProvider {
 
       if (response.isSuccess == true) {
         agentProfileData = AgentProfileData.fromJson(response.data['data']);
+        notifyListeners();
       } else {
         print(response.data);
       }

@@ -1,10 +1,10 @@
 import 'package:base_module/base_module.dart';
 
-class AgentProfileResponse extends BaseModel {
+class AgentProfileResponse extends BaseModel{
   AgentProfileResponse({
-      super.status,
-      super.message,
-      this.data,});
+    super.status,
+    super.message,
+    this.data,});
 
   AgentProfileResponse.fromJson(dynamic json) {
     data = json['data'] != null ? AgentProfileData.fromJson(json['data']) : null;
@@ -25,88 +25,112 @@ class AgentProfileResponse extends BaseModel {
 
 class AgentProfileData {
   AgentProfileData({
-      this.id, 
-      this.name, 
-      this.email, 
-      this.phone, 
-      this.type, 
-      this.otp, 
-      this.otpExpireAt, 
-      this.token, 
-      this.googleId, 
-      this.emailVerifiedAt, 
-      this.createdAt, 
-      this.updatedAt, 
-      this.status, 
-      this.createdBy, 
-      this.updatedBy, 
-      this.deletedBy, 
-      this.agentId, 
-      this.deletedAt, 
-      this.profileImage,});
+    this.id,
+    this.fullName,
+    this.fatherName,
+    this.mobileNumber,
+    this.alternateMobileNumber,
+    this.email,
+    this.dob,
+    this.gender,
+    this.maritalStatus,
+    this.addressLine1,
+    this.addressLine2,
+    this.city,
+    this.state,
+    this.pincode,
+    this.country,
+    this.occupation,
+    this.designation,
+    this.experience,
+    this.experienceDocument,
+    this.education,
+    this.educationDocument,
+    this.annualIncome,
+    this.monthlyIncome,
+    this.companies,
+    this.products,});
 
   AgentProfileData.fromJson(dynamic json) {
     id = json['id'];
-    name = json['name'];
+    fullName = json['full_name'];
+    fatherName = json['father_name'];
+    mobileNumber = json['mobile_number'];
+    alternateMobileNumber = json['alternate_mobile_number'];
     email = json['email'];
-    phone = json['phone'];
-    type = json['type'];
-    otp = json['otp'];
-    otpExpireAt = json['otp_expire_at'];
-    token = json['token'];
-    googleId = json['google_id'];
-    emailVerifiedAt = json['email_verified_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    status = json['status'];
-    createdBy = json['created_by'];
-    updatedBy = json['updated_by'];
-    deletedBy = json['deleted_by'];
-    agentId = json['agent_id'];
-    deletedAt = json['deleted_at'];
-    profileImage = json['profile_image'];
+    dob = json['dob'];
+    gender = json['gender'];
+    maritalStatus = json['marital_status'];
+    addressLine1 = json['address_line1'];
+    addressLine2 = json['address_line2'];
+    city = json['city'];
+    state = json['state'];
+    pincode = json['pincode'];
+    country = json['country'];
+    occupation = json['occupation'];
+    designation = json['designation'];
+    experience = json['experience'];
+    experienceDocument = json['experience_document'];
+    education = json['education'];
+    educationDocument = json['education_document'];
+    annualIncome = json['annual_income'];
+    monthlyIncome = json['monthly_income'];
+    companies = json['companies'] != null ? json['companies'].cast<String>() : [];
+    products = json['products'] != null ? json['products'].cast<String>() : [];
   }
   int? id;
-  String? name;
+  String? fullName;
+  String? fatherName;
+  String? mobileNumber;
+  String? alternateMobileNumber;
   String? email;
-  String? phone;
-  String? type;
-  dynamic otp;
-  dynamic otpExpireAt;
-  dynamic token;
-  dynamic googleId;
-  dynamic emailVerifiedAt;
-  String? createdAt;
-  String? updatedAt;
-  bool? status;
-  dynamic createdBy;
-  int? updatedBy;
-  dynamic deletedBy;
-  dynamic agentId;
-  dynamic deletedAt;
-  String? profileImage;
+  String? dob;
+  String? gender;
+  String? maritalStatus;
+  String? addressLine1;
+  String? addressLine2;
+  String? city;
+  String? state;
+  String? pincode;
+  String? country;
+  String? occupation;
+  String? designation;
+  String? experience;
+  String? experienceDocument;
+  String? education;
+  String? educationDocument;
+  String? annualIncome;
+  String? monthlyIncome;
+  List<String>? companies;
+  List<String>? products;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = id;
-    map['name'] = name;
+    map['full_name'] = fullName;
+    map['father_name'] = fatherName;
+    map['mobile_number'] = mobileNumber;
+    map['alternate_mobile_number'] = alternateMobileNumber;
     map['email'] = email;
-    map['phone'] = phone;
-    map['type'] = type;
-    map['otp'] = otp;
-    map['otp_expire_at'] = otpExpireAt;
-    map['token'] = token;
-    map['google_id'] = googleId;
-    map['email_verified_at'] = emailVerifiedAt;
-    map['created_at'] = createdAt;
-    map['updated_at'] = updatedAt;
-    map['status'] = status;
-    map['created_by'] = createdBy;
-    map['updated_by'] = updatedBy;
-    map['deleted_by'] = deletedBy;
-    map['agent_id'] = agentId;
-    map['deleted_at'] = deletedAt;
-    map['profile_image'] = profileImage;
+    map['dob'] = dob;
+    map['gender'] = gender;
+    map['marital_status'] = maritalStatus;
+    map['address_line1'] = addressLine1;
+    map['address_line2'] = addressLine2;
+    map['city'] = city;
+    map['state'] = state;
+    map['pincode'] = pincode;
+    map['country'] = country;
+    map['occupation'] = occupation;
+    map['designation'] = designation;
+    map['experience'] = experience;
+    map['experience_document'] = experienceDocument;
+    map['education'] = education;
+    map['education_document'] = educationDocument;
+    map['annual_income'] = annualIncome;
+    map['monthly_income'] = monthlyIncome;
+    map['companies'] = companies;
+    map['products'] = products;
     return map;
   }
 

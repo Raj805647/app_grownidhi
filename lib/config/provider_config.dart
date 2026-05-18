@@ -20,9 +20,9 @@ import 'package:provider/provider.dart';
 import '../features/auth/onboarding/onboarding_provider.dart';
 import '../features/auth/sign_in/sign_in_controller.dart';
 import '../features/auth/splash/splash_provider.dart';
+import '../features/screens/agent/agent_kyc/agent_kyc_provider.dart';
 import '../features/screens/agent/agent_my_profile/agent_my_profile_provider.dart';
 import '../features/screens/individual/add_product/add_product_provider.dart';
-import '../features/screens/individual/portfolio/portfolio_provider.dart';
 import '../features/screens/individual/add_product_details/add_product_details_provider.dart';
 import '../features/screens/individual/all_service/all_service_provider.dart';
 import '../features/screens/individual/bottom_bar/bottom_bar_provider.dart';
@@ -59,6 +59,7 @@ class ProviderConfig {
     ChangeNotifierProvider<AgentEarningProvider>(create: (_) => AgentEarningProvider()),
     ChangeNotifierProvider<AgentMyProfileProvider>(create: (_) => AgentMyProfileProvider()),
     ChangeNotifierProvider<AgentMyProfileEditProvider>(create: (_) => AgentMyProfileEditProvider()),
+    ChangeNotifierProvider<AgentKycProvider>(create: (_) => AgentKycProvider()),
 
   ];
 }

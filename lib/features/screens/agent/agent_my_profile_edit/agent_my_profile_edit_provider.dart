@@ -2,12 +2,22 @@ import 'dart:io';
 
 import 'package:base_module/base_module.dart';
 import 'package:base_module/core/models/agent_profile_response.dart';
+import 'package:base_module/core/models/company_list_response.dart';
+import 'package:base_module/core/models/product_list_response.dart';
 import 'package:base_module/image_file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 
 class AgentMyProfileEditProvider extends BaseProvider {
   bool isLoading = false;
   AgentProfileData agentProfileData = AgentProfileData();
+  List<CompanyListData> companyListData = [];
+  List<String> selectedCompanies = [];
+  List selectedCompanyIds = [];
+
+  List<ProductListData> productListData = [];
+  List<String> selectedProducts = [];
+  List selectedProductIds = [];
 
   final imagePickerService = ImagePickerService();
   final TextEditingController fullNameController = TextEditingController();
@@ -35,6 +45,18 @@ class AgentMyProfileEditProvider extends BaseProvider {
   File? experienceDocument;
   File? educationDocument;
 
+  void changeGender(String? value) {
+    if (value != null) {
+      genderController.text = value;
+    }
+  }
+
+  void changeMaritalStatus(String? value) {
+    if (value != null) {
+      maritalStatusController.text = value;
+    }
+  }
+
   Future<void> pickExperienceDocument(BuildContext context) async {
     final file = await imagePickerService.showImageSourceDialog(
       context: context,
@@ -59,7 +81,39 @@ class AgentMyProfileEditProvider extends BaseProvider {
     );
   }
 
-  Future<void> updateCreateProfile() async {
+  Future<void> fetchCompanyList() async {
+    final response = await authRepository.companyListData();
+    print('adflnldsan');
+    print(response.error);
+    print(response.data);
+    if (response.isSuccess == true) {
+      final List rawList = response.data['data'] ?? [];
+      companyListData = rawList
+          .map((e) => CompanyListData.fromJson(e))
+          .toList();
+      notifyListeners();
+    } else {
+      print(response.data);
+    }
+  }
+
+  Future<void> fetchProductList() async {
+    final response = await authRepository.productListData(selectedCompanyIds);
+    print('akdjnfkjdsakf');
+    print(response.isSuccess);
+    print(response.data);
+    if (response.isSuccess == true) {
+      final List rawList = response.data['data'] ?? [];
+      productListData = rawList
+          .map((e) => ProductListData.fromJson(e))
+          .toList();
+      notifyListeners();
+    } else {
+      print(response.data);
+    }
+  }
+
+  Future<void> updateCreateProfile(BuildContext context) async {
     try {
       isLoading = true;
       notifyListeners();
@@ -79,9 +133,19 @@ class AgentMyProfileEditProvider extends BaseProvider {
         "state": stateController.text.trim(),
         "pincode": pincodeController.text.trim(),
         "country": countryController.text.trim(),
+        "experience_document": experienceDocument != null
+            ? await MultipartFile.fromFile(
+                experienceDocument!.path,
+                filename: experienceDocument!.path.split('/').last,
+              )
+            : null,
 
-        "experience_document": educationDocument?.path,
-        "education_document": educationDocument?.path,
+        "education_document": educationDocument != null
+            ? await MultipartFile.fromFile(
+                educationDocument!.path,
+                filename: educationDocument!.path.split('/').last,
+              )
+            : null,
 
         "occupation": occupationController.text.trim(),
         "designation": designationController.text.trim(),
@@ -91,14 +155,24 @@ class AgentMyProfileEditProvider extends BaseProvider {
         "annual_income": annualIncomeController.text.trim(),
         "monthly_income": monthlyIncomeController.text.trim(),
 
-        'company_ids[]': [],
-        'product_ids[]': [],
+        'company_ids[]': selectedCompanyIds,
+        'product_ids[]': selectedProductIds,
       };
 
+      print('adbfhbdsavgfhdsagfydsa');
+      print(data);
+
       final response = await authRepository.agentUpdateProfile(data);
+      print('asdkfkdsagkfsdfj');
+      print(response.isSuccess);
+      print(response.data);
 
       if (response.isSuccess == true) {
-
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Profile updated successfully")),
+        );
+        back(context);
+        clearProfileData();
       } else {
         print(response.data);
       }
@@ -108,5 +182,49 @@ class AgentMyProfileEditProvider extends BaseProvider {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  void clearProfileData() {
+    /// Clear Text Controllers
+    fullNameController.clear();
+    fatherNameController.clear();
+    mobileNumberController.clear();
+    alternateMobileNumberController.clear();
+    emailController.clear();
+    dobController.clear();
+    genderController.clear();
+    maritalStatusController.clear();
+
+    addressLine1Controller.clear();
+    addressLine2Controller.clear();
+    cityController.clear();
+    stateController.clear();
+    pincodeController.clear();
+    countryController.clear();
+
+    occupationController.clear();
+    designationController.clear();
+    experienceController.clear();
+    educationController.clear();
+
+    annualIncomeController.clear();
+    monthlyIncomeController.clear();
+
+    /// Clear Files
+    experienceDocument = null;
+    educationDocument = null;
+
+    /// Clear Company Selection
+    selectedCompanies.clear();
+    selectedCompanyIds.clear();
+
+    /// Clear Product Selection
+    selectedProducts.clear();
+    selectedProductIds.clear();
+
+    /// Optional Product List Reset
+    productListData.clear();
+
+    notifyListeners();
   }
 }

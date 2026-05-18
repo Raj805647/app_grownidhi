@@ -30,7 +30,6 @@ class StorageService {
 
   static Future<String?> getUserToken() async {
     final prefs = await SharedPreferences.getInstance();
-
     final token = prefs.getString(_token);
 
     return token;

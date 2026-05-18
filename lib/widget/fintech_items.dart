@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'help_widget.dart';
+
 class FinanceItem extends StatelessWidget {
   final String title;
   final String value;
@@ -25,7 +27,7 @@ class FinanceItem extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 6),
+       spaceHeight( 6),
 
         Text(
           value,

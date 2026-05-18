@@ -9,6 +9,8 @@ import 'package:base_module/core/models/service_sub_category_response.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../widget/help_widget.dart';
+
 class ProductScreen extends StatefulWidget {
   final ServiceSubCategoryData item;
 
@@ -138,7 +140,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 4),
+                       spaceHeight( 4),
                         Text(
                           product.companyName ?? '',
                           style: TextStyle(
@@ -186,12 +188,12 @@ class _ProductScreenState extends State<ProductScreen> {
                 ],
               ),
 
-              const SizedBox(height: 12),
+             spaceHeight( 12),
 
               /// Divider
               Divider(color: Colors.grey.shade200, height: 1),
 
-              const SizedBox(height: 10),
+             spaceHeight( 10),
 
               /// Info Row (Icons + Data)
               Row(
@@ -270,7 +272,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     style: TextStyle(color: Colors.grey.shade600),
                   ),
 
-                  const SizedBox(height: 16),
+                 spaceHeight( 16),
 
                   /// Info rows with icons
                   _detailTile(
@@ -314,7 +316,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   if (product.requiredDocuments != null)
                     _section("Documents", product.requiredDocuments!),
 
-                  const SizedBox(height: 20),
+                 spaceHeight( 20),
                 ],
               ),
             );
@@ -346,7 +348,7 @@ class _ProductScreenState extends State<ProductScreen> {
             title,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),
-          const SizedBox(height: 4),
+         spaceHeight( 4),
           Text(content, style: TextStyle(color: Colors.grey.shade700)),
         ],
       ),

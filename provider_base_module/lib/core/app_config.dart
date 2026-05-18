@@ -1,6 +1,6 @@
 class AppConfig {
-  static const String apiTestUrl = "http://192.168.1.11:8000/api";
-  static const String apiProdUrl = "http://192.168.1.11:8000/api";
+  static const String apiTestUrl = "http://192.168.1.12:8000/api";
+  static const String apiProdUrl = "http://192.168.1.12:8000/api";
   static const String imageUrl = "http://192.168.1.12:8000";
   static const String apiTestKey = "";
   static const String apiProdKey = "";
@@ -28,6 +28,9 @@ class AppConfig {
 
   // agents api endpoints
   static const String actionAgentDashboard = '/agent/dashboard_count';
-  static const String actionAgentProfile = '/agentProfile';
+  static const String actionAgentProfile = '/getAagentDetails';
   static const String actionUpdateAgentProfile = '/storeOrUpdateAagentDetails';
+  static const String actionCompanyList = '/company-list';
+  static const String actionProductList = '/products-by-company';
+  static const String actionClientList = '/clients';
 }

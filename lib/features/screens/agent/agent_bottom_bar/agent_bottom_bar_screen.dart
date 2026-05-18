@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../widget/help_widget.dart';
 import '../agent_dashboard/agent_dashboard_screen.dart';
 import '../agent_earning/agent_earning_screen.dart';
 import '../agent_portfolio/agent_portfolio_screen.dart';
@@ -150,7 +151,7 @@ class AgentBottomBarScreen extends StatelessWidget {
               size: isSelected ? 28 : 24,
             ),
 
-            const SizedBox(height: 4),
+           spaceHeight( 4),
 
             AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 250),

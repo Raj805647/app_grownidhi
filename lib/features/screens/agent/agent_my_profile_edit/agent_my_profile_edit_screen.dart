@@ -7,8 +7,25 @@ import 'package:app_grownidhi/widget/ui_design.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AgentMyProfileEditScreen extends StatelessWidget {
+import '../../../../widget/help_widget.dart';
+
+class AgentMyProfileEditScreen extends StatefulWidget {
   const AgentMyProfileEditScreen({super.key});
+
+  @override
+  State<AgentMyProfileEditScreen> createState() =>
+      _AgentMyProfileEditScreenState();
+}
+
+class _AgentMyProfileEditScreenState extends State<AgentMyProfileEditScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    Future.microtask(() {
+      context.read<AgentMyProfileEditProvider>().fetchCompanyList();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,224 +39,302 @@ class AgentMyProfileEditScreen extends StatelessWidget {
           AppGradientBackground(),
 
           /// Form
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  /// Full Name
-                  customTextField(
-                    hintText: 'Full Name',
-                    controller: provider.fullNameController,
-                  ),
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                /// Full Name
+                customTextField(
+                  hintText: 'Full Name',
+                  controller: provider.fullNameController,
+                  prefixIcon: Icons.person,
+                ),
 
-                  const SizedBox(height: 12),
+                spaceHeight(12),
 
-                  /// Father Name
-                  customTextField(
-                    hintText: 'Father Name',
-                    controller: provider.fatherNameController,
-                  ),
+                /// Father Name
+                customTextField(
+                  hintText: 'Father Name',
+                  controller: provider.fatherNameController,
+                  prefixIcon: Icons.person_outline,
+                ),
 
-                  const SizedBox(height: 12),
+                spaceHeight(12),
 
-                  /// Mobile Number
-                  customTextField(
-                    hintText: 'Mobile Number',
-                    controller: provider.mobileNumberController,
-                    keyboardType: TextInputType.phone,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Alternate Mobile Number
-                  customTextField(
-                    hintText: 'Alternate Mobile Number',
-                    controller: provider.alternateMobileNumberController,
-                    keyboardType: TextInputType.phone,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Email
-                  customTextField(
-                    hintText: 'Email',
-                    controller: provider.emailController,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// DOB
-                  customTextField(
-                    hintText: 'Date Of Birth',
-                    controller: provider.dobController,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Gender Dropdown
-                  customDropdown(
-                    value: provider.genderController.text,
-                    label: 'Gender',
-                    items: const ['Male', 'Female', 'Other'],
-                    onChanged: (value) {
-                      // provider.changeGender(value);
-                    },
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Marital Status Dropdown
-                  customDropdown(
-                    value: provider.maritalStatusController.text,
-                    label: 'Marital Status',
-                    items: const ['Single', 'Married', 'Divorced'],
-                    onChanged: (value) {
-                      // provider.changeMaritalStatus(value);
-                    },
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Address Line 1
-                  customTextField(
-                    hintText: 'Address Line 1',
-                    controller: provider.addressLine1Controller,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Address Line 2
-                  customTextField(
-                    hintText: 'Address Line 2',
-                    controller: provider.addressLine2Controller,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// City
-                  customTextField(
-                    hintText: 'City',
-                    controller: provider.cityController,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// State
-                  customTextField(
-                    hintText: 'State',
-                    controller: provider.stateController,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Pincode
-                  customTextField(
-                    hintText: 'Pincode',
-                    controller: provider.pincodeController,
-                    keyboardType: TextInputType.number,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Country
-                  customTextField(
-                    hintText: 'Country',
-                    controller: provider.countryController,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Occupation
-                  customTextField(
-                    hintText: 'Occupation',
-                    controller: provider.occupationController,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Designation
-                  customTextField(
-                    hintText: 'Designation',
-                    controller: provider.designationController,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Experience
-                  customTextField(
-                    hintText: 'Experience',
-                    controller: provider.experienceController,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Education
-                  customTextField(
-                    hintText: 'Education',
-                    controller: provider.educationController,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Annual Income
-                  customTextField(
-                    hintText: 'Annual Income',
-                    controller: provider.annualIncomeController,
-                    keyboardType: TextInputType.number,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Monthly Income
-                  customTextField(
-                    hintText: 'Monthly Income',
-                    controller: provider.monthlyIncomeController,
-                    keyboardType: TextInputType.number,
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  /// Experience Upload
-                  uploadCard(
-                    title: 'Upload Experience Document',
-                    file: provider.experienceDocument,
-                    onTap: () {
-                      provider.pickExperienceDocument(context);
-                    },
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  /// Education Upload
-                  uploadCard(
-                    title: 'Upload Education Document',
-                    file: provider.educationDocument,
-                    onTap: () {
-                      provider.pickEducationDocument(context);
-                    },
-                  ),
-
-                  const SizedBox(height: 30),
-
-                  /// Submit Button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        provider.updateCreateProfile();
-                      },
-                      child: provider.isLoading
-                          ? const CircularProgressIndicator()
-                          : const Text('Update Profile'),
+                Row(
+                  children: [
+                    Expanded(
+                      child: customTextField(
+                        hintText: 'Mobile Number',
+                        controller: provider.mobileNumberController,
+                        keyboardType: TextInputType.phone,
+                        prefixIcon: Icons.call,
+                      ),
                     ),
-                  ),
+                    spaceWidth(12),
+                    Expanded(
+                      child: customTextField(
+                        hintText: 'Alternate Mobile Number',
+                        controller: provider.alternateMobileNumberController,
+                        keyboardType: TextInputType.phone,
+                        prefixIcon: Icons.phone_android,
+                      ),
+                    ),
+                  ],
+                ),
 
-                  const SizedBox(height: 30),
-                ],
-              ),
+                spaceHeight(12),
+
+                customTextField(
+                  hintText: 'Email',
+                  controller: provider.emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  prefixIcon: Icons.email,
+                ),
+
+                spaceHeight(12),
+
+                /// DOB
+                customTextField(
+                  hintText: 'Date Of Birth',
+                  controller: provider.dobController,
+                  prefixIcon: Icons.calendar_today,
+                  isRead: true,
+                  onTap: () => pickDateTime(
+                    context,
+                    provider.dobController,
+                    includeTime: false,
+                  ),
+                ),
+
+                spaceHeight(12),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: customDropdown(
+                        value: provider.genderController.text,
+                        label: 'Gender',
+                        items: const ['Male', 'Female', 'Other'],
+                        onChanged: (value) {
+                          provider.changeGender(value);
+                        },
+                      ),
+                    ),
+
+                    spaceWidth(12),
+
+                    Expanded(
+                      child: customDropdown(
+                        value: provider.maritalStatusController.text,
+                        label: 'Marital Status',
+                        items: const ['Single', 'Married', 'Divorced'],
+                        onChanged: (value) {
+                          provider.changeMaritalStatus(value);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+
+                spaceHeight(12),
+
+                /// Address Line 1
+                customTextField(
+                  hintText: 'Address Line 1',
+                  controller: provider.addressLine1Controller,
+                  prefixIcon: Icons.home,
+                ),
+
+                spaceHeight(12),
+
+                /// Address Line 2
+                customTextField(
+                  hintText: 'Address Line 2',
+                  controller: provider.addressLine2Controller,
+                  prefixIcon: Icons.location_on,
+                ),
+
+                spaceHeight(12),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: customTextField(
+                        hintText: 'City',
+                        controller: provider.cityController,
+                        prefixIcon: Icons.location_city,
+                      ),
+                    ),
+
+                    spaceWidth(12),
+
+                    /// State
+                    Expanded(
+                      child: customTextField(
+                        hintText: 'State',
+                        controller: provider.stateController,
+                        prefixIcon: Icons.map,
+                      ),
+                    ),
+                  ],
+                ),
+                spaceHeight(12),
+
+                /// Pincode
+                Row(
+                  children: [
+                    Expanded(
+                      child: customTextField(
+                        hintText: 'Pincode',
+                        controller: provider.pincodeController,
+                        keyboardType: TextInputType.number,
+                        prefixIcon: Icons.pin_drop,
+                      ),
+                    ),
+
+                    spaceWidth(12),
+
+                    /// Country
+                    Expanded(
+                      child: customTextField(
+                        hintText: 'Country',
+                        controller: provider.countryController,
+                        prefixIcon: Icons.public,
+                      ),
+                    ),
+                  ],
+                ),
+                spaceHeight(12),
+
+                /// Occupation
+                customTextField(
+                  hintText: 'Occupation',
+                  controller: provider.occupationController,
+                  prefixIcon: Icons.work,
+                ),
+
+                spaceHeight(12),
+
+                /// Designation
+                customTextField(
+                  hintText: 'Designation',
+                  controller: provider.designationController,
+                  prefixIcon: Icons.badge,
+                ),
+                spaceHeight(12),
+
+                customMultiSelectDropdown(
+                  title: 'Company List',
+                  selectedItems: provider.selectedCompanies,
+                  prefixIcon: Icons.work,
+                  onConfirm: (value)async {
+                    provider.selectedCompanyIds = provider.companyListData
+                        .where((company) => value.contains(company.companyName))
+                        .map((e) => e.id ?? '')
+                        .toList();
+                    print('adbfakjbdsf');
+                    print(provider.selectedCompanies);
+                    print(provider.selectedCompanyIds);
+                    provider.notifyListeners();
+                   await provider.fetchProductList();
+                  },
+                  items: provider.companyListData
+                      .map((e) => e.companyName ?? '')
+                      .toList(),
+                ),
+                spaceHeight(12),
+                customMultiSelectDropdown(
+                  title: 'Products List',
+                  selectedItems: provider.selectedProducts,
+                  prefixIcon: Icons.work,
+                  onConfirm: (value) {
+                    provider.selectedProductIds = provider.productListData
+                        .where((product) => value.contains(product.name))
+                        .map((e) => e.id ?? '')
+                        .toList();
+                  },
+                  items: provider.productListData
+                      .map((e) => e.name ?? '')
+                      .toList(),
+                ),
+                spaceHeight(12),
+
+                /// Experience
+                customTextField(
+                  hintText: 'Experience',
+                  controller: provider.experienceController,
+                  prefixIcon: Icons.timeline,
+                ),
+
+                spaceHeight(12),
+
+                /// Education
+                customTextField(
+                  hintText: 'Education',
+                  controller: provider.educationController,
+                  prefixIcon: Icons.school,
+                ),
+
+                spaceHeight(12),
+
+                /// Annual Income
+                customTextField(
+                  hintText: 'Annual Income',
+                  controller: provider.annualIncomeController,
+                  keyboardType: TextInputType.number,
+                  prefixIcon: Icons.currency_rupee,
+                ),
+
+                spaceHeight(12),
+
+                /// Monthly Income
+                customTextField(
+                  hintText: 'Monthly Income',
+                  controller: provider.monthlyIncomeController,
+                  keyboardType: TextInputType.number,
+                  prefixIcon: Icons.account_balance_wallet,
+                ),
+
+                spaceHeight(20),
+
+                /// Experience Upload
+                uploadCard(
+                  title: 'Upload Experience Document',
+                  file: provider.experienceDocument,
+                  onTap: () {
+                    provider.pickExperienceDocument(context);
+                  },
+                ),
+
+                spaceHeight(16),
+
+                /// Education Upload
+                uploadCard(
+                  title: 'Upload Education Document',
+                  file: provider.educationDocument,
+                  onTap: () {
+                    provider.pickEducationDocument(context);
+                  },
+                ),
+
+                spaceHeight(30),
+
+                /// Submit Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: provider.isLoading ? null : () =>
+                      provider.updateCreateProfile(context),
+                    child: provider.isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text('Update Profile'),
+                  ),
+                ),
+
+                spaceHeight(30),
+              ],
             ),
           ),
         ],
@@ -289,7 +384,7 @@ class AgentMyProfileEditScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 4),
+                  spaceHeight(4),
 
                   Text(
                     file != null

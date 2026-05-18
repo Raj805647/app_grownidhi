@@ -6,6 +6,8 @@ import 'package:base_module/core/app_config.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../widget/help_widget.dart';
+
 class PortfolioDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> formDetails;
 
@@ -26,7 +28,7 @@ class PortfolioDetailsScreen extends StatelessWidget {
         child: ListView.separated(
           padding: const EdgeInsets.all(16),
           itemCount: formDetails.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 12),
+          separatorBuilder: (context, index) =>spaceHeight( 12),
           itemBuilder: (context, index) {
             final entry = formDetails.entries.elementAt(index);
             final key = entry.key;
@@ -140,7 +142,7 @@ class PortfolioDetailsScreen extends StatelessWidget {
                       size: 40,
                       color: Colors.grey.shade600,
                     ),
-                    const SizedBox(height: 8),
+                   spaceHeight( 8),
                     Text(
                       'Failed to load image',
                       style: TextStyle(

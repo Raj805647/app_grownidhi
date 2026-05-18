@@ -259,7 +259,7 @@ class KycUpdateScreen extends StatelessWidget {
                               title: "PAN Card",
                               subtitle: "Upload front and back side of your PAN card",
                             ),
-                            const SizedBox(height: 16),
+                           spaceHeight( 16),
                             Row(
                               children: [
                                 Expanded(child: _buildModernImageUpload(
@@ -276,7 +276,7 @@ class KycUpdateScreen extends StatelessWidget {
                               ],
                             ),
 
-                            const SizedBox(height: 32),
+                           spaceHeight( 32),
 
                             // Aadhaar Card Section
                             _buildSectionHeader(
@@ -284,7 +284,7 @@ class KycUpdateScreen extends StatelessWidget {
                               title: "Aadhaar Card",
                               subtitle: "Upload front and back side of your Aadhaar card",
                             ),
-                            const SizedBox(height: 16),
+                           spaceHeight( 16),
                             Row(
                               children: [
                                 Expanded(child: _buildModernImageUpload(
@@ -301,7 +301,7 @@ class KycUpdateScreen extends StatelessWidget {
                               ],
                             ),
 
-                            const SizedBox(height: 32),
+                           spaceHeight( 32),
 
                             // Selfie Section
                             _buildSectionHeader(
@@ -309,7 +309,7 @@ class KycUpdateScreen extends StatelessWidget {
                               title: "Selfie Verification",
                               subtitle: "Take a clear selfie holding your ID proof",
                             ),
-                            const SizedBox(height: 16),
+                           spaceHeight( 16),
                             Center(
                               child: SizedBox(
                                 width: 180,
@@ -563,7 +563,7 @@ class KycUpdateScreen extends StatelessWidget {
                               color: const Color(0xFF1DBF73),
                             ),
                           ),
-                          const SizedBox(height: 12),
+                         spaceHeight( 12),
                           Text(
                             isSelfie ? "Tap to capture" : "Tap to upload",
                             style: TextStyle(
@@ -612,7 +612,7 @@ class KycUpdateScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 12),
+           spaceHeight( 12),
 
             // Label Row with Remove Option
             Row(

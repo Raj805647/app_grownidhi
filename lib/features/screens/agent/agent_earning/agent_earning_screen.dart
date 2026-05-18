@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../widget/help_widget.dart';
 import 'agent_earning_provider.dart';
 
 class AgentEarningScreen extends StatelessWidget {
@@ -58,15 +59,15 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
             else
               SliverList(
                 delegate: SliverChildListDelegate([
-                  const SizedBox(height: 8),
+                 spaceHeight( 8),
                   _buildCommissionSummary(provider),
-                  const SizedBox(height: 24),
+                 spaceHeight( 24),
                   _buildRevenueGraph(provider),
-                  const SizedBox(height: 24),
+                 spaceHeight( 24),
                   _buildRevenueSources(provider),
-                  const SizedBox(height: 24),
+                 spaceHeight( 24),
                   _buildPendingCommissions(provider),
-                  const SizedBox(height: 80),
+                 spaceHeight( 80),
                 ]),
               ),
           ],
@@ -158,7 +159,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
               ),
             ],
           ),
-          const SizedBox(height: 16),
+         spaceHeight( 16),
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -192,7 +193,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                 spaceHeight( 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -210,7 +211,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                 spaceHeight( 20),
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -237,7 +238,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12),
+                       spaceHeight( 12),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: LinearProgressIndicator(
@@ -247,7 +248,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
                             minHeight: 8,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                       spaceHeight( 8),
                         Text(
                           '${provider.getYearlyProgressPercentage().toStringAsFixed(1)}% Achieved',
                           style: const TextStyle(fontSize: 11, color: Colors.grey),
@@ -259,7 +260,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
               ),
             ),
           ),
-          const SizedBox(height: 16),
+         spaceHeight( 16),
           Row(
             children: [
               Expanded(
@@ -292,7 +293,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(icon, size: 20, color: color),
-            const SizedBox(height: 8),
+           spaceHeight( 8),
             Text(
               value,
               style: TextStyle(
@@ -301,7 +302,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
                 color: color,
               ),
             ),
-            const SizedBox(height: 4),
+           spaceHeight( 4),
             Text(
               title,
               style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
@@ -329,7 +330,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(emoji, style: const TextStyle(fontSize: 20)),
-          const SizedBox(height: 6),
+         spaceHeight( 6),
           Text(
             value,
             style: const TextStyle(
@@ -337,7 +338,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 2),
+         spaceHeight( 2),
           Text(
             subtitle,
             style: TextStyle(fontSize: 9, color: Colors.grey.shade500),
@@ -379,7 +380,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
               ),
             ],
           ),
-          const SizedBox(height: 16),
+         spaceHeight( 16),
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -443,7 +444,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        const SizedBox(height: 8),
+                                       spaceHeight( 8),
                                         Text(
                                           month['month'],
                                           style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
@@ -460,7 +461,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
+               spaceHeight( 16),
                 if (provider.selectedChartIndex == 0)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -490,7 +491,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
                       const Text('Target', style: TextStyle(fontSize: 12)),
                     ],
                   ),
-                const SizedBox(height: 16),
+               spaceHeight( 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -560,7 +561,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
             Text(change, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: color)),
           ],
         ),
-        const SizedBox(height: 2),
+       spaceHeight( 2),
         Text(label, style: TextStyle(fontSize: 10, color: Colors.grey.shade500)),
       ],
     );
@@ -576,7 +577,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
             'Revenue by Product',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 12),
+         spaceHeight( 12),
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -630,7 +631,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
+               spaceHeight( 20),
                 ...provider.revenueSources.map((source) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: Column(
@@ -663,7 +664,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                     spaceHeight( 8),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(4),
                         child: LinearProgressIndicator(
@@ -717,12 +718,12 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
               ),
             ],
           ),
-          const SizedBox(height: 12),
+         spaceHeight( 12),
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: pending.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            separatorBuilder: (_, __) =>spaceHeight( 12),
             itemBuilder: (context, index) {
               final commission = pending[index];
               final isProcessing = commission['status'] == 'processing';
@@ -769,7 +770,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                               spaceHeight( 4),
                                 Text(
                                   '${commission['policyType']} • ${commission['policyNumber']}',
                                   style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
@@ -788,7 +789,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
                                   color: Color(0xFF4CAF50),
                                 ),
                               ),
-                              const SizedBox(height: 4),
+                             spaceHeight( 4),
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
@@ -808,7 +809,7 @@ class _EarningContentState extends State<_EarningContent> with SingleTickerProvi
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
+                     spaceHeight( 12),
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(

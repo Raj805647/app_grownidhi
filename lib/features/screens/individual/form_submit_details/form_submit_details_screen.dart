@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../widget/custom_appbat.dart';
+import '../../../../widget/help_widget.dart';
 
 class FormSubmitDetailsScreen extends StatefulWidget {
   final ServiceProductsData productDetails;
@@ -62,7 +63,7 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 10),
+                       spaceHeight( 10),
 
                         /// TITLE
                         const Text(
@@ -74,7 +75,7 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
                           ),
                         ),
 
-                        const SizedBox(height: 8),
+                       spaceHeight( 8),
 
                         Text(
                           "Please complete the form below",
@@ -84,7 +85,7 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
                           ),
                         ),
 
-                        const SizedBox(height: 25),
+                       spaceHeight( 25),
 
                         /// FORM CONTAINER
                         Container(
@@ -123,7 +124,7 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
                           ),
                         ),
 
-                        const SizedBox(height: 30),
+                       spaceHeight( 30),
 
                         /// SUBMIT BUTTON
                         provider.formDataList.isNotEmpty
@@ -267,7 +268,7 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
                 ),
               ),
 
-              const SizedBox(height: 10),
+             spaceHeight( 10),
 
               ...List.generate(
                 field.options.length,
@@ -314,7 +315,7 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
                 ),
               ),
 
-              const SizedBox(height: 10),
+             spaceHeight( 10),
 
               ...List.generate(
                 field.options.length,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../widget/help_widget.dart';
 import 'agent_portfolio_provider.dart';
 
 class AgentPortfolioScreen extends StatelessWidget {
@@ -248,7 +249,7 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 6),
+                             spaceHeight( 6),
                               Row(
                                 children: [
                                   const Icon(Icons.email, size: 12, color: Colors.grey),
@@ -259,7 +260,7 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 4),
+                             spaceHeight( 4),
                               Row(
                                 children: [
                                   const Icon(Icons.phone, size: 12, color: Colors.grey),
@@ -275,7 +276,7 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                   spaceHeight( 16),
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
@@ -314,7 +315,7 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
             color: Color(0xFF1A1A1A),
           ),
         ),
-        const SizedBox(height: 4),
+       spaceHeight( 4),
         Text(
           label,
           style: TextStyle(fontSize: 10, color: Colors.grey.shade500),
@@ -377,7 +378,7 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                         spaceHeight( 4),
                           Text(
                             policy['clientName']!,
                             style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
@@ -404,7 +405,7 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+               spaceHeight( 16),
                 Row(
                   children: [
                     Expanded(
@@ -415,7 +416,7 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+               spaceHeight( 10),
                 Row(
                   children: [
                     Expanded(
@@ -442,7 +443,7 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
           label,
           style: TextStyle(fontSize: 10, color: Colors.grey.shade500),
         ),
-        const SizedBox(height: 4),
+       spaceHeight( 4),
         Text(
           value,
           style: const TextStyle(
@@ -507,12 +508,12 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                     spaceHeight( 4),
                       Text(
                         '${renewal['policyType']} • ${renewal['policyNumber']}',
                         style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                       ),
-                      const SizedBox(height: 8),
+                     spaceHeight( 8),
                       Row(
                         children: [
                           Container(
@@ -640,12 +641,12 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
                           ),
                         ],
                       ),
-                      const SizedBox(height: 4),
+                     spaceHeight( 4),
                       Text(
                         followup['type']!,
                         style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
                       ),
-                      const SizedBox(height: 6),
+                     spaceHeight( 6),
                       Row(
                         children: [
                           const Icon(Icons.calendar_today, size: 12, color: Colors.grey),
@@ -687,7 +688,7 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.check_circle_outline, size: 80, color: Colors.green.shade200),
-          const SizedBox(height: 16),
+         spaceHeight( 16),
           Text(
             'No overdue items',
             style: TextStyle(fontSize: 18, color: Colors.grey.shade600),
@@ -742,7 +743,7 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                         spaceHeight( 4),
                           Text(
                             '${item['policyType']} • ${item['policyNumber']}',
                             style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
@@ -767,7 +768,7 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
                     ),
                   ],
                 ),
-                const SizedBox(height: 14),
+               spaceHeight( 14),
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
@@ -780,7 +781,7 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
                       Column(
                         children: [
                           Text('Premium', style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
-                          const SizedBox(height: 4),
+                         spaceHeight( 4),
                           Text(item['premium']!, style: const TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       ),
@@ -788,7 +789,7 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
                       Column(
                         children: [
                           Text('Penalty', style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
-                          const SizedBox(height: 4),
+                         spaceHeight( 4),
                           Text(item['penalty']!, style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
                         ],
                       ),
@@ -929,7 +930,7 @@ class _PortfolioContentState extends State<_PortfolioContent> with SingleTickerP
                               ),
                             ],
                           ),
-                          const SizedBox(height: 4),
+                         spaceHeight( 4),
                           Text(
                             'Age: ${member['age']} • Coverage: ${member['coverage']}',
                             style: TextStyle(fontSize: 11, color: Colors.grey.shade600),

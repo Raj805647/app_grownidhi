@@ -246,7 +246,7 @@ class _AllServiceScreenState extends State<AllServiceScreen> {
                       ],
                     ),
 
-                    const SizedBox(height: 4),
+                   spaceHeight( 4),
 
                     // Description - single line with ellipsis
                     if (item.description != null &&
@@ -258,7 +258,7 @@ class _AllServiceScreenState extends State<AllServiceScreen> {
                         overflow: TextOverflow.ellipsis,
                       ),
 
-                    const SizedBox(height: 6),
+                   spaceHeight( 6),
 
                     // Type and Dates in a single row (wrapped if needed)
                     Wrap(
@@ -286,7 +286,7 @@ class _AllServiceScreenState extends State<AllServiceScreen> {
                       ],
                     ),
 
-                    const SizedBox(height: 4),
+                   spaceHeight( 4),
 
                     // Created/Updated By in a single row
                     if (item.createdBy != null || item.updatedBy != null)

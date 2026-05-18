@@ -11,9 +11,25 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 
-class AgentMyProfileScreen extends StatelessWidget {
+import '../../../../widget/help_widget.dart';
+
+class AgentMyProfileScreen extends StatefulWidget {
   const AgentMyProfileScreen({super.key});
 
+  @override
+  State<AgentMyProfileScreen> createState() => _AgentMyProfileScreenState();
+}
+
+class _AgentMyProfileScreenState extends State<AgentMyProfileScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    Future.microtask((){
+      context.read<AgentMyProfileProvider>().fetchAgentMyProfile();
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,9 +49,12 @@ class AgentMyProfileScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.black,
+                      InkWell(
+                        onTap: ()=> provider.back(context),
+                        child:  Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.black,
+                        ),
                       ),
                       const Text(
                         "My Profile",
@@ -61,9 +80,9 @@ class AgentMyProfileScreen extends StatelessWidget {
                       )
                     ],
                   ),
-            
-                  const SizedBox(height: 30),
-            
+
+                 spaceHeight( 30),
+
                   /// PROFILE CARD
                   Container(
                     width: double.infinity,
@@ -78,47 +97,31 @@ class AgentMyProfileScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         /// IMAGE
-                        Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.black,
-                              width: 2,
-                            ),
-                          ),
-                          child: const CircleAvatar(
-                            radius: 50,
-                            backgroundImage: NetworkImage(
-                              "https://i.pravatar.cc/300",
-                            ),
-                          ),
-                        ),
-            
-                        const SizedBox(height: 18),
-            
+
+                       spaceHeight( 18),
+
                         /// NAME
-                        const Text(
-                          "Agent123",
+                         Text(
+                          provider.agentProfileData.fullName ?? '',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 26,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-            
-                        const SizedBox(height: 6),
-            
-                        const Text(
-                          "Senior Sales Agent",
+
+                       spaceHeight( 6),
+
+                         Text(
+                          provider.agentProfileData.designation ?? '',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 15,
                           ),
                         ),
-            
-                        const SizedBox(height: 18),
-            
+
+                       spaceHeight( 18),
+
                         /// BADGES
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -131,120 +134,129 @@ class AgentMyProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-            
-                  const SizedBox(height: 28),
-            
+
+                 spaceHeight( 28),
+
                   /// DETAILS
                   profileCard(
                     icon: Icons.email_outlined,
                     title: "Email",
-                    value: "agent@gmail.com",
+                    value:                           provider.agentProfileData.email ?? '',
                   ),
-            
+
                   profileCard(
                     icon: Icons.phone_android,
                     title: "Phone",
-                    value: "+91 7863478569",
+                    value:                           provider.agentProfileData.mobileNumber ?? '',
                   ),
-            
+
                   profileCard(
                     icon: Icons.cake_outlined,
                     title: "Date Of Birth",
-                    value: "12 March 1995",
+                    value:                           provider.agentProfileData.dob ?? '',
                   ),
-            
+
                   profileCard(
                     icon: Icons.person_outline,
                     title: "Gender",
-                    value: "Male",
+                    value:                           provider.agentProfileData.gender ?? '',
+
                   ),
-            
+
                   profileCard(
                     icon: Icons.favorite_outline,
                     title: "Marital Status",
-                    value: "Single",
+                    value:                          provider.agentProfileData.maritalStatus ?? '',
+
                   ),
-            
+
                   profileCard(
                     icon: Icons.home_outlined,
                     title: "Address",
                     value:
-                    "221B Baker Street, New Delhi, India",
+                    provider.agentProfileData.addressLine1 ?? '',
                   ),
-            
+
                   profileCard(
                     icon: Icons.location_city_outlined,
                     title: "City",
-                    value: "New Delhi",
+                    value:                          provider.agentProfileData.city ?? '',
+
                   ),
-            
+
                   profileCard(
                     icon: Icons.map_outlined,
                     title: "State",
-                    value: "Delhi",
+                    value:                           provider.agentProfileData.state ?? '',
+
                   ),
-            
+
                   profileCard(
                     icon: Icons.pin_drop_outlined,
                     title: "Pincode",
-                    value: "110001",
+                    value:                           provider.agentProfileData.pincode ?? '',
+
                   ),
-            
+
                   profileCard(
                     icon: Icons.flag_outlined,
                     title: "Country",
-                    value: "India",
+                    value:                           provider.agentProfileData.country ?? '',
+
                   ),
-            
+
                   profileCard(
                     icon: Icons.work_outline,
                     title: "Occupation",
-                    value: "Insurance Advisor",
+                    value:                          provider.agentProfileData.occupation ?? '',
+
                   ),
-            
+
                   profileCard(
                     icon: Icons.badge_outlined,
                     title: "Designation",
-                    value: "Senior Agent",
+                    value:                          provider.agentProfileData.designation ?? '',
+
                   ),
-            
+
                   profileCard(
                     icon: Icons.timeline,
                     title: "Experience",
-                    value: "7 Years",
+                    value:                           provider.agentProfileData.experience ?? '',
+
                   ),
-            
+
                   profileCard(
                     icon: Icons.school_outlined,
                     title: "Education",
                     value: "MBA in Marketing",
                   ),
-            
-                  profileCard(
+
+                  profileListCard(
                     icon: Icons.business_outlined,
                     title: "Company",
-                    value: "ABC Finance Pvt Ltd",
+                    values:                           provider.agentProfileData.companies ?? [],
                   ),
-            
-                  profileCard(
+
+                  profileListCard(
                     icon: Icons.shopping_bag_outlined,
                     title: "Product / Service",
-                    value: "Insurance & Financial Services",
+                    values:   provider.agentProfileData.products ?? [] ,
                   ),
-            
+
                   profileCard(
                     icon: Icons.currency_rupee,
                     title: "Annual Income",
-                    value: "₹12,00,000",
+                    value:   provider.agentProfileData.annualIncome ?? '',
                   ),
-            
+
                   profileCard(
                     icon: Icons.account_balance_wallet_outlined,
                     title: "Monthly Income",
-                    value: "₹1,00,000",
+                    value:   provider.agentProfileData.monthlyIncome ?? '',
                   ),
-            
-                  const SizedBox(height: 30),
+
+                 spaceHeight( 30),
                 ],
               ),
             ),
@@ -293,7 +305,7 @@ class AgentMyProfileScreen extends StatelessWidget {
             ),
             child: Icon(
               icon,
-              color: Colors.black,
+              color: Colors.white,
               size: 26,
             ),
           ),
@@ -305,23 +317,115 @@ class AgentMyProfileScreen extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: Colors.black.withOpacity(.7),
+                    color: Colors.white.withOpacity(.7),
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 6),
+               spaceHeight( 6),
                 Text(
                   value,
                   style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 17,
+                    color: Colors.white,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
           )
+        ],
+      ),
+    );
+  }
+
+  /// LIST CARD
+  Widget profileListCard({
+    required IconData icon,
+    required String title,
+    required List<String> values,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(22),
+        gradient: LinearGradient(
+          colors: [
+            Colors.black.withOpacity(0.18),
+            Colors.black.withOpacity(0.08),
+          ],
+        ),
+        border: Border.all(
+          color: Colors.black.withOpacity(0.15),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 5),
+          )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+      Container(
+      height: 52,
+        width: 52,
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.12),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Icon(
+          icon,
+          color: Colors.white,
+          size: 26,
+        ),
+      ),
+
+              const SizedBox(width: 10),
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 16),
+
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: values.map((e) {
+              return Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.blueAccent.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(
+                    color: Colors.blueAccent.withOpacity(0.3),
+                  ),
+                ),
+                child: Text(
+                  e,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
         ],
       ),
     );

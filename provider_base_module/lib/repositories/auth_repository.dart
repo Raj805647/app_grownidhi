@@ -107,6 +107,12 @@ class AuthRepository extends BaseRepository {
       return response.data;
     });
   }
+  Future<Result<dynamic>> agentClientData() {
+    return safeApiCall(() async {
+      final response = await apiClient.getDio(AppConfig.actionClientList);
+      return response.data;
+    });
+  }
 
   Future<Result<dynamic>> agentProfile() {
     return safeApiCall(() async {
@@ -121,6 +127,23 @@ class AuthRepository extends BaseRepository {
           AppConfig.actionUpdateAgentProfile,
           body: data,
           isFormData: true);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> companyListData() {
+    return safeApiCall(() async {
+      final response = await apiClient.getDio(AppConfig.actionCompanyList);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> productListData(List companyId) {
+    final companyIds = companyId.join(',');
+    final url = '${AppConfig.actionProductList}?company_ids=$companyIds';
+    print('adfbjdsakf=> $url');
+    return safeApiCall(() async {
+      final response = await apiClient.getDio(url);
       return response.data;
     });
   }

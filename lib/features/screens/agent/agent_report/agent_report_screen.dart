@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../widget/help_widget.dart';
 import 'agent_report_provider.dart';
 
 class AgentReportScreen extends StatelessWidget {
@@ -30,15 +31,15 @@ class _ReportContent extends StatelessWidget {
             _buildAppBar(),
             SliverList(
               delegate: SliverChildListDelegate([
-                const SizedBox(height: 8),
+               spaceHeight( 8),
                 _buildReportTypes(provider),
-                const SizedBox(height: 24),
+               spaceHeight( 24),
                 _buildDateRangePicker(context, provider),
-                const SizedBox(height: 24),
+               spaceHeight( 24),
                 _buildExportOptions(provider),
-                const SizedBox(height: 24),
+               spaceHeight( 24),
                 _buildSavedReports(provider),
-                const SizedBox(height: 80),
+               spaceHeight( 80),
               ]),
             ),
           ],
@@ -101,7 +102,7 @@ class _ReportContent extends StatelessWidget {
             'Report Types',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 12),
+         spaceHeight( 12),
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -140,7 +141,7 @@ class _ReportContent extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(report['icon'], style: const TextStyle(fontSize: 28)),
-                        const SizedBox(height: 8),
+                       spaceHeight( 8),
                         Text(
                           report['title'],
                           style: const TextStyle(
@@ -200,7 +201,7 @@ class _ReportContent extends StatelessWidget {
                 'Date Range',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 16),
+             spaceHeight( 16),
               Row(
                 children: [
                   Expanded(
@@ -238,7 +239,7 @@ class _ReportContent extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+             spaceHeight( 16),
               Row(
                 children: [
                   _buildQuickDateChip('Last 7 days', () {
@@ -281,7 +282,7 @@ class _ReportContent extends StatelessWidget {
               label,
               style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
             ),
-            const SizedBox(height: 4),
+           spaceHeight( 4),
             Text(
               '${date.day}/${date.month}/${date.year}',
               style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
@@ -323,7 +324,7 @@ class _ReportContent extends StatelessWidget {
             'Export Data',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 12),
+         spaceHeight( 12),
           Row(
             children: [
               Expanded(
@@ -357,7 +358,7 @@ class _ReportContent extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+         spaceHeight( 16),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -412,7 +413,7 @@ class _ReportContent extends StatelessWidget {
         child: Column(
           children: [
             Icon(icon, size: 32, color: color),
-            const SizedBox(height: 8),
+           spaceHeight( 8),
             Text(
               format,
               style: const TextStyle(
@@ -420,7 +421,7 @@ class _ReportContent extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 2),
+           spaceHeight( 2),
             Text(
               type,
               style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
@@ -450,7 +451,7 @@ class _ReportContent extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+         spaceHeight( 12),
           ...provider.savedReports.map((report) => Container(
             margin: const EdgeInsets.only(bottom: 12),
             decoration: BoxDecoration(
@@ -488,7 +489,7 @@ class _ReportContent extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                       spaceHeight( 4),
                         Row(
                           children: [
                             Icon(Icons.calendar_today, size: 10, color: Colors.grey.shade500),
