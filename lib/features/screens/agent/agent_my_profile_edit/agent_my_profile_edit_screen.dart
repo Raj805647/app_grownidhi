@@ -48,6 +48,7 @@ class _AgentMyProfileEditScreenState extends State<AgentMyProfileEditScreen> {
                   hintText: 'Full Name',
                   controller: provider.fullNameController,
                   prefixIcon: Icons.person,
+                  isRead: true,
                 ),
 
                 spaceHeight(12),
@@ -69,6 +70,7 @@ class _AgentMyProfileEditScreenState extends State<AgentMyProfileEditScreen> {
                         controller: provider.mobileNumberController,
                         keyboardType: TextInputType.phone,
                         prefixIcon: Icons.call,
+                        isRead: true,
                       ),
                     ),
                     spaceWidth(12),
@@ -90,6 +92,7 @@ class _AgentMyProfileEditScreenState extends State<AgentMyProfileEditScreen> {
                   controller: provider.emailController,
                   keyboardType: TextInputType.emailAddress,
                   prefixIcon: Icons.email,
+                  isRead: true,
                 ),
 
                 spaceHeight(12),
@@ -228,7 +231,7 @@ class _AgentMyProfileEditScreenState extends State<AgentMyProfileEditScreen> {
                   title: 'Company List',
                   selectedItems: provider.selectedCompanies,
                   prefixIcon: Icons.work,
-                  onConfirm: (value)async {
+                  onConfirm: (value) async {
                     provider.selectedCompanyIds = provider.companyListData
                         .where((company) => value.contains(company.companyName))
                         .map((e) => e.id ?? '')
@@ -237,7 +240,7 @@ class _AgentMyProfileEditScreenState extends State<AgentMyProfileEditScreen> {
                     print(provider.selectedCompanies);
                     print(provider.selectedCompanyIds);
                     provider.notifyListeners();
-                   await provider.fetchProductList();
+                    await provider.fetchProductList();
                   },
                   items: provider.companyListData
                       .map((e) => e.companyName ?? '')
@@ -325,8 +328,9 @@ class _AgentMyProfileEditScreenState extends State<AgentMyProfileEditScreen> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: provider.isLoading ? null : () =>
-                      provider.updateCreateProfile(context),
+                    onPressed: provider.isLoading
+                        ? null
+                        : () => provider.updateCreateProfile(context),
                     child: provider.isLoading
                         ? const CircularProgressIndicator()
                         : const Text('Update Profile'),

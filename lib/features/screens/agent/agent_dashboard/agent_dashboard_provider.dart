@@ -11,6 +11,7 @@ class AgentDashboardProvider extends BaseProvider {
   Future<void> fetchAgentDashboard() async {
     try {
       isLoading = true;
+      notifyListeners();
 
       final response = await authRepository.agentDashboard();
       print('adbfhbdsaf=> ${response.data}');

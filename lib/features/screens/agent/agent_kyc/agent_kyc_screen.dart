@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_grownidhi/widget/custom_appbat.dart';
 import 'package:app_grownidhi/widget/custom_textfield.dart';
 import 'package:app_grownidhi/widget/ui_design.dart';
@@ -30,6 +32,12 @@ class AgentKycScreen extends StatelessWidget {
                     customTextField(
                       controller: provider.dobController,
                       hintText: "Date of Birth",
+                      isRead: true,
+                      onTap: () => pickDateTime(
+                        context,
+                        provider.dobController,
+                        includeTime: false,
+                      ),
                     ),
 
                     spaceHeight(12),
@@ -165,50 +173,89 @@ class AgentKycScreen extends StatelessWidget {
 
                     spaceHeight(20),
 
-                    /// PAN Card Upload
-                    GestureDetector(
-                      onTap: () {
-                        provider.pickExperienceDocument(
-                            context);
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey.shade400,
-                          ),
-                          borderRadius:
-                          BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          children: [
-                            const Icon(
-                              Icons.upload_file,
-                              size: 40,
-                              color: Colors.blue,
-                            ),
-                            const SizedBox(height: 8),
 
-                            Text(
-                              provider.panCardImage != null
-                                  ? "PAN Card Selected"
-                                  : "Upload PAN Card",
-                            ),
-                          ],
-                        ),
-                      ),
+                    documentUploadWidget(
+                      label: "PAN Card Front",
+                      imageFile: provider.getImage("panFront"),
+                      onPick: () {
+                        provider.pickImage(
+                          context: context,
+                          keyName: "panFront",
+                        );
+                      },
+                      onRemove: () {
+                        provider.removeImage("panFront");
+                      },
                     ),
 
+                    spaceHeight( 20),
+
+                    documentUploadWidget(
+                      label: "PAN Card Back",
+                      imageFile: provider.getImage("panBack"),
+                      onPick: () {
+                        provider.pickImage(
+                          context: context,
+                          keyName: "panBack",
+                        );
+                      },
+                      onRemove: () {
+                        provider.removeImage("panBack");
+                      },
+                    ),
+
+                    spaceHeight(20),
+
+                    documentUploadWidget(
+                      label: "Profile Photo",
+                      imageFile: provider.getImage("profile"),
+                      onPick: () {
+                        provider.pickImage(
+                          context: context,
+                          keyName: "profile",
+                        );
+                      },
+                      onRemove: () {
+                        provider.removeImage("profile");
+                      },
+                    ),
+                    spaceHeight(20),
+
+                    documentUploadWidget(
+                      label: "Aadhaar Front",
+                      imageFile: provider.getImage("aadharFront"),
+                      onPick: () {
+                        provider.pickImage(
+                          context: context,
+                          keyName: "aadharFront",
+                        );
+                      },
+                      onRemove: () {
+                        provider.removeImage("aadharFront");
+                      },
+                    ),
+                    spaceHeight(20),
+
+                    documentUploadWidget(
+                      label: "Aadhaar Back",
+                      imageFile: provider.getImage("aadharBack"),
+                      onPick: () {
+                        provider.pickImage(
+                          context: context,
+                          keyName: "aadharBack",
+                        );
+                      },
+                      onRemove: () {
+                        provider.removeImage("aadharBack");
+                      },
+                    ),
                     spaceHeight(24),
 
                     CustomLoadingButton(
                       isLoading: provider.isLoading,
                       text: "Submit KYC",
                       loadingText: "Submitting...",
-                      onTap: () {
-                        provider.submitKyc();
-                      },
+                      onTap: () => provider.submitKycUpdate(context),
                     ),
                   ],
                 ),
@@ -217,6 +264,90 @@ class AgentKycScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget documentUploadWidget({
+    required String label,
+    required File? imageFile,
+    required VoidCallback onPick,
+    required VoidCallback onRemove,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        /// Label
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        GestureDetector(
+          onTap: onPick,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey.shade400,
+              ),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: imageFile != null
+                ? Stack(
+              alignment: Alignment.topRight,
+              children: [
+
+                /// Image
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.file(
+                    imageFile,
+                    height: 180,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+
+                /// Remove Button
+                GestureDetector(
+                  onTap: onRemove,
+                  child: Container(
+                    margin: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(6),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ],
+            )
+                : Column(
+              children: [
+                const Icon(
+                  Icons.upload_file,
+                  size: 40,
+                  color: Colors.blue,
+                ),
+                const SizedBox(height: 8),
+                Text("Upload $label"),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

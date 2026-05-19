@@ -355,8 +355,8 @@ class _AgentDashboardScreenState extends State<AgentDashboardScreen> {
               ),
               _quickActionItem(
                 icon: Icons.message,
-                title: "Message",
-                onTap: () {},
+                title: "Add Client",
+                onTap: ()=> provider.navigateTo(context, RouteNames.agentClientDataScreen),
               ),
             ],
           ),

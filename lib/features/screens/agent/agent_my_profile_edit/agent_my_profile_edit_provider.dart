@@ -4,11 +4,13 @@ import 'package:base_module/base_module.dart';
 import 'package:base_module/core/models/agent_profile_response.dart';
 import 'package:base_module/core/models/company_list_response.dart';
 import 'package:base_module/core/models/product_list_response.dart';
+import 'package:base_module/core/models/user_response.dart';
 import 'package:base_module/image_file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
 class AgentMyProfileEditProvider extends BaseProvider {
+  UserData userData = UserData();
   bool isLoading = false;
   AgentProfileData agentProfileData = AgentProfileData();
   List<CompanyListData> companyListData = [];
@@ -82,6 +84,8 @@ class AgentMyProfileEditProvider extends BaseProvider {
   }
 
   Future<void> fetchCompanyList() async {
+    userData = await StorageService.getUserData() ?? UserData();
+    autoFetchUserData();
     final response = await authRepository.companyListData();
     print('adflnldsan');
     print(response.error);
@@ -95,6 +99,13 @@ class AgentMyProfileEditProvider extends BaseProvider {
     } else {
       print(response.data);
     }
+  }
+
+  void autoFetchUserData() {
+    fullNameController.text = userData.name ?? '';
+    emailController.text = userData.email ?? '';
+    mobileNumberController.text = userData.number ?? '';
+    notifyListeners();
   }
 
   Future<void> fetchProductList() async {

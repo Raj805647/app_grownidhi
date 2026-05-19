@@ -37,6 +37,7 @@ class UserData {
     id = json['id'];
     name = json['name'];
     email = json['email'];
+    number = json['phone'];
     type = json['type'];
     status = json['status'];
     token = json['token'];
@@ -46,6 +47,7 @@ class UserData {
   String? name;
   String? email;
   String? type;
+  String? number;
   bool? status;
   String? token;
   String? createdAt;
@@ -55,6 +57,7 @@ class UserData {
     map['id'] = id;
     map['name'] = name;
     map['email'] = email;
+    map['phone'] = number;
     map['type'] = type;
     map['status'] = status;
     map['token'] = token;

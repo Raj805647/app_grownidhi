@@ -32,5 +32,7 @@ class AppConfig {
   static const String actionUpdateAgentProfile = '/storeOrUpdateAagentDetails';
   static const String actionCompanyList = '/company-list';
   static const String actionProductList = '/products-by-company';
-  static const String actionClientList = '/clients';
+  static const String actionClientList = '/agent/clients';
+  static const String actionAgentKycAddOrUpdate = '/agentKycAddOrUpdate';
+  static const String actionClientAddOrUpdate = '/agent/clientAddOrUpdate';
 }

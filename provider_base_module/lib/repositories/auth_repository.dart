@@ -137,6 +137,12 @@ class AuthRepository extends BaseRepository {
       return response.data;
     });
   }
+  Future<Result<dynamic>> kycUpdateStore(Map<String, dynamic> data) {
+    return safeApiCall(() async {
+      final response = await apiClient.postDio(AppConfig.actionAgentKycAddOrUpdate,isFormData: true,body: data);
+      return response.data;
+    });
+  }
 
   Future<Result<dynamic>> productListData(List companyId) {
     final companyIds = companyId.join(',');
@@ -144,6 +150,15 @@ class AuthRepository extends BaseRepository {
     print('adfbjdsakf=> $url');
     return safeApiCall(() async {
       final response = await apiClient.getDio(url);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> addClientMember(int companyId, Map<String, dynamic> data) {
+    final url = '${AppConfig.actionClientAddOrUpdate}/client_id=$companyId';
+    print('adfbjdsakf=> $url');
+    return safeApiCall(() async {
+      final response = await apiClient.postDio(url,isFormData: true,body: data);
       return response.data;
     });
   }

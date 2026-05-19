@@ -88,6 +88,7 @@ class ApiClient {
       final token = await StorageService.getUserToken();
       if (token != null && token.isNotEmpty) {
         headers['Authorization'] = 'Bearer $token';
+        // headers['Authorization'] = 'Bearer 47|EPTikIWUd0p8EWZB9JlvdZnkYTZLmZTP0kc0lnC1891a3985';
       }
     }
 
@@ -110,7 +111,8 @@ class ApiClient {
     if (requiresAuth) {
       final token = await StorageService.getUserToken();
       if (token != null && token.isNotEmpty) {
-        headers['Authorization'] = 'Bearer $token';
+        // headers['Authorization'] = 'Bearer $token';
+        headers['Authorization'] = 'Bearer 50|vPqCYLWSNXn6Ij2q85tFzlnH5443ZIz51OPDCmv996dfd9c1';
       }
     }
 
@@ -134,7 +136,8 @@ class ApiClient {
       final token = await StorageService.getUserToken();
 
       if (token != null && token.isNotEmpty) {
-        updatedHeaders['Authorization'] = 'Bearer $token';
+        // updatedHeaders['Authorization'] = 'Bearer $token';
+        updatedHeaders['Authorization'] = 'Bearer 50|vPqCYLWSNXn6Ij2q85tFzlnH5443ZIz51OPDCmv996dfd9c1';
       }
     }
 
