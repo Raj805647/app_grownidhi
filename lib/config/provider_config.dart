@@ -1,5 +1,6 @@
 import 'package:app_grownidhi/features/auth/sign_up/sign_up_provider.dart';
 import 'package:app_grownidhi/features/screens/agent/agent_bottom_bar/agent_bottom_bar_provider.dart';
+import 'package:app_grownidhi/features/screens/agent/agent_client_data/agent_client_data_provider.dart';
 import 'package:app_grownidhi/features/screens/agent/agent_dashboard/agent_dashboard_provider.dart';
 import 'package:app_grownidhi/features/screens/agent/agent_dashboard/agent_dashboard_provider.dart';
 import 'package:app_grownidhi/features/screens/agent/agent_earning/agent_earning_provider.dart';
@@ -20,8 +21,12 @@ import 'package:provider/provider.dart';
 import '../features/auth/onboarding/onboarding_provider.dart';
 import '../features/auth/sign_in/sign_in_controller.dart';
 import '../features/auth/splash/splash_provider.dart';
+import '../features/screens/agent/agent_add_client_data/agent_add_client_data_provider.dart';
+import '../features/screens/agent/agent_client_details/agent_client_details_provider.dart';
+import '../features/screens/agent/agent_client_member_update_create/agent_client_member_update_create_provider.dart';
 import '../features/screens/agent/agent_kyc/agent_kyc_provider.dart';
 import '../features/screens/agent/agent_my_profile/agent_my_profile_provider.dart';
+import '../features/screens/agent/agent_portfolio_product/agent_portfolio_product_provider.dart';
 import '../features/screens/individual/add_product/add_product_provider.dart';
 import '../features/screens/individual/add_product_details/add_product_details_provider.dart';
 import '../features/screens/individual/all_service/all_service_provider.dart';
@@ -60,6 +65,10 @@ class ProviderConfig {
     ChangeNotifierProvider<AgentMyProfileProvider>(create: (_) => AgentMyProfileProvider()),
     ChangeNotifierProvider<AgentMyProfileEditProvider>(create: (_) => AgentMyProfileEditProvider()),
     ChangeNotifierProvider<AgentKycProvider>(create: (_) => AgentKycProvider()),
-
+    ChangeNotifierProvider<AgentClientDataProvider>(create: (_) => AgentClientDataProvider()),
+    ChangeNotifierProvider<AgentAddClientDataProvider>(create: (_) => AgentAddClientDataProvider()),
+    ChangeNotifierProvider<AgentClientDetailsProvider>(create: (_) => AgentClientDetailsProvider()),
+    ChangeNotifierProvider<AgentClientMemberUpdateCreateProvider>(create: (_) => AgentClientMemberUpdateCreateProvider()),
+    ChangeNotifierProvider<AgentPortfolioProductProvider>(create: (_) => AgentPortfolioProductProvider()),
   ];
 }

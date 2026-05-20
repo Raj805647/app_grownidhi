@@ -1,27 +1,24 @@
-import 'dart:io';
-
 import 'package:base_module/base_module.dart';
-import 'package:base_module/core/models/agent_client_response.dart';
 import 'package:base_module/core/models/agent_client_member_data_response.dart';
+import 'package:flutter/cupertino.dart';
 
-class AgentClientDataProvider extends BaseProvider {
+class AgentClientDetailsProvider extends BaseProvider {
   bool isLoading = false;
+  List<AgentClientMemberData> agentClientMemberData = [];
 
-  List<AgentClientData> agentClientData = [];
-
-  Future<void> fetchAgentClientData() async {
+  Future<void> fetchClientMemberData() async {
     try {
       isLoading = true;
       notifyListeners();
 
-      final response = await authRepository.agentClientData();
+      final response = await authRepository.agentClientMemberData();
       print('adskjbfbdsasdf');
       print(response.isSuccess);
       print(response.data);
       if (response.isSuccess == true) {
         final List rawList = response.data['data'] ?? [];
-        agentClientData = rawList
-            .map((e) => AgentClientData.fromJson(e))
+        agentClientMemberData = rawList
+            .map((e) => AgentClientMemberData.fromJson(e))
             .toList();
         ;
         notifyListeners();
@@ -35,6 +32,18 @@ class AgentClientDataProvider extends BaseProvider {
     } finally {
       isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> deleteClientMember(int id) async {
+    try {
+      await authRepository.deleteClientMemberData(id);
+
+      agentClientMemberData.removeWhere((e) => e.familyMember?.id == id);
+
+      notifyListeners();
+    } catch (e) {
+      debugPrint(e.toString());
     }
   }
 }

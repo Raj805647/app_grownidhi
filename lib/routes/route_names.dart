@@ -29,5 +29,7 @@ class RouteNames {
   static const String agentKycScreen = '/agentKycScreen';
   static const String agentClientDataScreen = '/agentClientDataScreen';
   static const String agentAddClientDataScreen = '/agentAddClientDataScreen';
+  static const String agentClientDetailsScreen = '/agentClientDetailsScreen';
+  static const String agentClientMemberUpdateCreateScreen = '/agentClientMemberUpdateCreateScreen';
 
 }

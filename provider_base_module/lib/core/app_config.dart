@@ -33,6 +33,12 @@ class AppConfig {
   static const String actionCompanyList = '/company-list';
   static const String actionProductList = '/products-by-company';
   static const String actionClientList = '/agent/clients';
+  static const String actionClientMemberList = '/agent/clientFamilyMembers';
   static const String actionAgentKycAddOrUpdate = '/agentKycAddOrUpdate';
   static const String actionClientAddOrUpdate = '/agent/clientAddOrUpdate';
+  static const String actionClientFamilyMemberAddOrUpdate = '/agent/clientFamilyMemberAddOrUpdate';
+  static const String actionClientFamilyMemberDelete = '/agent/clientFamilyMemberDelete';
+  static const String actionPortfolioCategory = '/agent/categories';
+  static const String actionPortfolioSubCategory = '/agent/subcategories';
+  static const String actionPortfolioProducts = '/agent/products';
 }

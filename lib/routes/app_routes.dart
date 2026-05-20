@@ -11,8 +11,10 @@ import '../features/auth/onboarding/onboarding_screen.dart';
 import '../features/auth/sign_in/sign_in_screen.dart';
 import '../features/auth/sign_up/sign_up_screen.dart';
 import '../features/auth/splash/splash_screen.dart';
-import '../features/screens/agent/agent_client_data/agent_add_client_data_screen.dart';
+import '../features/screens/agent/agent_add_client_data/agent_add_client_data_screen.dart';
 import '../features/screens/agent/agent_client_data/agent_client_data_screen.dart';
+import '../features/screens/agent/agent_client_details/agent_client_details_screen.dart';
+import '../features/screens/agent/agent_client_member_update_create/agent_client_member_update_create_screen.dart';
 import '../features/screens/agent/agent_kyc/agent_kyc_screen.dart';
 import '../features/screens/agent/agent_my_profile/agent_my_profile_screen.dart';
 import '../features/screens/agent/agent_my_profile_edit/agent_my_profile_edit_screen.dart';
@@ -56,6 +58,8 @@ class AppRoutes {
     RouteNames.agentKycScreen: (context) => AgentKycScreen(),
     RouteNames.agentClientDataScreen: (context) => AgentClientDataScreen(),
     // RouteNames.agentAddClientDataScreen: (context) => AgentAddClientDataScreen(),
+    // RouteNames.agentClientDetailsScreen: (context) => AgentClientDetailsScreen(),
+    // RouteNames.agentClientMemberUpdateCreateScreen: (context) => AgentClientMemberUpdateCreateScreen(),
 
   };
 

@@ -6,12 +6,13 @@ import 'package:flutter/material.dart';
 
 import '../../../../widget/custom_button.dart';
 import '../../../../widget/custom_textfield.dart';
-import 'agent_client_data_provider.dart';
 import 'package:provider/provider.dart';
+
+import 'agent_add_client_data_provider.dart';
 
 class AgentAddClientDataScreen extends StatefulWidget {
   final AgentClientData? agentClientData;
-  AgentAddClientDataScreen({super.key, required this.agentClientData});
+  const AgentAddClientDataScreen({super.key, required this.agentClientData});
 
   @override
   State<AgentAddClientDataScreen> createState() =>
@@ -23,7 +24,7 @@ class _AgentAddClientDataScreenState extends State<AgentAddClientDataScreen> {
   void initState() {
     // TODO: implement initState
     Future.microtask(() {
-      context.read<AgentClientDataProvider>().autoField(
+      context.read<AgentAddClientDataProvider>().autoField(
         widget.agentClientData ?? AgentClientData(),
       );
     });
@@ -48,7 +49,7 @@ class _AgentAddClientDataScreenState extends State<AgentAddClientDataScreen> {
                 color: Colors.white.withOpacity(0.95),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Consumer<AgentClientDataProvider>(
+              child: Consumer<AgentAddClientDataProvider>(
                 builder: (context, provider, child) => Column(
                   children: [
                     /// Profile Image

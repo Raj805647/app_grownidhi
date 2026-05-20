@@ -7,7 +7,8 @@ import 'package:base_module/core/models/agent_client_response.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'agent_add_client_data_screen.dart';
+import '../agent_add_client_data/agent_add_client_data_screen.dart';
+import '../agent_client_details/agent_client_details_screen.dart';
 
 class AgentClientDataScreen extends StatefulWidget {
   const AgentClientDataScreen({super.key});
@@ -75,7 +76,7 @@ class _AgentClientDataScreenState extends State<AgentClientDataScreen> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                AgentAddClientDataScreen(agentClientData: agentClientData),
+                AgentClientDetailsScreen(agentClientData: agentClientData),
           ),
         ),
         child: Container(
@@ -175,52 +176,6 @@ class _AgentClientDataScreenState extends State<AgentClientDataScreen> {
                           ),
                         ),
                       ],
-                    ),
-
-                    const SizedBox(height: 6),
-
-                    /// Phone
-                    Row(
-                      children: [
-                        const Icon(Icons.phone, size: 16, color: Colors.grey),
-                        const SizedBox(width: 6),
-                        Text(
-                          agentClientData.phone ?? "N/A",
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 6),
-
-                    /// Created By
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.person_outline,
-                          size: 16,
-                          color: Colors.grey,
-                        ),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: Text(
-                            "Created By: ${agentClientData.createdBy ?? 'N/A'}",
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 10),
-                    Text(
-                      agentClientData.createdAt ?? "",
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   ],
                 ),
