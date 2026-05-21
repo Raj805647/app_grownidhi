@@ -60,6 +60,7 @@ class AppRoutes {
     // RouteNames.agentAddClientDataScreen: (context) => AgentAddClientDataScreen(),
     // RouteNames.agentClientDetailsScreen: (context) => AgentClientDetailsScreen(),
     // RouteNames.agentClientMemberUpdateCreateScreen: (context) => AgentClientMemberUpdateCreateScreen(),
+    // RouteNames.agentClientApplyFormScreen: (context) => AgentClientApplyFormScreen(),
 
   };
 

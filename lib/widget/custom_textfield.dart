@@ -23,7 +23,7 @@ Widget customTextField({
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(hintText, style: TextStyle(color: Colors.black, fontSize: 12)),
+      Text(hintText, style: TextStyle(color: Colors.white, fontSize: 14)),
       spaceHeight(8),
       TextField(
         controller: controller,
@@ -86,7 +86,7 @@ Widget customDropdown({
         style: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w600,
-          color: Color(0xFF1E2A5A),
+          color: Colors.white,
         ),
       ),
 
@@ -143,8 +143,8 @@ Widget customMultiSelectDropdown({
       Text(
         title,
         style: const TextStyle(
-          fontSize: 12,
-          color: Colors.black,
+          fontSize: 14,
+          color: Colors.white,
         ),
       ),
 
@@ -182,6 +182,224 @@ Widget customMultiSelectDropdown({
         ),
       ),
     ],
+  );
+}
+
+Widget customRadioGroup({
+  required String title,
+  required List<dynamic> options,
+  required String groupValue,
+  required Function(dynamic) onChanged,
+}) {
+  return Container(
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(
+      color: Colors.white.withOpacity(0.08),
+      borderRadius: BorderRadius.circular(18),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 16,
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: List.generate(
+            options.length,
+                (i) {
+              final option = options[i];
+
+              final isSelected = groupValue == option;
+
+              return GestureDetector(
+                onTap: () => onChanged(option),
+
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.08),
+
+                    borderRadius: BorderRadius.circular(14),
+
+                    border: Border.all(
+                      color: isSelected
+                          ? Colors.white
+                          : Colors.white.withOpacity(0.3),
+                    ),
+                  ),
+
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: isSelected
+                                ? Colors.deepPurple
+                                : Colors.white,
+                            width: 2,
+                          ),
+                        ),
+                        child: Center(
+                          child: Container(
+                            width: isSelected ? 10 : 0,
+                            height: isSelected ? 10 : 0,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.deepPurple,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      Text(
+                        option.toString(),
+                        style: TextStyle(
+                          color: isSelected
+                              ? Colors.deepPurple
+                              : Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget customCheckboxGroup({
+  required String title,
+  required List<dynamic> options,
+  required Function(dynamic) onTap,
+  required bool Function(dynamic) isChecked,
+}) {
+  return Container(
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(
+      color: Colors.white.withOpacity(0.08),
+      borderRadius: BorderRadius.circular(18),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 16,
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: List.generate(
+            options.length,
+                (i) {
+              final option = options[i];
+
+              final checked = isChecked(option);
+
+              return GestureDetector(
+                onTap: () => onTap(option),
+
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: checked
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.08),
+
+                    borderRadius: BorderRadius.circular(14),
+
+                    border: Border.all(
+                      color: checked
+                          ? Colors.white
+                          : Colors.white.withOpacity(0.3),
+                    ),
+                  ),
+
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 22,
+                        height: 22,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: checked
+                                ? Colors.deepPurple
+                                : Colors.white,
+                            width: 2,
+                          ),
+                          color: checked
+                              ? Colors.deepPurple
+                              : Colors.transparent,
+                        ),
+                        child: checked
+                            ? const Icon(
+                          Icons.check,
+                          color: Colors.white,
+                          size: 16,
+                        )
+                            : null,
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      Text(
+                        option.toString(),
+                        style: TextStyle(
+                          color: checked
+                              ? Colors.deepPurple
+                              : Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    ),
   );
 }
 

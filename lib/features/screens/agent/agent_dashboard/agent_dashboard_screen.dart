@@ -1,4 +1,5 @@
 import 'package:app_grownidhi/widget/ui_design.dart';
+import 'package:base_module/core/app_config.dart';
 import 'package:base_module/core/app_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -6,6 +7,8 @@ import 'package:provider/provider.dart';
 
 import '../../../../routes/route_names.dart';
 import '../../../../widget/help_widget.dart';
+import '../agent_client_data/agent_client_data_screen.dart';
+import '../agent_client_details/agent_client_details_screen.dart';
 import 'agent_dashboard_provider.dart';
 
 class AgentDashboardScreen extends StatefulWidget {
@@ -20,7 +23,7 @@ class _AgentDashboardScreenState extends State<AgentDashboardScreen> {
   void initState() {
     // TODO: implement initState
     Future.microtask(() {
-      context.read<AgentDashboardProvider>().fetchAgentDashboard();
+      context.read<AgentDashboardProvider>(). agentClientDataProvider.fetchAgentClientData();
     });
     super.initState();
   }
@@ -51,9 +54,7 @@ class _AgentDashboardScreenState extends State<AgentDashboardScreen> {
                         spaceHeight(24),
                         _buildQuickActions(provider, context),
                         spaceHeight(24),
-                        //   _buildUpcomingRenewals(
-                        //   provider.dashboardData!.upcomingRenewals,
-                        // ),
+                          _buildClientData(context, provider),
                       /* spaceHeight( 24),
                         _buildPendingCommissions(
                           provider.dashboardData!.pendingCommissions,
@@ -70,39 +71,6 @@ class _AgentDashboardScreenState extends State<AgentDashboardScreen> {
                 );
               },
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildErrorWidget(String error) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.error_outline, size: 64, color: Colors.red.shade300),
-          spaceHeight(16),
-          Text(
-            'Failed to load dashboard',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.grey.shade700,
-            ),
-          ),
-          spaceHeight(8),
-          Text(error, style: TextStyle(color: Colors.grey.shade500)),
-          spaceHeight(16),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF6C63FF),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: const Text('Retry'),
           ),
         ],
       ),
@@ -150,6 +118,224 @@ class _AgentDashboardScreenState extends State<AgentDashboardScreen> {
           ),
         ),
         const SizedBox(width: 16),
+      ],
+    );
+  }
+
+  Widget _buildClientData(
+      BuildContext context,
+      AgentDashboardProvider provider,
+      ) {
+    final clientProvider = provider.agentClientDataProvider;
+    final clients = clientProvider.agentClientData;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        /// TOP ROW
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Clients",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+
+              InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AgentClientDataScreen()));
+                },
+                child: const Text(
+                  "View All",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 14),
+
+        /// HORIZONTAL CLIENT LIST
+        SizedBox(
+          height: 100,
+          child: clients.isEmpty
+              ? const Center(
+            child: Text("No Client Found"),
+          )
+              : ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            itemCount: clients.length,
+            separatorBuilder: (_, __) =>
+            const SizedBox(width: 12),
+            itemBuilder: (context, index) {
+              final client = clients[index];
+
+              return InkWell(
+                onTap: ()=> Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        AgentClientDetailsScreen(agentClientData: client),
+                  ),
+                ),
+                child: Container(
+                  width: 220,
+                  margin: const EdgeInsets.only(bottom: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        const Color(0xff2563EB),
+                        const Color(0xff1E40AF),
+                      ],
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xff2563EB).withOpacity(0.25),
+                        blurRadius: 16,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: Stack(
+                    children: [
+
+                      /// BACKGROUND DESIGN
+                      Positioned(
+                        top: -25,
+                        right: -25,
+                        child: Container(
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withOpacity(0.08),
+                          ),
+                        ),
+                      ),
+
+                      Positioned(
+                        bottom: -35,
+                        left: -20,
+                        child: Container(
+                          height: 90,
+                          width: 90,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withOpacity(0.05),
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.all(18),
+                        child: Row(
+                          children: [
+
+                            /// PROFILE IMAGE
+                            Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.4),
+                                  width: 2,
+                                ),
+                              ),
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.white,
+                                backgroundImage:
+                                (client.profileImage != null &&
+                                    client.profileImage!.isNotEmpty)
+                                    ? NetworkImage(
+                                  '${AppConfig.imageUrl}/${client.profileImage}',
+                                )
+                                    : null,
+                                child: (client.profileImage == null ||
+                                    client.profileImage!.isEmpty)
+                                    ? const Icon(
+                                  Icons.person,
+                                  size: 30,
+                                  color: Colors.grey,
+                                )
+                                    : null,
+                              ),
+                            ),
+
+                            const SizedBox(width: 14),
+
+                            /// NAME + PHONE
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+
+                                  Text(
+                                    client.name ?? "Unknown Client",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 6),
+
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.call,
+                                        color: Colors.white.withOpacity(0.8),
+                                        size: 16,
+                                      ),
+
+                                      const SizedBox(width: 6),
+
+                                      Expanded(
+                                        child: Text(
+                                          client.phone ?? "No Phone",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            color:
+                                            Colors.white.withOpacity(0.85),
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ],
     );
   }

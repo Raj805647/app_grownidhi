@@ -199,10 +199,33 @@ class AuthRepository extends BaseRepository {
       return response.data;
     });
   }
+
   Future<Result<dynamic>> getAgentPortfolioPortFolio(int service_id,service_type_id ) {
     return safeApiCall(() async {
       final response = await apiClient.getDio('${AppConfig.actionPortfolioProducts}/service_id=$service_id/service_type_id=$service_type_id');
       return response.data;
     });
   }
+
+  Future<Result<dynamic>> getAgentProductApplyForm(int service_id ) {
+    return safeApiCall(() async {
+      final response = await apiClient.getDio('${AppConfig.actionAgentProductApplyForm}/product_id=$service_id');
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> agentProductFormSubmit(Map<String, dynamic> body ) {
+    return safeApiCall(() async {
+      final response = await apiClient.postDio(AppConfig.actionAgentProductFormSubmit,body: body,isFormData: true);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> agentCompanyData() {
+    return safeApiCall(() async {
+      final response = await apiClient.getDio(AppConfig.actionAgentCompanyData);
+      return response.data;
+    });
+  }
+
 }

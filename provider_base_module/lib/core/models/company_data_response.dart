@@ -1,20 +1,20 @@
 import 'package:base_module/base_module.dart';
 
-class ProductListResponse extends BaseModel {
-  ProductListResponse({
+class CompanyDataResponse extends BaseModel{
+  CompanyDataResponse({
       super.status,
       super.message,
       this.data,});
 
-  ProductListResponse.fromJson(dynamic json) {
+  CompanyDataResponse.fromJson(dynamic json) {
     if (json['data'] != null) {
       data = [];
       json['data'].forEach((v) {
-        data?.add(ProductListData.fromJson(v));
+        data?.add(CompanyData.fromJson(v));
       });
     }
   }
-  List<ProductListData>? data;
+  List<CompanyData>? data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -28,22 +28,22 @@ class ProductListResponse extends BaseModel {
 
 }
 
-class ProductListData {
-  ProductListData({
+class CompanyData {
+  CompanyData({
       this.id, 
-      this.name,});
+      this.companyName,});
 
-  ProductListData.fromJson(dynamic json) {
+  CompanyData.fromJson(dynamic json) {
     id = json['id'];
-    name = json['name'];
+    companyName = json['company_name'];
   }
   int? id;
-  String? name;
+  String? companyName;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = id;
-    map['name'] = name;
+    map['company_name'] = companyName;
     return map;
   }
 

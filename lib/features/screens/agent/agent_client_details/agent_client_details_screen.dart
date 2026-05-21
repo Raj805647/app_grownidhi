@@ -1,4 +1,5 @@
 import 'package:app_grownidhi/features/screens/agent/agent_client_member_update_create/agent_client_member_update_create_screen.dart';
+import 'package:app_grownidhi/features/screens/individual/kyc_update/kyc_update_screen.dart';
 import 'package:app_grownidhi/routes/route_names.dart';
 import 'package:app_grownidhi/widget/custom_appbat.dart';
 import 'package:app_grownidhi/widget/help_widget.dart';
@@ -8,6 +9,7 @@ import 'package:base_module/core/models/agent_client_response.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../agent_client_data/agent_client_data_provider.dart';
+import '../agent_client_profile_details/agent_client_profile_details_screen.dart';
 import 'agent_client_details_provider.dart';
 import 'agent_client_member_details.dart';
 
@@ -168,12 +170,149 @@ class _AgentClientDetailsScreenState extends State<AgentClientDetailsScreen> {
                   ),
                 ),
                 spaceHeight(20),
+                buildClientAction(
+                  onProfileTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            AgentClientProfileDetailsScreen(),
+                      ),
+                    );
+                  },
+                  onKycTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            KycUpdateScreen(),
+                      ),
+                    );
+                  },
+                ),
+                spaceHeight(20),
                 buildClientMemberData(),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget buildClientAction({
+    VoidCallback? onProfileTap,
+    VoidCallback? onKycTap,
+  }) {
+    return Row(
+      children: [
+
+        /// COMPLETE PROFILE BUTTON
+        Expanded(
+          child: InkWell(
+            onTap: onProfileTap,
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 14,
+              ),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xff4F46E5),
+                    Color(0xff4338CA),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xff4F46E5)
+                        .withOpacity(0.25),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: const Row(
+                mainAxisAlignment:
+                MainAxisAlignment.center,
+                children: [
+
+                  Icon(
+                    Icons.person_outline,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+
+                  SizedBox(width: 8),
+
+                  Text(
+                    "Complete Profile",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(width: 14),
+
+        /// CLIENT KYC BUTTON
+        Expanded(
+          child: InkWell(
+            onTap: onKycTap,
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 14,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: const Color(0xff10B981),
+                  width: 1.5,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.04),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: const Row(
+                mainAxisAlignment:
+                MainAxisAlignment.center,
+                children: [
+
+                  Icon(
+                    Icons.verified_user_outlined,
+                    color: Color(0xff10B981),
+                    size: 20,
+                  ),
+
+                  SizedBox(width: 8),
+
+                  Text(
+                    "Client KYC",
+                    style: TextStyle(
+                      color: Color(0xff10B981),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:app_grownidhi/widget/ui_design.dart';
+import 'package:base_module/core/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../widget/help_widget.dart';
@@ -46,7 +47,7 @@ class _AgentPortfolioScreenState extends State<AgentPortfolioScreen> {
             ),
           )*/
           SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.only(left: 16,right: 16, top: 20, bottom: 100),
             child: Column(
               children: [
                 Row(
@@ -237,11 +238,12 @@ class _AgentPortfolioScreenState extends State<AgentPortfolioScreen> {
                                           category_id:
                                               provider.selectedCategoryId ?? 0,
                                           subCategoy_id: item.id ?? 0,
+                                          appbarName: item.name ?? '',
                                         ),
                                   ),
                                 ),
                                 child: Container(
-                                  padding: const EdgeInsets.all(18),
+                                  padding: const EdgeInsets.all(10),
 
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(28),
@@ -284,11 +286,13 @@ class _AgentPortfolioScreenState extends State<AgentPortfolioScreen> {
                                           ),
                                         ),
 
-                                        child: const Icon(
+                                        child:(item.icon?.isEmpty ?? true)
+                                  ? const Icon(
                                           Icons.account_balance_wallet,
                                           color: Colors.deepPurple,
                                           size: 30,
-                                        ),
+                                        ): 
+                                        Image.network('${AppConfig.imageUrl}/${item.icon}',height: 75,fit: BoxFit.cover,),
                                       ),
 
                                       const Spacer(),
@@ -303,13 +307,12 @@ class _AgentPortfolioScreenState extends State<AgentPortfolioScreen> {
 
                                         style: const TextStyle(
                                           color: Colors.black,
-                                          fontSize: 18,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
 
-                                      const SizedBox(height: 8),
-
+                                      const SizedBox(height: 5),
                                       /// VALUE
                                       Text(
                                         item.value ?? "₹ 00,000",
@@ -320,7 +323,7 @@ class _AgentPortfolioScreenState extends State<AgentPortfolioScreen> {
                                         ),
                                       ),
 
-                                      const SizedBox(height: 14),
+                                      const SizedBox(height: 8),
 
                                       /// TYPE BADGE
                                       Container(

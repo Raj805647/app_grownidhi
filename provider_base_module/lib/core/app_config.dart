@@ -41,4 +41,7 @@ class AppConfig {
   static const String actionPortfolioCategory = '/agent/categories';
   static const String actionPortfolioSubCategory = '/agent/subcategories';
   static const String actionPortfolioProducts = '/agent/products';
+  static const String actionAgentProductApplyForm = '/agent/apply-form';
+  static const String actionAgentProductFormSubmit = '/agent/product/form-submit';
+  static const String actionAgentCompanyData = '/agent/companies';
 }

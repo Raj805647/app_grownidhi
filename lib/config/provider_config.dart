@@ -22,6 +22,7 @@ import '../features/auth/onboarding/onboarding_provider.dart';
 import '../features/auth/sign_in/sign_in_controller.dart';
 import '../features/auth/splash/splash_provider.dart';
 import '../features/screens/agent/agent_add_client_data/agent_add_client_data_provider.dart';
+import '../features/screens/agent/agent_client_apply_form/agent_client_apply_form_provider.dart';
 import '../features/screens/agent/agent_client_details/agent_client_details_provider.dart';
 import '../features/screens/agent/agent_client_member_update_create/agent_client_member_update_create_provider.dart';
 import '../features/screens/agent/agent_kyc/agent_kyc_provider.dart';
@@ -70,5 +71,7 @@ class ProviderConfig {
     ChangeNotifierProvider<AgentClientDetailsProvider>(create: (_) => AgentClientDetailsProvider()),
     ChangeNotifierProvider<AgentClientMemberUpdateCreateProvider>(create: (_) => AgentClientMemberUpdateCreateProvider()),
     ChangeNotifierProvider<AgentPortfolioProductProvider>(create: (_) => AgentPortfolioProductProvider()),
+    ChangeNotifierProvider<AgentPortfolioProductProvider>(create: (_) => AgentPortfolioProductProvider()),
+    ChangeNotifierProvider<AgentClientApplyFormProvider>(create: (_) => AgentClientApplyFormProvider()),
   ];
 }

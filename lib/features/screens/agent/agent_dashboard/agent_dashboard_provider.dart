@@ -1,3 +1,4 @@
+import 'package:app_grownidhi/features/screens/agent/agent_client_data/agent_client_data_provider.dart';
 import 'package:base_module/base_module.dart';
 import 'package:flutter/material.dart';
 import 'package:base_module/core/models/agent_dashboard_response.dart';
@@ -6,6 +7,7 @@ import 'package:base_module/core/models/agent_client_response.dart';
 class AgentDashboardProvider extends BaseProvider {
   bool isLoading = false;
   AgentDashboardData agentDashboardData = AgentDashboardData();
+  AgentClientDataProvider agentClientDataProvider = AgentClientDataProvider();
   List<AgentClientData> agentClientData = [];
 
   Future<void> fetchAgentDashboard() async {
@@ -20,6 +22,7 @@ class AgentDashboardProvider extends BaseProvider {
       notifyListeners();
       if (response.isSuccess == true) {
         agentDashboardData = AgentDashboardData.fromJson(response.data['data']);
+        // agentClientDataProvider.fetchAgentClientData();
         fetchDashboardData();
         print('adfbdsakjbf=> $agentDashboardData');
       } else {

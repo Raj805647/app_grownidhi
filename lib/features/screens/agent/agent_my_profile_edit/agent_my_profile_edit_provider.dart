@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:base_module/base_module.dart';
 import 'package:base_module/core/models/agent_profile_response.dart';
 import 'package:base_module/core/models/company_list_response.dart';
-import 'package:base_module/core/models/product_list_response.dart';
+import 'package:base_module/core/models/product_service_response.dart';
 import 'package:base_module/core/models/user_response.dart';
 import 'package:base_module/image_file_picker.dart';
 import 'package:flutter/material.dart';

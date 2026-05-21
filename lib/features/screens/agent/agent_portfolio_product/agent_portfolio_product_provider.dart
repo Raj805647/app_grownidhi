@@ -1,5 +1,5 @@
 import 'package:base_module/base_module.dart';
-import 'package:base_module/core/models/product_list_response.dart';
+import 'package:base_module/core/models/product_service_response.dart';
 import 'package:flutter/cupertino.dart';
 
 class AgentPortfolioProductProvider extends BaseProvider {
