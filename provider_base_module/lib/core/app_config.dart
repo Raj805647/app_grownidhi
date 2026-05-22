@@ -1,7 +1,7 @@
 class AppConfig {
-  static const String apiTestUrl = "http://192.168.1.12:8000/api";
-  static const String apiProdUrl = "http://192.168.1.12:8000/api";
-  static const String imageUrl = "http://192.168.1.12:8000";
+  static const String apiTestUrl = "https://192.168.1.12:8000/api";
+  static const String apiProdUrl = "https://app.grownidhi.com/api";
+  static const String imageUrl = "https://app.grownidhi.com";
   static const String apiTestKey = "";
   static const String apiProdKey = "";
   static const reverseAddressApi = "";
@@ -44,4 +44,5 @@ class AppConfig {
   static const String actionAgentProductApplyForm = '/agent/apply-form';
   static const String actionAgentProductFormSubmit = '/agent/product/form-submit';
   static const String actionAgentCompanyData = '/agent/companies';
+  static const String actionAgentClientAddUpdateProfile = '/client-professional-details';
 }

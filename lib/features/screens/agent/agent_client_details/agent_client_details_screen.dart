@@ -176,7 +176,7 @@ class _AgentClientDetailsScreenState extends State<AgentClientDetailsScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            AgentClientProfileDetailsScreen(),
+                            AgentClientProfileDetailsScreen(clientId: widget.agentClientData?.id ?? 0,),
                       ),
                     );
                   },

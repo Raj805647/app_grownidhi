@@ -228,4 +228,17 @@ class AuthRepository extends BaseRepository {
     });
   }
 
+  Future<Result<dynamic>> agentClientAddUpdateProfile(Map<String,dynamic> body) {
+    return safeApiCall(() async {
+      final response = await apiClient.postDio(AppConfig.actionAgentClientAddUpdateProfile, body: body,isFormData: true);
+      return response.data;
+    });
+  }
+  Future<Result<dynamic>> agentClientProfile() {
+    return safeApiCall(() async {
+      final response = await apiClient.getDio(AppConfig.actionAgentClientAddUpdateProfile);
+      return response.data;
+    });
+  }
+
 }
