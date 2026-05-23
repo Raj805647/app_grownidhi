@@ -6,16 +6,15 @@ import 'firebase_service.dart';
 import 'grownidhi_app.dart';
 
 void main() async {
-  final NotificationService firebaseService = NotificationService();
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FirebaseMessaging.onBackgroundMessage(
-    firebaseService.firebaseBackgroundHandler,
-  );
+  FirebaseMessaging.onBackgroundMessage(firebaseBackgroundHandler);
+
+  await NotificationService().initialize();
 
   runApp(const GrownidhiApp());
 }

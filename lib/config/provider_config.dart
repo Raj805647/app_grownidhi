@@ -6,6 +6,7 @@ import 'package:app_grownidhi/features/screens/agent/agent_dashboard/agent_dashb
 import 'package:app_grownidhi/features/screens/agent/agent_earning/agent_earning_provider.dart';
 import 'package:app_grownidhi/features/screens/agent/agent_earning/agent_earning_provider.dart';
 import 'package:app_grownidhi/features/screens/agent/agent_my_profile_edit/agent_my_profile_edit_provider.dart';
+import 'package:app_grownidhi/features/screens/agent/agent_notification/agent_notification_provider.dart';
 import 'package:app_grownidhi/features/screens/agent/agent_portfolio/agent_portfolio_provider.dart';
 import 'package:app_grownidhi/features/screens/agent/agent_portfolio/agent_portfolio_provider.dart';
 import 'package:app_grownidhi/features/screens/agent/agent_report/agent_report_provider.dart';
@@ -34,6 +35,7 @@ import '../features/screens/individual/add_product/add_product_provider.dart';
 import '../features/screens/individual/add_product_details/add_product_details_provider.dart';
 import '../features/screens/individual/all_service/all_service_provider.dart';
 import '../features/screens/individual/bottom_bar/bottom_bar_provider.dart';
+import '../features/screens/individual/individual_profile_details/individual_profile_details_provider.dart';
 import '../features/screens/individual/product/product_provider.dart';
 import '../features/screens/individual/product_details/product_details_provider.dart';
 
@@ -54,6 +56,7 @@ class ProviderConfig {
     ChangeNotifierProvider<ProductDetailProvider>(create: (_) => ProductDetailProvider()),
     ChangeNotifierProvider<CalenderProvider>(create: (_) => CalenderProvider()),
     ChangeNotifierProvider<ProfileProvider>(create: (_) => ProfileProvider()),
+    ChangeNotifierProvider<IndividualProfileDetailsProvider>(create: (_) => IndividualProfileDetailsProvider()),
     ChangeNotifierProvider<KycUpdateProvider>(create: (_) => KycUpdateProvider()),
     ChangeNotifierProvider<ProductProvider>(create: (_) => ProductProvider()),
     ChangeNotifierProvider<FormSubmitDetailsProvider>(create: (_) => FormSubmitDetailsProvider()),
@@ -77,5 +80,6 @@ class ProviderConfig {
     ChangeNotifierProvider<AgentClientApplyFormProvider>(create: (_) => AgentClientApplyFormProvider()),
     ChangeNotifierProvider<AgentClientAddUpdateProfileProvider>(create: (_) => AgentClientAddUpdateProfileProvider()),
     ChangeNotifierProvider<AgentClientProfileDetailsProvider>(create: (_) => AgentClientProfileDetailsProvider()),
+    ChangeNotifierProvider<AgentNotificationProvider>(create: (_) => AgentNotificationProvider()),
   ];
 }

@@ -10,31 +10,388 @@ import 'home_provider.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  static const Color backgroundColor = Color(0xff0F172A);
+  static  Color cardColor = Colors.white.withOpacity(0.05);
+  static const Color accentColor = Color(0xff22C55E);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeProvider>(
       builder: (context, provider, child) {
         return Scaffold(
-          backgroundColor: const Color(0xfff5f7fb),
+          backgroundColor: backgroundColor,
+
           body: Stack(
             children: [
+              /// BACKGROUND
               AppGradientBackground(),
-              SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildAnimatedHeader(provider),
-                    spaceHeight(20),
-                    _buildAnimatedNetWorthCard(provider),
-                    spaceHeight(20),
-                    _buildPortfolio(provider),
-                    spaceHeight(20),
-                    _buildUpcomingAction(),
-                    spaceHeight(20),
-                    _buildQuickActions(),
-                    spaceHeight(30),
-                  ],
+
+              SafeArea(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+
+                    children: [
+                      /// HEADER
+                      Row(
+                        children: [
+                          Container(
+                            height: 56,
+                            width: 56,
+
+                            decoration: BoxDecoration(
+                              color: cardColor,
+
+                              borderRadius: BorderRadius.circular(18),
+
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.05),
+                              ),
+                            ),
+
+                            child: const Center(
+                              child: Text(
+                                "R",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(width: 14),
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+
+                            children: [
+                              Text(
+                                "Welcome Back 👋",
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.60),
+                                  fontSize: 13,
+                                ),
+                              ),
+
+                              const SizedBox(height: 4),
+
+                              Text(
+                                provider.userName,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const Spacer(),
+
+                          Container(
+                            padding: const EdgeInsets.all(12),
+
+                            decoration: BoxDecoration(
+                              color: cardColor,
+
+                              borderRadius: BorderRadius.circular(16),
+
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.05),
+                              ),
+                            ),
+
+                            child: const Icon(
+                              Icons.notifications_none,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 26),
+
+                      /// NET WORTH CARD
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(24),
+
+                        decoration: BoxDecoration(
+                          color: cardColor,
+
+                          borderRadius: BorderRadius.circular(32),
+
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.06),
+                          ),
+
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.30),
+                              blurRadius: 20,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
+                        ),
+
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                                  children: [
+                                    Text(
+                                      "Total Net Worth",
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.60),
+                                        fontSize: 14,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 10),
+
+                                    const Text(
+                                      "₹15,40,000",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 34,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                Container(
+                                  padding: const EdgeInsets.all(14),
+
+                                  decoration: BoxDecoration(
+                                    color: accentColor.withOpacity(0.12),
+
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+
+                                  child: const Icon(
+                                    Icons.account_balance_wallet,
+                                    color: accentColor,
+                                    size: 30,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 30),
+
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _miniCard("Investment", "₹5.8L"),
+                                ),
+
+                                const SizedBox(width: 12),
+
+                                Expanded(
+                                  child: _miniCard("Insurance", "₹12.5L"),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 26),
+
+                            /// CHART
+                            SizedBox(
+                              height: 70,
+
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+
+                                children: List.generate(
+                                  12,
+                                  (index) => Container(
+                                    width: 14,
+                                    height: 25 + (index * 3),
+
+                                    decoration: BoxDecoration(
+                                      color: accentColor.withOpacity(0.90),
+
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 28),
+
+                      /// PORTFOLIO
+                      const Text(
+                        "Portfolio Overview",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      GridView.builder(
+                        itemCount: provider.portfolioItems.length,
+
+                        shrinkWrap: true,
+
+                        physics: const NeverScrollableScrollPhysics(),
+
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 14,
+                              mainAxisSpacing: 14,
+                              childAspectRatio: 1.12,
+                            ),
+
+                        itemBuilder: (context, index) {
+                          final item = provider.portfolioItems[index];
+
+                          return Container(
+                            padding: const EdgeInsets.all(18),
+
+                            decoration: BoxDecoration(
+                              color: cardColor,
+
+                              borderRadius: BorderRadius.circular(28),
+
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.05),
+                              ),
+                            ),
+
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(12),
+
+                                  decoration: BoxDecoration(
+                                    color: accentColor.withOpacity(0.12),
+
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+
+                                  child: const Icon(
+                                    Icons.show_chart,
+                                    color: accentColor,
+                                  ),
+                                ),
+
+                                const Spacer(),
+
+                                Text(
+                                  item['title'],
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.60),
+                                    fontSize: 13,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 6),
+
+                                Text(
+                                  item['value'],
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 4),
+
+                                Text(
+                                  item['change'],
+                                  style: const TextStyle(
+                                    color: accentColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+
+                      const SizedBox(height: 28),
+
+                      /// UPCOMING ACTIONS
+                      const Text(
+                        "Upcoming Actions",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      _actionCard(
+                        title: "Life Insurance Premium",
+                        amount: "₹12,500",
+                        subtitle: "Due in 5 days",
+                      ),
+
+                      _actionCard(
+                        title: "Home Loan EMI",
+                        amount: "₹45,000",
+                        subtitle: "Due in 10 days",
+                      ),
+
+                      const SizedBox(height: 28),
+
+                      /// QUICK ACTIONS
+                      const Text(
+                        "Quick Actions",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                        children: [
+                          _quickAction(Icons.security, "Insurance"),
+
+                          _quickAction(Icons.account_balance_wallet, "Loans"),
+
+                          _quickAction(Icons.trending_up, "Invest"),
+
+                          _quickAction(Icons.credit_card, "Cards"),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -44,505 +401,173 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAnimatedHeader(HomeProvider provider) {
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.8, end: 1),
-      duration: const Duration(milliseconds: 600),
-      builder: (context, value, child) {
-        return Transform.scale(
-          scale: value,
-          child: Row(
-            children: [
-              Container(
-                height: 45,
-                width: 45,
-                decoration: BoxDecoration(
-                  color: Colors.green.shade800,
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Center(
-                  child: const Text(
-                    'R',
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  ),
-                ),
-              ),
-              spaceWidth(10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Good Evening 👋",
-                    style: TextStyle(color: Colors.black54),
-                  ),
-                  Text(
-                    provider.userName,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 15,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.notifications_none),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  Widget _miniCard(String title, String value) {
+    return Container(
+      padding: const EdgeInsets.all(14),
 
-  Widget _buildAnimatedNetWorthCard(HomeProvider provider) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 600),
-      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(28),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF0D1B2A), Color(0xFF1B263B), Color(0xFF243B53)],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.12),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        color: Colors.white.withOpacity(0.04),
+
+        borderRadius: BorderRadius.circular(18),
+
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+
         children: [
-          /// TOP TITLE
-          Row(
-            children: [
-              const Text(
-                "Total Net Worth",
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              spaceWidth(6),
-              Icon(
-                Icons.auto_awesome,
-                color: Colors.greenAccent.shade200,
-                size: 18,
-              ),
-            ],
-          ),
-
-          spaceHeight(12),
-
-          /// AMOUNT + ACTIONS
-          Row(
-            children: [
-              const Expanded(
-                child: Text(
-                  "₹15,40,000",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ),
-
-              /// Eye Button
-              Container(
-                height: 38,
-                width: 38,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.08),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.remove_red_eye_outlined,
-                  color: Colors.white70,
-                  size: 18,
-                ),
-              ),
-
-              spaceWidth(10),
-
-              /// Profit Chip
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.greenAccent.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: Colors.greenAccent.withOpacity(0.2),
-                  ),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.north_east, color: Colors.greenAccent, size: 16),
-                    SizedBox(width: 4),
-                    Text(
-                      "+2.3%",
-                      style: TextStyle(
-                        color: Colors.greenAccent,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          spaceHeight(18),
-
-          /// CUSTOM BAR GRAPH
-          SizedBox(
-            height: 70,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(
-                14,
-                (index) => AnimatedContainer(
-                  duration: Duration(milliseconds: 400 + (index * 50)),
-                  width: 14,
-                  height: 25 + (index * 3).toDouble(),
-                  decoration: BoxDecoration(
-                    color: Colors.greenAccent.withOpacity(0.8),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
+          Text(
+            title,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.60),
+              fontSize: 12,
             ),
           ),
 
-          spaceHeight(10),
+          const SizedBox(height: 6),
 
-          Divider(color: Colors.white.withOpacity(0.08), thickness: 1),
-
-          spaceHeight(10),
-
-          /// BOTTOM INFO
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildFinanceInfoItem(title: "Investment", value: "₹5.8L"),
-              _buildFinanceInfoItem(title: "Liability", value: "₹8.2L"),
-              _buildFinanceInfoItem(title: "Insurance", value: "₹12.5L"),
-            ],
+          Text(
+            value,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildFinanceInfoItem({required String title, required String value}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 11),
-        ),
-        spaceHeight(6),
-        Text(
-          value,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPortfolio(HomeProvider provider) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Portfolio Overview",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        spaceHeight(12),
-        GridView.builder(
-          shrinkWrap: true,
-          itemCount: provider.portfolioItems.length,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 1.2,
-          ),
-          itemBuilder: (context, index) {
-            final item = provider.portfolioItems[index];
-
-            return TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0.9, end: 1),
-              duration: Duration(milliseconds: 300 + (index * 100)),
-              builder: (context, value, child) {
-                return Transform.scale(
-                  scale: value,
-                  child: _buildPortfolioCard(
-                    item["title"],
-                    item["value"],
-                    item["change"],
-                    item["color"],
-                  ),
-                );
-              },
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildUpcomingAction() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Text(
-              "Upcoming Actions",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Text("View All", style: TextStyle(color: Colors.green)),
-          ],
-        ),
-        spaceHeight(10),
-        _buildActionCard(
-          "Life Insurance Premium",
-          "₹12,500",
-          "Due in 5 days",
-          true,
-        ),
-        _buildActionCard("Home Loan EMI", "₹45,000", "Due in 10 days", false),
-        _buildActionCard("Credit Card Bill", "₹15,234", "Paid", false),
-      ],
-    );
-  }
-
-  Widget _buildActionCard(
-    String title,
-    String amount,
-    String subtitle,
-    bool isDue,
-  ) {
+  Widget _actionCard({
+    required String title,
+    required String amount,
+    required String subtitle,
+  }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(14),
+      margin: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.all(18),
+
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
+        color: cardColor,
+        borderRadius: BorderRadius.circular(26),
+
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
+
       child: Row(
         children: [
-          /// 🔹 ICON (colored like fintech UI)
           Container(
-            height: 45,
-            width: 45,
+            padding: const EdgeInsets.all(14),
+
             decoration: BoxDecoration(
-              color: isDue ? Colors.orange.shade100 : Colors.green.shade100,
-              borderRadius: BorderRadius.circular(12),
+              color: accentColor.withOpacity(0.12),
+
+              borderRadius: BorderRadius.circular(16),
             ),
-            child: Icon(
-              Icons.shield_outlined,
-              color: isDue ? Colors.orange : Colors.green,
-            ),
+
+            child: const Icon(Icons.shield_outlined, color: accentColor),
           ),
 
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
 
-          /// 🔹 TITLE + SUBTITLE
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+
               children: [
                 Text(
                   title,
                   style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                spaceHeight(4),
+
+                const SizedBox(height: 6),
+
                 Text(
                   subtitle,
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.60),
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),
           ),
 
-          /// 🔹 AMOUNT + STATUS
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
+
             children: [
               Text(
                 amount,
                 style: const TextStyle(
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
                 ),
               ),
 
-              spaceHeight(6),
+              const SizedBox(height: 6),
 
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
-                  vertical: 4,
+                  vertical: 6,
                 ),
+
                 decoration: BoxDecoration(
-                  color: isDue
-                      ? Colors.orange.withOpacity(0.15)
-                      : Colors.green.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(20),
+                  color: accentColor.withOpacity(0.12),
+
+                  borderRadius: BorderRadius.circular(30),
                 ),
-                child: Text(
-                  isDue ? "Due Soon" : "Active",
+
+                child: const Text(
+                  "Active",
                   style: TextStyle(
-                    color: isDue ? Colors.orange : Colors.green,
+                    color: accentColor,
                     fontSize: 11,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
             ],
           ),
-
-          const SizedBox(width: 6),
-
-          /// 🔹 ARROW (optional - looks premium)
-          const Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey),
         ],
       ),
     );
   }
 
-  Widget _buildQuickActions() {
+  Widget _quickAction(IconData icon, String title) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Quick Actions",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        Container(
+          height: 60,
+          width: 60,
+
+          decoration: BoxDecoration(
+            color: cardColor,
+
+            borderRadius: BorderRadius.circular(20),
+
+            border: Border.all(color: Colors.white.withOpacity(0.05)),
+          ),
+
+          child: Icon(icon, color: accentColor),
         ),
-        SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildQuickAction(
-              Icons.security_outlined,
-              "Insurance",
-              Colors.blue,
-            ),
-            _buildQuickAction(
-              Icons.account_balance_wallet,
-              "Loans",
-              Colors.purple,
-            ),
-            _buildQuickAction(Icons.trending_up, "Invest", Colors.green),
-            _buildQuickAction(Icons.credit_card, "Cards", Colors.orange),
-          ],
+
+        const SizedBox(height: 10),
+
+        Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ],
-    );
-  }
-  
-  Widget _buildPortfolioCard(String title, value, change, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            backgroundColor: color,
-            child: const Icon(Icons.show_chart, color: Colors.white),
-          ),
-          spaceHeight(10),
-          Text(title),
-          spaceHeight(4),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          Text(
-            change,
-            style: TextStyle(
-              color: change.contains("-") ? Colors.red : Colors.green,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildQuickAction(IconData icon, String label, Color color) {
-    return InkWell(
-      onTap: (){
-
-      },
-      child: Column(
-        children: [
-          Container(
-            height: 55,
-            width: 55,
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Icon(icon, color: Colors.white),
-          ),
-          spaceHeight(6),
-          Text(label),
-        ],
-      ),
     );
   }
 }

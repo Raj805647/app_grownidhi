@@ -1,15 +1,28 @@
 import 'package:app_grownidhi/widget/custom_appbat.dart';
 import 'package:app_grownidhi/widget/custom_textfield.dart';
 import 'package:app_grownidhi/widget/ui_design.dart';
+import 'package:base_module/core/models/client_complete_profile_response.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'agent_client_add_update_profile_provider.dart';
 
-class AgentClientAddUpdateProfileScreen extends StatelessWidget {
+class AgentClientAddUpdateProfileScreen extends StatefulWidget {
 final int clientId;
-  const AgentClientAddUpdateProfileScreen({super.key, required this.clientId});
+final ClientCompleteData clientData;
+  const AgentClientAddUpdateProfileScreen({super.key, required this.clientId, required this.clientData});
 
+  @override
+  State<AgentClientAddUpdateProfileScreen> createState() => _AgentClientAddUpdateProfileScreenState();
+}
+
+class _AgentClientAddUpdateProfileScreenState extends State<AgentClientAddUpdateProfileScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    Future.microtask((()=> context.read<AgentClientAddUpdateProfileProvider>().initailizeTextController(widget.clientData)));
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -212,7 +225,7 @@ final int clientId;
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
-                        onPressed: ()=>provider.submitClientDta(context, clientId),
+                        onPressed: ()=>provider.submitClientDta(context, widget.clientId),
                         child: const Text(
                           "Save Profile",
                           style: TextStyle(

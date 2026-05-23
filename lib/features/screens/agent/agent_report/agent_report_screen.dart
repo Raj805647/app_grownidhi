@@ -1,527 +1,738 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../widget/help_widget.dart';
+import '../../../../widget/ui_design.dart';
 import 'agent_report_provider.dart';
 
-class AgentReportScreen extends StatelessWidget {
+class AgentReportScreen extends StatefulWidget {
   const AgentReportScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => AgentReportProvider(),
-      child: const _ReportContent(),
-    );
-  }
+  State<AgentReportScreen> createState() => _AgentReportScreenState();
 }
 
-class _ReportContent extends StatelessWidget {
-  const _ReportContent();
+class _AgentReportScreenState extends State<AgentReportScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  final List<Map<String, dynamic>> reportTypes = [
+    {
+      'icon': Icons.account_balance_wallet,
+      'title': 'Portfolio Report',
+      'subtitle': 'Client investment data',
+    },
+    {
+      'icon': Icons.bar_chart,
+      'title': 'MIS Report',
+      'subtitle': 'Business analytics',
+    },
+    {
+      'icon': Icons.currency_rupee,
+      'title': 'Commission Report',
+      'subtitle': 'Revenue & earnings',
+    },
+    {
+      'icon': Icons.trending_up,
+      'title': 'Performance',
+      'subtitle': 'Growth statistics',
+    },
+    {
+      'icon': Icons.refresh,
+      'title': 'Renewal Report',
+      'subtitle': 'Upcoming renewals',
+    },
+    {
+      'icon': Icons.warning_amber_rounded,
+      'title': 'Overdue Report',
+      'subtitle': 'Pending follow-ups',
+    },
+  ];
+
+  final List<Map<String, dynamic>> recentReports = [
+    {
+      "name": "Client Portfolio Summary",
+      "date": "15 Nov 2025",
+      "size": "2.4 MB",
+    },
+    {
+      "name": "Commission Earnings Report",
+      "date": "12 Nov 2025",
+      "size": "1.8 MB",
+    },
+    {
+      "name": "Business MIS Analytics",
+      "date": "08 Nov 2025",
+      "size": "3.1 MB",
+    },
+  ];
+
+  int selectedIndex = 0;
+
+  DateTime startDate = DateTime.now().subtract(const Duration(days: 30));
+
+  DateTime endDate = DateTime.now();
+
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  Future<void> generateReport() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    setState(() {
+      isLoading = false;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Report Generated Successfully"),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<AgentReportProvider>();
-
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
-      body: RefreshIndicator(
-        onRefresh: () => provider.generateReport(),
-        child: CustomScrollView(
-          slivers: [
-            _buildAppBar(),
-            SliverList(
-              delegate: SliverChildListDelegate([
-               spaceHeight( 8),
-                _buildReportTypes(provider),
-               spaceHeight( 24),
-                _buildDateRangePicker(context, provider),
-               spaceHeight( 24),
-                _buildExportOptions(provider),
-               spaceHeight( 24),
-                _buildSavedReports(provider),
-               spaceHeight( 80),
-              ]),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+      backgroundColor: Colors.transparent,
 
-  Widget _buildAppBar() {
-    return SliverAppBar(
-      expandedHeight: 140,
-      floating: true,
-      pinned: true,
-      backgroundColor: Colors.white,
-      elevation: 0,
-      flexibleSpace: FlexibleSpaceBar(
-        title: const Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Reports',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF1A1A1A),
-              ),
-            ),
-            SizedBox(height: 4),
-            Text(
-              'Generate & export business reports',
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.grey,
-              ),
-            ),
-          ],
-        ),
-        titlePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      ),
-      actions: [
-        Container(
-          margin: const EdgeInsets.only(right: 16),
-          child: CircleAvatar(
-            backgroundColor: const Color(0xFF6C63FF).withOpacity(0.1),
-            child: const Icon(Icons.help_outline, color: Color(0xFF6C63FF)),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildReportTypes(AgentReportProvider provider) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
         children: [
-          const Text(
-            'Report Types',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-         spaceHeight( 12),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 1.5,
-            ),
-            itemCount: provider.reportTypes.length,
-            itemBuilder: (context, index) {
-              final report = provider.reportTypes[index];
-              final isSelected = provider.selectedReportType == report['title'];
+          const AppGradientBackground(),
 
-              return GestureDetector(
-                onTap: () => provider.setSelectedReportType(report['title']),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: isSelected ? const Color(0xFF6C63FF) : Colors.transparent,
-                      width: 2,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
-                        blurRadius: 10,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+          SafeArea(
+            child: RefreshIndicator(
+              onRefresh: generateReport,
+
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  top: 10,
+                  bottom: 120,
+                ),
+
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+                    /// HEADER
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                       children: [
-                        Text(report['icon'], style: const TextStyle(fontSize: 28)),
-                       spaceHeight( 8),
-                        Text(
-                          report['title'],
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        if (isSelected)
-                          Container(
-                            margin: const EdgeInsets.only(top: 6),
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF6C63FF),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Text(
-                              'Selected',
-                              style: TextStyle(fontSize: 8, color: Colors.white),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
 
-  Widget _buildDateRangePicker(BuildContext context, AgentReportProvider provider) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 15,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Date Range',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-             spaceHeight( 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildDateButton(
-                      context,
-                      'Start Date',
-                      provider.startDate,
-                          () async {
-                        final date = await showDatePicker(
-                          context: context,
-                          initialDate: provider.startDate,
-                          firstDate: DateTime(2020),
-                          lastDate: DateTime.now(),
-                        );
-                        if (date != null) provider.setStartDate(date);
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _buildDateButton(
-                      context,
-                      'End Date',
-                      provider.endDate,
-                          () async {
-                        final date = await showDatePicker(
-                          context: context,
-                          initialDate: provider.endDate,
-                          firstDate: provider.startDate,
-                          lastDate: DateTime(2025),
-                        );
-                        if (date != null) provider.setEndDate(date);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-             spaceHeight( 16),
-              Row(
-                children: [
-                  _buildQuickDateChip('Last 7 days', () {
-                    provider.setStartDate(DateTime.now().subtract(const Duration(days: 7)));
-                    provider.setEndDate(DateTime.now());
-                  }),
-                  const SizedBox(width: 8),
-                  _buildQuickDateChip('Last 30 days', () {
-                    provider.setStartDate(DateTime.now().subtract(const Duration(days: 30)));
-                    provider.setEndDate(DateTime.now());
-                  }),
-                  const SizedBox(width: 8),
-                  _buildQuickDateChip('This Year', () {
-                    provider.setStartDate(DateTime(DateTime.now().year, 1, 1));
-                    provider.setEndDate(DateTime.now());
-                  }),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDateButton(BuildContext context, String label, DateTime date, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade50,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade200),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
-            ),
-           spaceHeight( 4),
-            Text(
-              '${date.day}/${date.month}/${date.year}',
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildQuickDateChip(String label, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: const Color(0xFF6C63FF).withOpacity(0.1),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          label,
-          style: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF6C63FF),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildExportOptions(AgentReportProvider provider) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Export Data',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-         spaceHeight( 12),
-          Row(
-            children: [
-              Expanded(
-                child: _buildExportButton(
-                  'PDF',
-                  'Document',
-                  Icons.picture_as_pdf,
-                  const Color(0xFFF44336),
-                      () => provider.exportData('PDF'),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildExportButton(
-                  'Excel',
-                  'Spreadsheet',
-                  Icons.table_chart,
-                  const Color(0xFF4CAF50),
-                      () => provider.exportData('Excel'),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildExportButton(
-                  'CSV',
-                  'Data File',
-                  Icons.data_usage,
-                  const Color(0xFF2196F3),
-                      () => provider.exportData('CSV'),
-                ),
-              ),
-            ],
-          ),
-         spaceHeight( 16),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: provider.isLoading ? null : () => provider.generateReport(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF6C63FF),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              child: provider.isLoading
-                  ? const SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.white,
-                ),
-              )
-                  : const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.file_download, size: 20),
-                  SizedBox(width: 8),
-                  Text('Generate Report', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildExportButton(String format, String type, IconData icon, Color color, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Icon(icon, size: 32, color: color),
-           spaceHeight( 8),
-            Text(
-              format,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-           spaceHeight( 2),
-            Text(
-              type,
-              style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSavedReports(AgentReportProvider provider) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Recent Reports',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                'View All',
-                style: TextStyle(fontSize: 12, color: Color(0xFF6C63FF)),
-              ),
-            ],
-          ),
-         spaceHeight( 12),
-          ...provider.savedReports.map((report) => Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF6C63FF).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(Icons.insert_drive_file, color: Color(0xFF6C63FF)),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          report['name'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                       spaceHeight( 4),
-                        Row(
                           children: [
-                            Icon(Icons.calendar_today, size: 10, color: Colors.grey.shade500),
-                            const SizedBox(width: 4),
-                            Text(
-                              report['date'],
-                              style: TextStyle(fontSize: 10, color: Colors.grey.shade500),
+                            const Text(
+                              "Reports",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                            const SizedBox(width: 12),
-                            Icon(Icons.description, size: 10, color: Colors.grey.shade500),
-                            const SizedBox(width: 4),
+
+                            const SizedBox(height: 4),
+
                             Text(
-                              report['size'],
-                              style: TextStyle(fontSize: 10, color: Colors.grey.shade500),
+                              "Generate business analytics",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
                             ),
                           ],
                         ),
+
+                        Container(
+                          padding: const EdgeInsets.all(12),
+
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.15),
+
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+
+                          child: const Icon(
+                            Icons.file_download_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.download, size: 20),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.more_vert, size: 20),
-                  ),
-                ],
+
+                    const SizedBox(height: 28),
+
+                    /// REPORT TYPES
+                    const Text(
+                      "Report Categories",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 18),
+
+                    GridView.builder(
+                      shrinkWrap: true,
+
+                      itemCount: reportTypes.length,
+
+                      physics: const NeverScrollableScrollPhysics(),
+
+                      gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 1,
+                      ),
+
+                      itemBuilder: (context, index) {
+                        final item = reportTypes[index];
+
+                        final isSelected = selectedIndex == index;
+
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedIndex = index;
+                            });
+                          },
+
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+
+                            padding: const EdgeInsets.all(18),
+
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(28),
+
+                              gradient: isSelected
+                                  ? const LinearGradient(
+                                colors: [
+                                  Color(0xff00DBDE),
+                                  Color(0xffFC00FF),
+                                ],
+                              )
+                                  : LinearGradient(
+                                colors: [
+                                  Colors.deepPurple.withOpacity(0.12),
+                                  Colors.blue.withOpacity(0.06),
+                                ],
+                              ),
+
+                              border: Border.all(
+                                color: isSelected
+                                    ? Colors.transparent
+                                    : Colors.deepPurple.withOpacity(0.08),
+                              ),
+
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.white.withOpacity(0.05),
+                                  blurRadius: 10,
+                                ),
+                              ],
+                            ),
+
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(14),
+
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+
+                                  child: Icon(
+                                    item['icon'],
+                                    color: Colors.deepPurple,
+                                    size: 28,
+                                  ),
+                                ),
+
+                                const Spacer(),
+
+                                Text(
+                                  item['title'],
+                                  maxLines: 2,
+
+                                  overflow: TextOverflow.ellipsis,
+
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.white,
+
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 6),
+
+                                Text(
+                                  item['subtitle'],
+                                  maxLines: 2,
+
+                                  overflow: TextOverflow.ellipsis,
+
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Colors.white70
+                                        : Colors.white,
+
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+
+                    const SizedBox(height: 30),
+
+                    /// DATE RANGE
+                    const Text(
+                      "Date Range",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 18),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _dateCard(
+                            title: "Start Date",
+                            date:
+                            "${startDate.day}/${startDate.month}/${startDate.year}",
+                            onTap: () async {
+                              final picked = await showDatePicker(
+                                context: context,
+                                initialDate: startDate,
+                                firstDate: DateTime(2020),
+                                lastDate: DateTime.now(),
+                              );
+
+                              if (picked != null) {
+                                setState(() {
+                                  startDate = picked;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(width: 14),
+
+                        Expanded(
+                          child: _dateCard(
+                            title: "End Date",
+                            date:
+                            "${endDate.day}/${endDate.month}/${endDate.year}",
+                            onTap: () async {
+                              final picked = await showDatePicker(
+                                context: context,
+                                initialDate: endDate,
+                                firstDate: DateTime(2020),
+                                lastDate: DateTime.now(),
+                              );
+
+                              if (picked != null) {
+                                setState(() {
+                                  endDate = picked;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 28),
+
+                    /// EXPORT SECTION
+                    const Text(
+                      "Export Options",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 18),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _exportCard(
+                            icon: Icons.picture_as_pdf,
+                            title: "PDF",
+                            color: Colors.red,
+                          ),
+                        ),
+
+                        const SizedBox(width: 14),
+
+                        Expanded(
+                          child: _exportCard(
+                            icon: Icons.table_chart,
+                            title: "Excel",
+                            color: Colors.green,
+                          ),
+                        ),
+
+                        const SizedBox(width: 14),
+
+                        Expanded(
+                          child: _exportCard(
+                            icon: Icons.data_array,
+                            title: "CSV",
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 28),
+
+                    /// GENERATE BUTTON
+                    SizedBox(
+                      width: double.infinity,
+
+                      height: 58,
+
+                      child: ElevatedButton(
+                        onPressed: isLoading ? null : generateReport,
+
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+
+                          backgroundColor: Colors.transparent,
+
+                          shadowColor: Colors.transparent,
+
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+
+                        child: Ink(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(18),
+
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xff00DBDE),
+                                Color(0xffFC00FF),
+                              ],
+                            ),
+                          ),
+
+                          child: Center(
+                            child: isLoading
+                                ? const SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                                : const Text(
+                              "Generate Report",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 30),
+
+                    /// RECENT REPORTS
+                    const Text(
+                      "Recent Reports",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 18),
+
+                    ListView.builder(
+                      itemCount: recentReports.length,
+
+                      shrinkWrap: true,
+
+                      physics: const NeverScrollableScrollPhysics(),
+
+                      itemBuilder: (context, index) {
+                        final item = recentReports[index];
+
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 16),
+
+                          padding: const EdgeInsets.all(18),
+
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(24),
+
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.deepPurple.withOpacity(0.10),
+                                Colors.blue.withOpacity(0.05),
+                              ],
+                            ),
+
+                            border: Border.all(
+                              color: Colors.deepPurple.withOpacity(0.08),
+                            ),
+                          ),
+
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(14),
+
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+
+                                child: const Icon(
+                                  Icons.description,
+                                  color: Colors.deepPurple,
+                                ),
+                              ),
+
+                              const SizedBox(width: 14),
+
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+
+                                  children: [
+                                    Text(
+                                      item['name'],
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 6),
+
+                                    Text(
+                                      item['date'],
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+
+                                children: [
+                                  Text(
+                                    item['size'],
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 8),
+
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+
+                                      borderRadius:
+                                      BorderRadius.circular(12),
+                                    ),
+
+                                    child: const Icon(
+                                      Icons.download,
+                                      size: 18,
+                                      color: Colors.deepPurple,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-          )),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _dateCard({
+    required String title,
+    required String date,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+
+      child: Container(
+        padding: const EdgeInsets.all(18),
+
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(22),
+
+          gradient: LinearGradient(
+            colors: [
+              Colors.deepPurple.withOpacity(0.10),
+              Colors.blue.withOpacity(0.05),
+            ],
+          ),
+
+          border: Border.all(
+            color: Colors.deepPurple.withOpacity(0.08),
+          ),
+        ),
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            Row(
+              children: [
+                const Icon(
+                  Icons.calendar_month,
+                  color: Colors.deepPurple,
+                  size: 20,
+                ),
+
+                const SizedBox(width: 8),
+
+                Expanded(
+                  child: Text(
+                    date,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _exportCard({
+    required IconData icon,
+    required String title,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 22),
+
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(22),
+
+        gradient: LinearGradient(
+          colors: [
+            Colors.deepPurple.withOpacity(0.10),
+            Colors.blue.withOpacity(0.05),
+          ],
+        ),
+
+        border: Border.all(
+          color: Colors.deepPurple.withOpacity(0.08),
+        ),
+      ),
+
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: color,
+            size: 34,
+          ),
+
+          const SizedBox(height: 10),
+
+          Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+                color: Colors.white
+            ),
+          ),
         ],
       ),
     );

@@ -22,7 +22,7 @@ class AgentClientDataProvider extends BaseProvider {
         final List rawList = response.data['data'] ?? [];
         agentClientData = rawList
             .map((e) => AgentClientData.fromJson(e))
-            .toList();
+                    .toList();
         ;
         notifyListeners();
       } else {

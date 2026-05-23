@@ -107,9 +107,17 @@ class AuthRepository extends BaseRepository {
       return response.data;
     });
   }
+
   Future<Result<dynamic>> agentClientData() {
     return safeApiCall(() async {
       final response = await apiClient.getDio(AppConfig.actionClientList);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> agentClientApplication() {
+    return safeApiCall(() async {
+      final response = await apiClient.getDio(AppConfig.actionClientApplication);
       return response.data;
     });
   }
@@ -123,7 +131,8 @@ class AuthRepository extends BaseRepository {
 
   Future<Result<dynamic>> deleteClientMemberData(int id) {
     return safeApiCall(() async {
-      final response = await apiClient.getDio('${AppConfig.actionClientFamilyMemberDelete}/$id');
+      final response = await apiClient
+          .getDio('${AppConfig.actionClientFamilyMemberDelete}/$id');
       return response.data;
     });
   }
@@ -154,7 +163,10 @@ class AuthRepository extends BaseRepository {
 
   Future<Result<dynamic>> kycUpdateStore(Map<String, dynamic> data) {
     return safeApiCall(() async {
-      final response = await apiClient.postDio(AppConfig.actionAgentKycAddOrUpdate,isFormData: true,body: data);
+      final response = await apiClient.postDio(
+          AppConfig.actionAgentKycAddOrUpdate,
+          isFormData: true,
+          body: data);
       return response.data;
     });
   }
@@ -169,54 +181,66 @@ class AuthRepository extends BaseRepository {
     });
   }
 
-  Future<Result<dynamic>> agentClientMemberUpdateCreateData(Map<String,dynamic> data) {
+  Future<Result<dynamic>> agentClientMemberUpdateCreateData(
+      Map<String, dynamic> data) {
     final url = '${AppConfig.actionClientFamilyMemberAddOrUpdate}';
     return safeApiCall(() async {
-      final response = await apiClient.postDio(url,body: data,isFormData: true);
+      final response =
+          await apiClient.postDio(url, body: data, isFormData: true);
       return response.data;
     });
   }
 
-  Future<Result<dynamic>> addClientMember(int companyId, Map<String, dynamic> data) {
+  Future<Result<dynamic>> addClientMember(
+      int companyId, Map<String, dynamic> data) {
     final url = '${AppConfig.actionClientAddOrUpdate}/client_id=$companyId';
     print('adfbjdsakf=> $url');
     return safeApiCall(() async {
-      final response = await apiClient.postDio(url,isFormData: true,body: data);
+      final response =
+          await apiClient.postDio(url, isFormData: true, body: data);
       return response.data;
     });
   }
 
   Future<Result<dynamic>> getAgentPortfolioCategory() {
     return safeApiCall(() async {
-      final response = await apiClient.getDio(AppConfig.actionPortfolioCategory);
+      final response =
+          await apiClient.getDio(AppConfig.actionPortfolioCategory);
       return response.data;
     });
   }
 
   Future<Result<dynamic>> getAgentPortfolioSubCategory(int service_id) {
     return safeApiCall(() async {
-      final response = await apiClient.getDio('${AppConfig.actionPortfolioSubCategory}/service_id=$service_id');
+      final response = await apiClient.getDio(
+          '${AppConfig.actionPortfolioSubCategory}/service_id=$service_id');
       return response.data;
     });
   }
 
-  Future<Result<dynamic>> getAgentPortfolioPortFolio(int service_id,service_type_id ) {
+  Future<Result<dynamic>> getAgentPortfolioPortFolio(
+      int service_id, service_type_id) {
     return safeApiCall(() async {
-      final response = await apiClient.getDio('${AppConfig.actionPortfolioProducts}/service_id=$service_id/service_type_id=$service_type_id');
+      final response = await apiClient.getDio(
+          '${AppConfig.actionPortfolioProducts}/service_id=$service_id/service_type_id=$service_type_id');
       return response.data;
     });
   }
 
-  Future<Result<dynamic>> getAgentProductApplyForm(int service_id ) {
+  Future<Result<dynamic>> getAgentProductApplyForm(int service_id) {
     return safeApiCall(() async {
-      final response = await apiClient.getDio('${AppConfig.actionAgentProductApplyForm}/product_id=$service_id');
+      final response = await apiClient.getDio(
+          '${AppConfig.actionAgentProductApplyForm}/product_id=$service_id');
       return response.data;
     });
   }
 
-  Future<Result<dynamic>> agentProductFormSubmit(Map<String, dynamic> body ) {
+  Future<Result<dynamic>> agentProductFormSubmit(Map<String, dynamic> body) {
     return safeApiCall(() async {
-      final response = await apiClient.postDio(AppConfig.actionAgentProductFormSubmit,body: body,isFormData: true);
+      final response = await apiClient.postDio(
+          AppConfig.actionAgentProductFormSubmit,
+          body: body,
+          isFormData: true);
       return response.data;
     });
   }
@@ -228,17 +252,29 @@ class AuthRepository extends BaseRepository {
     });
   }
 
-  Future<Result<dynamic>> agentClientAddUpdateProfile(Map<String,dynamic> body) {
+  Future<Result<dynamic>> agentClientAddUpdateProfile(
+      Map<String, dynamic> body) {
     return safeApiCall(() async {
-      final response = await apiClient.postDio(AppConfig.actionAgentClientAddUpdateProfile, body: body,isFormData: true);
-      return response.data;
-    });
-  }
-  Future<Result<dynamic>> agentClientProfile() {
-    return safeApiCall(() async {
-      final response = await apiClient.getDio(AppConfig.actionAgentClientAddUpdateProfile);
+      final response = await apiClient.postDio(
+          AppConfig.actionAgentClientAddUpdateProfile,
+          body: body,
+          isFormData: true);
       return response.data;
     });
   }
 
+  Future<Result<dynamic>> agentClientProfile() {
+    return safeApiCall(() async {
+      final response =
+          await apiClient.getDio(AppConfig.actionAgentClientAddUpdateProfile);
+      return response.data;
+    });
+  }
+  Future<Result<dynamic>> agentNotificationData() {
+    return safeApiCall(() async {
+      final response =
+          await apiClient.getDio(AppConfig.actionAgentNotification);
+      return response.data;
+    });
+  }
 }

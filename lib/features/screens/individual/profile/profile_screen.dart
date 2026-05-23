@@ -1,3 +1,4 @@
+import 'package:app_grownidhi/features/screens/individual/individual_profile_details/individual_profile_details_screen.dart';
 import 'package:app_grownidhi/features/screens/individual/profile/profile_provider.dart';
 import 'package:app_grownidhi/routes/route_names.dart';
 import 'package:app_grownidhi/widget/ui_design.dart';
@@ -259,7 +260,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             title: Text(title),
             children: [
-              _buildTile(Icons.person, "My Profile", () {}),
+              _buildTile(Icons.person, "My Profile", ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => IndividualProfileDetailsScreen(),))),
               _divider(),
               _buildTile(Icons.verified_user, "KYC Documents", ()=> provider.navigateTo(context, RouteNames.kycScreen)),
               _divider(),

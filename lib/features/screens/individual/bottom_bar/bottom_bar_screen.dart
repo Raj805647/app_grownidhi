@@ -14,19 +14,26 @@ class BottomBarScreen extends StatelessWidget {
   BottomBarScreen({super.key});
 
   final List<Map<String, dynamic>> navBarItems = [
-    {'icon': Icons.home_outlined, 'label': 'home', 'screen': HomeScreen()},
     {
-      'icon': Icons.bar_chart_outlined,
+      'icon': Icons.home_rounded,
+      'label': 'Home',
+      'screen': HomeScreen(),
+    },
+
+    {
+      'icon': Icons.pie_chart_rounded,
       'label': 'Portfolio',
       'screen': PortfolioScreen(),
     },
+
     {
-      'icon': Icons.calendar_month_sharp,
-      'label': 'Calender',
+      'icon': Icons.calendar_month_rounded,
+      'label': 'Calendar',
       'screen': CalendarScreen(),
     },
+
     {
-      'icon': Icons.person_2_outlined,
+      'icon': Icons.person_rounded,
       'label': 'Profile',
       'screen': ProfileScreen(),
     },
@@ -36,87 +43,246 @@ class BottomBarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<BottomBarProvider>(
       builder: (context, provider, child) {
+
         return Scaffold(
-          body: navBarItems[provider.selectedIndex]['screen'],
+          backgroundColor: const Color(0xffF5F7FB),
 
-          floatingActionButton: FloatingActionButton(
-            onPressed: () =>
-                provider.navigateTo(context, RouteNames.portfolioScreen),
-            backgroundColor: Colors.green,
-            elevation: 8,
-            splashColor: Colors.green.withOpacity(0.5),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: const Icon(Icons.add, size: 30, color: Colors.white),
-          ),
+          extendBody: true,
 
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          bottomNavigationBar: BottomAppBar(
-            height: 68,
-            elevation: 10,
-            color: Colors.white,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildItem(context, 0),
-                _buildItem(context, 1),
-                spaceWidth(40),
-                _buildItem(context, 2),
-                _buildItem(context, 3),
-              ],
-            ),
+          body: Stack(
+            children: [
+
+              /// ACTIVE SCREEN
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 350),
+
+                transitionBuilder: (child, animation) {
+                  return FadeTransition(
+                    opacity: animation,
+
+                    child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0.05, 0),
+                        end: Offset.zero,
+                      ).animate(animation),
+
+                      child: child,
+                    ),
+                  );
+                },
+
+                child: Container(
+                  key: ValueKey(provider.selectedIndex),
+                  child:
+                  navBarItems[provider.selectedIndex]['screen'],
+                ),
+              ),
+
+              /// PREMIUM FLOATING BOTTOM BAR
+              Positioned(
+                left: 18,
+                right: 18,
+                bottom: 18,
+
+                child: Container(
+                  height: 78,
+
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 10,
+                  ),
+
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(28),
+
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+
+                      colors: [
+                        Color(0xff111827),
+                        Color(0xff1E293B),
+                      ],
+                    ),
+
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.15),
+                        blurRadius: 25,
+                        offset: const Offset(0, 12),
+                      ),
+
+                      BoxShadow(
+                        color:
+                        const Color(0xff6366F1).withOpacity(0.10),
+                        blurRadius: 20,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                  ),
+
+                  child: Row(
+                    children: [
+
+                      Expanded(
+                        child: _navItem(
+                          provider,
+                          index: 0,
+                        ),
+                      ),
+
+                      Expanded(
+                        child: _navItem(
+                          provider,
+                          index: 1,
+                        ),
+                      ),
+
+                      const SizedBox(width: 64),
+
+                      Expanded(
+                        child: _navItem(
+                          provider,
+                          index: 2,
+                        ),
+                      ),
+
+                      Expanded(
+                        child: _navItem(
+                          provider,
+                          index: 3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              /// CENTER FAB
+              Positioned(
+                bottom: 42,
+                left: MediaQuery.of(context).size.width / 2 - 32,
+
+                child: GestureDetector(
+                  onTap: () {
+                    provider.navigateTo(
+                      context,
+                      RouteNames.portfolioScreen,
+                    );
+                  },
+
+                  child: Container(
+                    height: 64,
+                    width: 64,
+
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color(0xff6366F1),
+                          Color(0xff8B5CF6),
+                        ],
+                      ),
+
+                      boxShadow: [
+                        BoxShadow(
+                          color:
+                          const Color(0xff6366F1).withOpacity(0.35),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+
+                    child: const Icon(
+                      Icons.add_rounded,
+                      color: Colors.white,
+                      size: 34,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },
     );
   }
 
-  Widget _buildItem(BuildContext context, int index) {
-    return Consumer<BottomBarProvider>(
-      builder: (context, provider, child) {
-        final isSelected = provider.selectedIndex == index;
+  Widget _navItem(
+      BottomBarProvider provider, {
+        required int index,
+      }) {
+    final bool isSelected =
+        provider.selectedIndex == index;
 
-        return GestureDetector(
-          onTap: () => provider.changeTab(index),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                height: 2.5,
-                width: isSelected ? 24 : 0,
-                margin: const EdgeInsets.only(bottom: 2),
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+    return GestureDetector(
+      onTap: () => provider.changeTab(index),
 
-              AnimatedScale(
-                scale: isSelected ? 1.12 : 1.0,
-                duration: const Duration(milliseconds: 250),
-                child: Icon(
-                  navBarItems[index]['icon'],
-                  size: 25,
-                  color: isSelected ? Colors.green : Colors.grey,
-                ),
-              ),
+      behavior: HitTestBehavior.opaque,
 
-              AnimatedDefaultTextStyle(
-                duration: const Duration(milliseconds: 250),
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  color: isSelected ? Colors.green : Colors.grey,
-                ),
-                child: Text(navBarItems[index]['label']),
-              ),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+
+        padding: const EdgeInsets.symmetric(
+          horizontal: 8,
+          vertical: 6,
+        ),
+
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+
+          gradient: isSelected
+              ? const LinearGradient(
+            colors: [
+              Color(0xff6366F1),
+              Color(0xff8B5CF6),
             ],
-          ),
-        );
-      },
+          )
+              : null,
+
+          color: isSelected
+              ? null
+              : Colors.transparent,
+        ),
+
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+
+          children: [
+
+            AnimatedScale(
+              duration: const Duration(milliseconds: 250),
+              scale: isSelected ? 1.15 : 1,
+
+              child: Icon(
+                navBarItems[index]['icon'],
+                size: 24,
+
+                color: isSelected
+                    ? Colors.white
+                    : Colors.white.withOpacity(0.55),
+              ),
+            ),
+
+            const SizedBox(height: 4),
+
+            Text(
+              navBarItems[index]['label'],
+
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+
+                color: isSelected
+                    ? Colors.white
+                    : Colors.white.withOpacity(0.55),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

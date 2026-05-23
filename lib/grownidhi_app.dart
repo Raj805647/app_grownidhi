@@ -7,20 +7,9 @@ import 'package:provider/provider.dart';
 
 import 'firebase_service.dart';
 
-class GrownidhiApp extends StatefulWidget {
+class GrownidhiApp extends StatelessWidget {
   const GrownidhiApp({super.key});
 
-  @override
-  State<GrownidhiApp> createState() => _GrownidhiAppState();
-}
-
-class _GrownidhiAppState extends State<GrownidhiApp> {
-  @override
-  void initState() {
-    super.initState();
-
-    NotificationService().initialize();
-  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(

@@ -5,349 +5,488 @@ import 'package:provider/provider.dart';
 import '../../../../widget/help_widget.dart';
 import '../agent_portfolio_product/agent_portfolio_product_screen.dart';
 import 'agent_portfolio_provider.dart';
-
 class AgentPortfolioScreen extends StatefulWidget {
   const AgentPortfolioScreen({super.key});
 
   @override
-  State<AgentPortfolioScreen> createState() => _AgentPortfolioScreenState();
+  State<AgentPortfolioScreen> createState() =>
+      _AgentPortfolioScreenState();
 }
 
-class _AgentPortfolioScreenState extends State<AgentPortfolioScreen> {
+class _AgentPortfolioScreenState
+    extends State<AgentPortfolioScreen> {
+
   @override
   void initState() {
-    // TODO: implement initState
+
     Future.microtask(() {
-      context.read<AgentPortfolioProvider>().fetchCategroyPortfolio();
+
+      context
+          .read<AgentPortfolioProvider>()
+          .fetchCategroyPortfolio();
     });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      backgroundColor: Colors.transparent,
+
+      backgroundColor:
+      const Color(0xff081C15),
 
       body: Stack(
         children: [
-          AppGradientBackground(),
 
-          /*          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xff1A1A40),
-                  Color(0xff270082),
-                  Color(0xff7A0BC0),
-                ],
+          /// BACKGROUND
+          const AppGradientBackground(),
 
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-          )*/
-          SingleChildScrollView(
-            padding: const EdgeInsets.only(left: 16,right: 16, top: 20, bottom: 100),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          /// MAIN UI
+          SafeArea(
+            child: Consumer<AgentPortfolioProvider>(
+              builder: (context, provider, child) {
 
-                  children: [
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                return RefreshIndicator(
 
-                      children: [
-                        Text(
-                          "Portfolio",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                  onRefresh: () async {
 
-                        SizedBox(height: 4),
+                    await provider
+                        .fetchCategroyPortfolio();
+                  },
 
-                        Text(
-                          "Manage your assets",
-                          style: TextStyle(color: Colors.black54, fontSize: 15),
-                        ),
-                      ],
+                  child: SingleChildScrollView(
+
+                    physics:
+                    const AlwaysScrollableScrollPhysics(),
+
+                    padding:
+                    const EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      top: 10,
+                      bottom: 100,
                     ),
 
-                    Container(
-                      padding: const EdgeInsets.all(12),
-
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.12),
-
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-
-                      child: const Icon(
-                        Icons.notifications_none,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-                Consumer<AgentPortfolioProvider>(
-                  builder: (context, provider, child) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
 
                       children: [
-                        /// CATEGORY LOADING
-                        if (provider.categoryLoading)
-                          const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(20),
-                              child: CircularProgressIndicator(),
-                            ),
-                          )
-                        else
-                          /// CATEGORY LIST
-                          SizedBox(
-                            height: 52,
 
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
+                        /// APP BAR
+                        _buildHeader(),
 
-                              itemCount: provider.serviceCategoryData.length,
+                        const SizedBox(height: 24),
 
-                              separatorBuilder: (_, __) =>
-                                  const SizedBox(width: 12),
-
-                              itemBuilder: (context, index) {
-                                final category =
-                                    provider.serviceCategoryData[index];
-
-                                final isSelected =
-                                    provider.selectedCategoryId == category.id;
-
-                                return GestureDetector(
-                                  onTap: () async {
-                                    provider.selectedCategoryId = category.id;
-
-                                    provider.notifyListeners();
-
-                                    await provider.fetchSubCategoryPortfolio(
-                                      category.id ?? 0,
-                                    );
-                                  },
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 250),
-
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 22,
-                                      vertical: 14,
-                                    ),
-
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(18),
-
-                                      gradient: isSelected
-                                          ? const LinearGradient(
-                                              colors: [
-                                                Color(0xff00DBDE),
-                                                Color(0xffFC00FF),
-                                              ],
-                                            )
-                                          : null,
-
-                                      color: isSelected ? null : Colors.white,
-                                    ),
-
-                                    child: Center(
-                                      child: Text(
-                                        category.name ?? "Category",
-
-                                        style: TextStyle(
-                                          color: isSelected
-                                              ? Colors.white
-                                              : Colors.black,
-
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
+                        /// CATEGORY
+                        _buildCategorySection(provider),
 
                         const SizedBox(height: 28),
 
-                        /// SUB CATEGORY TITLE
+                        /// TITLE
                         const Text(
                           "Portfolio Services",
+
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontSize: 22,
-                            fontWeight: FontWeight.bold,
+                            fontWeight:
+                            FontWeight.bold,
                           ),
                         ),
 
                         const SizedBox(height: 18),
 
-                        /// SUB CATEGORY LOADING
+                        /// LOADING
                         if (provider.subCategoryLoading)
                           const Center(
                             child: Padding(
-                              padding: EdgeInsets.all(30),
-                              child: CircularProgressIndicator(),
+                              padding:
+                              EdgeInsets.all(30),
+
+                              child:
+                              CircularProgressIndicator(),
                             ),
                           )
-                        else if (provider.serviceSubCategoryData.isEmpty)
-                          /// EMPTY
-                          const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(30),
-                              child: Text("No Portfolio Found"),
+
+                        /// EMPTY
+                        else if (provider
+                            .serviceSubCategoryData
+                            .isEmpty)
+
+                          Container(
+
+                            width: double.infinity,
+
+                            padding:
+                            const EdgeInsets.all(40),
+
+                            decoration: BoxDecoration(
+
+                              color: Colors.white
+                                  .withOpacity(0.05),
+
+                              borderRadius:
+                              BorderRadius.circular(
+                                  24),
+                            ),
+
+                            child: const Column(
+                              children: [
+
+                                Icon(
+                                  Icons.inventory_2_outlined,
+                                  color: Colors.white54,
+                                  size: 50,
+                                ),
+
+                                SizedBox(height: 12),
+
+                                Text(
+                                  "No Portfolio Found",
+
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
                             ),
                           )
+
+                        /// GRID
                         else
-                          /// SUB CATEGORY GRID
                           GridView.builder(
-                            itemCount: provider.serviceSubCategoryData.length,
+
+                            itemCount: provider
+                                .serviceSubCategoryData
+                                .length,
 
                             shrinkWrap: true,
 
-                            physics: const NeverScrollableScrollPhysics(),
+                            physics:
+                            const NeverScrollableScrollPhysics(),
 
                             gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 16,
-                                  crossAxisSpacing: 16,
-                                  childAspectRatio: 0.82,
-                                ),
+                            const SliverGridDelegateWithFixedCrossAxisCount(
 
-                            itemBuilder: (context, index) {
-                              final item =
-                                  provider.serviceSubCategoryData[index];
+                              crossAxisCount: 2,
+
+                              mainAxisSpacing: 16,
+                              crossAxisSpacing: 16,
+
+                              childAspectRatio: 0.76,
+                            ),
+
+                            itemBuilder:
+                                (context, index) {
+
+                              final item = provider
+                                  .serviceSubCategoryData[index];
 
                               return InkWell(
-                                onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        AgentPortfolioProductScreen(
-                                          category_id:
-                                              provider.selectedCategoryId ?? 0,
-                                          subCategoy_id: item.id ?? 0,
-                                          appbarName: item.name ?? '',
-                                        ),
-                                  ),
-                                ),
+
+                                borderRadius:
+                                BorderRadius.circular(
+                                    28),
+
+                                onTap: () {
+
+                                  Navigator.push(
+
+                                    context,
+
+                                    MaterialPageRoute(
+
+                                      builder: (context) =>
+                                          AgentPortfolioProductScreen(
+
+                                            category_id:
+                                            provider.selectedCategoryId ??
+                                                0,
+
+                                            subCategoy_id:
+                                            item.id ?? 0,
+
+                                            appbarName:
+                                            item.name ??
+                                                '',
+                                          ),
+                                    ),
+                                  );
+                                },
+
                                 child: Container(
-                                  padding: const EdgeInsets.all(10),
+
+                                  padding:
+                                  const EdgeInsets.all(
+                                      14),
 
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(28),
 
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Colors.deepPurple.withOpacity(0.15),
+                                    color: Colors.white
+                                        .withOpacity(
+                                        0.08),
 
-                                        Colors.blue.withOpacity(0.08),
-                                      ],
-                                    ),
+                                    borderRadius:
+                                    BorderRadius.circular(
+                                        28),
 
                                     border: Border.all(
-                                      color: Colors.deepPurple.withOpacity(
-                                        0.10,
-                                      ),
+                                      color: Colors.white
+                                          .withOpacity(
+                                          0.05),
                                     ),
-
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.04),
-                                        blurRadius: 12,
-                                      ),
-                                    ],
                                   ),
 
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment
+                                        .start,
 
                                     children: [
-                                      /// ICON
-                                      Container(
-                                        padding: const EdgeInsets.all(14),
 
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(
-                                            18,
+                                      /// TOP ICON
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment
+                                            .spaceBetween,
+
+                                        children: [
+
+                                          Container(
+
+                                            height: 65,
+                                            width: 65,
+
+                                            padding:
+                                            const EdgeInsets
+                                                .all(10),
+
+                                            decoration:
+                                            BoxDecoration(
+
+                                              color: Colors
+                                                  .white
+                                                  .withOpacity(
+                                                  0.08),
+
+                                              borderRadius:
+                                              BorderRadius
+                                                  .circular(
+                                                  20),
+                                            ),
+
+                                            child:
+                                            (item.icon
+                                                ?.isEmpty ??
+                                                true)
+
+                                                ? const Icon(
+                                              Icons
+                                                  .account_balance_wallet_outlined,
+
+                                              color:
+                                              Colors.greenAccent,
+
+                                              size:
+                                              34,
+                                            )
+
+                                                : ClipRRect(
+
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  14),
+
+                                              child:
+                                              Image.network(
+
+                                                '${AppConfig.imageUrl}/${item.icon}',
+
+                                                fit: BoxFit
+                                                    .cover,
+                                              ),
+                                            ),
                                           ),
-                                        ),
 
-                                        child:(item.icon?.isEmpty ?? true)
-                                  ? const Icon(
-                                          Icons.account_balance_wallet,
-                                          color: Colors.deepPurple,
-                                          size: 30,
-                                        ): 
-                                        Image.network('${AppConfig.imageUrl}/${item.icon}',height: 75,fit: BoxFit.cover,),
+                                          Container(
+
+                                            padding:
+                                            const EdgeInsets
+                                                .symmetric(
+
+                                              horizontal:
+                                              10,
+
+                                              vertical:
+                                              6,
+                                            ),
+
+                                            decoration:
+                                            BoxDecoration(
+
+                                              color: Colors
+                                                  .greenAccent
+                                                  .withOpacity(
+                                                  0.12),
+
+                                              borderRadius:
+                                              BorderRadius
+                                                  .circular(
+                                                  14),
+                                            ),
+
+                                            child: Text(
+
+                                              item.type ??
+                                                  "Portfolio",
+
+                                              style:
+                                              const TextStyle(
+
+                                                color: Colors
+                                                    .greenAccent,
+
+                                                fontSize:
+                                                11,
+
+                                                fontWeight:
+                                                FontWeight
+                                                    .w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
 
                                       const Spacer(),
 
                                       /// NAME
                                       Text(
-                                        item.name ?? "N/A",
+
+                                        item.name ??
+                                            "N/A",
 
                                         maxLines: 2,
 
-                                        overflow: TextOverflow.ellipsis,
+                                        overflow:
+                                        TextOverflow
+                                            .ellipsis,
 
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                                        style:
+                                        const TextStyle(
+
+                                          color:
+                                          Colors.white,
+
+                                          fontSize: 17,
+
+                                          fontWeight:
+                                          FontWeight
+                                              .bold,
                                         ),
                                       ),
 
-                                      const SizedBox(height: 5),
+                                      const SizedBox(
+                                          height: 8),
+
                                       /// VALUE
-                                      Text(
-                                        item.value ?? "₹ 00,000",
+                                      Row(
+                                        children: [
 
-                                        style: TextStyle(
-                                          color: Colors.grey.shade700,
-                                          fontSize: 15,
-                                        ),
+                                          const Icon(
+                                            Icons
+                                                .currency_rupee,
+
+                                            color: Colors
+                                                .greenAccent,
+
+                                            size: 16,
+                                          ),
+
+                                          Expanded(
+                                            child: Text(
+
+                                              item.value ??
+                                                  "00,000",
+
+                                              overflow:
+                                              TextOverflow
+                                                  .ellipsis,
+
+                                              style:
+                                              TextStyle(
+
+                                                color: Colors
+                                                    .white
+                                                    .withOpacity(
+                                                    0.7),
+
+                                                fontSize:
+                                                14,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
 
-                                      const SizedBox(height: 8),
+                                      const SizedBox(
+                                          height: 12),
 
-                                      /// TYPE BADGE
+                                      /// BUTTON
                                       Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 12,
-                                          vertical: 7,
+
+                                        width:
+                                        double.infinity,
+
+                                        padding:
+                                        const EdgeInsets
+                                            .symmetric(
+
+                                          vertical: 10,
                                         ),
 
-                                        decoration: BoxDecoration(
-                                          color: Colors.deepPurple.withOpacity(
-                                            0.08,
+                                        decoration:
+                                        BoxDecoration(
+
+                                          gradient:
+                                          const LinearGradient(
+
+                                            colors: [
+
+                                              Color(
+                                                  0xff22C55E),
+
+                                              Color(
+                                                  0xff16A34A),
+                                            ],
                                           ),
 
-                                          borderRadius: BorderRadius.circular(
-                                            14,
-                                          ),
+                                          borderRadius:
+                                          BorderRadius
+                                              .circular(
+                                              16),
                                         ),
 
-                                        child: Text(
-                                          item.type ?? "Portfolio",
+                                        child: const Center(
 
-                                          style: const TextStyle(
-                                            color: Colors.deepPurple,
-                                            fontWeight: FontWeight.w600,
+                                          child: Text(
+
+                                            "View Products",
+
+                                            style:
+                                            TextStyle(
+
+                                              color:
+                                              Colors.white,
+
+                                              fontWeight:
+                                              FontWeight
+                                                  .bold,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -358,13 +497,203 @@ class _AgentPortfolioScreenState extends State<AgentPortfolioScreen> {
                             },
                           ),
                       ],
-                    );
-                  },
-                ),
-              ],
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// HEADER
+  Widget _buildHeader() {
+
+    return Row(
+
+      mainAxisAlignment:
+      MainAxisAlignment.spaceBetween,
+
+      children: [
+
+        Column(
+          crossAxisAlignment:
+          CrossAxisAlignment.start,
+
+          children: [
+
+            const Text(
+
+              "Portfolio",
+
+              style: TextStyle(
+
+                color: Colors.white,
+
+                fontSize: 30,
+
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 4),
+
+            Text(
+
+              "Manage your services",
+
+              style: TextStyle(
+
+                color:
+                Colors.white.withOpacity(0.7),
+
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+
+        Container(
+
+          padding: const EdgeInsets.all(12),
+
+          decoration: BoxDecoration(
+
+            color:
+            Colors.white.withOpacity(0.08),
+
+            borderRadius:
+            BorderRadius.circular(18),
+          ),
+
+          child: const Icon(
+
+            Icons.notifications_none_rounded,
+
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// CATEGORY SECTION
+  Widget _buildCategorySection(
+      AgentPortfolioProvider provider) {
+
+    if (provider.categoryLoading) {
+
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    return SizedBox(
+
+      height: 52,
+
+      child: ListView.separated(
+
+        scrollDirection: Axis.horizontal,
+
+        itemCount:
+        provider.serviceCategoryData.length,
+
+        separatorBuilder: (_, __) =>
+        const SizedBox(width: 12),
+
+        itemBuilder: (context, index) {
+
+          final category =
+          provider.serviceCategoryData[index];
+
+          final isSelected =
+              provider.selectedCategoryId ==
+                  category.id;
+
+          return InkWell(
+
+            borderRadius:
+            BorderRadius.circular(18),
+
+            onTap: () async {
+
+              await provider
+                  .fetchSubCategoryPortfolio(
+                category.id ?? 0,
+              );
+            },
+
+            child: AnimatedContainer(
+
+              duration:
+              const Duration(milliseconds: 250),
+
+              padding:
+              const EdgeInsets.symmetric(
+
+                horizontal: 22,
+                vertical: 14,
+              ),
+
+              decoration: BoxDecoration(
+
+                borderRadius:
+                BorderRadius.circular(18),
+
+                gradient: isSelected
+
+                    ? const LinearGradient(
+
+                  colors: [
+
+                    Color(0xff22C55E),
+
+                    Color(0xff16A34A),
+                  ],
+                )
+
+                    : null,
+
+                color: isSelected
+                    ? null
+                    : Colors.white
+                    .withOpacity(0.08),
+
+                border: Border.all(
+                  color: Colors.white
+                      .withOpacity(0.05),
+                ),
+              ),
+
+              child: Center(
+
+                child: Text(
+
+                  category.name ??
+                      "Category",
+
+                  style: TextStyle(
+
+                    color: Colors.white,
+
+                    fontWeight:
+                    isSelected
+
+                        ? FontWeight.bold
+
+                        : FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -17,7 +17,7 @@ class AppConfig {
   static const String actionSignUp = '/register';
 
   //individual api endpoints
-  static const String actionProfile = '/profile';
+  static const String actionProfile = '/individualProfessionalDetails';
   static const String actionServiceCategory = '/categories';
   static const String actionServiceSubsCategory = '/subcategories';
   static const String actionServiceProductDetails = '/products';
@@ -33,6 +33,7 @@ class AppConfig {
   static const String actionCompanyList = '/company-list';
   static const String actionProductList = '/products-by-company';
   static const String actionClientList = '/agent/clients';
+  static const String actionClientApplication = '/agent/clientApplications';
   static const String actionClientMemberList = '/agent/clientFamilyMembers';
   static const String actionAgentKycAddOrUpdate = '/agentKycAddOrUpdate';
   static const String actionClientAddOrUpdate = '/agent/clientAddOrUpdate';
@@ -45,4 +46,5 @@ class AppConfig {
   static const String actionAgentProductFormSubmit = '/agent/product/form-submit';
   static const String actionAgentCompanyData = '/agent/companies';
   static const String actionAgentClientAddUpdateProfile = '/client-professional-details';
+  static const String actionAgentNotification = '/agent/notifications';
 }

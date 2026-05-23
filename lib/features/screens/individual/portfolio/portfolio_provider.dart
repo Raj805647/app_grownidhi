@@ -22,6 +22,7 @@ class PortfolioProvider extends BaseProvider{
         final List data = response.data['data'] ?? [];
 
         portfolioList = data.map((e) => PortfolioDetailsData.fromJson(e)).toList();
+        notifyListeners();
       }
     } catch (error, stackTrace) {
       print("🔥 Error: $error");
@@ -31,5 +32,4 @@ class PortfolioProvider extends BaseProvider{
       notifyListeners();
     }
   }
-
 }
