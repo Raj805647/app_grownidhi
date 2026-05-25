@@ -20,12 +20,15 @@ import '../features/screens/agent/agent_my_profile/agent_my_profile_screen.dart'
 import '../features/screens/agent/agent_my_profile_edit/agent_my_profile_edit_screen.dart';
 import '../features/screens/individual/add_product/add_product_screen.dart';
 import '../features/screens/individual/add_product_details/add_product_details_screen.dart';
-import '../features/screens/individual/all_service/all_service_screen.dart';
 import '../features/screens/individual/bottom_bar/bottom_bar_screen.dart';
 import '../features/screens/individual/calender/calender_screen.dart';
+import '../features/screens/individual/individivual_add_member/individual_add_member_screen.dart';
+import '../features/screens/individual/individual_members/individual_member_details_screen.dart';
+import '../features/screens/individual/individual_members/individual_members_screen.dart';
+import '../features/screens/individual/individual_setting/individual_setting_screen.dart';
 import '../features/screens/individual/product/product_screen.dart';
 import '../features/screens/individual/product_details/product_details_screen.dart';
-import '../features/screens/individual/profile/profile_screen.dart';
+import '../features/screens/individual/show_cate_subcate_data/show_cate_subcate_data_screen.dart';
 import 'route_names.dart';
 
 class AppRoutes {
@@ -41,11 +44,14 @@ class AppRoutes {
     RouteNames.homeScreen: (context) => HomeScreen(),
     RouteNames.addProductScreen: (context) => AddProductScreen(),
     RouteNames.addProductDetailsScreen: (context) => AddProductDetailsScreen(),
-    RouteNames.portfolioScreen: (context) => AllServiceScreen(),
+    RouteNames.showCateSubcateDataScreen: (context) => ShowCateSubcateDataScreen(),
     RouteNames.productDetailScreen: (context) => ProductDetailScreen(),
     RouteNames.calendarScreen: (context) => CalendarScreen(),
-    RouteNames.profileScreen: (context) => ProfileScreen(),
+    RouteNames.profileScreen: (context) => IndividualSettingScreen(),
     RouteNames.kycScreen: (context) => KycUpdateScreen(),
+    RouteNames.individualAddMemberScreen: (context) => IndividualAddMemberScreen(),
+    RouteNames.individualMemberScreen: (context) => IndividualMembersScreen(),
+    // RouteNames.individualMemberDetailsScreen: (context) => IndividualMemberDetailsScreen(),
 
     //agent scree
     RouteNames.agentBottomNavigationScreen: (context) => AgentBottomBarScreen(),

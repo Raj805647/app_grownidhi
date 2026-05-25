@@ -11,12 +11,15 @@ class RouteNames {
   static const String profileScreen = '/profileScreen';
   static const String addProductScreen = '/addProductScreen';
   static const String addProductDetailsScreen = '/addProductDetailsScreen';
-  static const String portfolioScreen = '/portfolioScreen';
+  static const String showCateSubcateDataScreen = '/portfolioScreen';
   static const String productDetailScreen = '/productDetailScreen';
   static const String calendarScreen = '/calendarScreen';
   static const String kycScreen = '/kycScreen';
   static const String productScreen = '/productScreen';
   static const String formSubmitDetailsScreen = '/formSubmitDetailsScreen';
+  static const String individualMemberScreen = '/individualMemberScreen';
+  static const String individualMemberDetailsScreen = '/individualMemberDetailsScreen';
+  static const String individualAddMemberScreen = '/individualAddMemberScreen';
 
   // agent Screen
   static const String agentBottomNavigationScreen = '/agentBottomNavigationScreen';

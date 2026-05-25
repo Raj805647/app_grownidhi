@@ -100,6 +100,46 @@ class AuthRepository extends BaseRepository {
     });
   }
 
+  Future<Result<dynamic>> individualUpdateMembers(Map<String, dynamic> body) {
+    return safeApiCall(() async {
+      final response = await apiClient.postDio(AppConfig.actionAddUpdateMembers,
+          body: body, isFormData: true);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> individualUMembers() {
+    return safeApiCall(() async {
+      final response =
+          await apiClient.getDio(AppConfig.actionIndividuaFamilyMember);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> individualDeleteMembers(int id) {
+    return safeApiCall(() async {
+      final response =
+          await apiClient.deleteDio('${AppConfig.actionIndividualDeleteFamilyMember}/familymember_id=$id');
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> individualAddUpdateKYC(Map<String, dynamic> body) {
+    return safeApiCall(() async {
+      final response = await apiClient.postDio(AppConfig.actionIndividualKYC,
+          body: body, isFormData: true);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> getIndividualKYC() {
+    return safeApiCall(() async {
+      final response =
+          await apiClient.getDio(AppConfig.actionIndividualKYCData);
+      return response.data;
+    });
+  }
+
   // Agent auth repository
   Future<Result<dynamic>> agentDashboard() {
     return safeApiCall(() async {
@@ -117,7 +157,8 @@ class AuthRepository extends BaseRepository {
 
   Future<Result<dynamic>> agentClientApplication() {
     return safeApiCall(() async {
-      final response = await apiClient.getDio(AppConfig.actionClientApplication);
+      final response =
+          await apiClient.getDio(AppConfig.actionClientApplication);
       return response.data;
     });
   }
@@ -270,6 +311,7 @@ class AuthRepository extends BaseRepository {
       return response.data;
     });
   }
+
   Future<Result<dynamic>> agentNotificationData() {
     return safeApiCall(() async {
       final response =

@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../widget/help_widget.dart';
-import '../all_service/all_service_screen.dart';
 import '../calender/calender_screen.dart';
+import '../individual_setting/individual_setting_screen.dart';
 import '../portfolio/portfolio_screen.dart';
-import '../profile/profile_screen.dart';
 import 'bottom_bar_provider.dart';
 
 class BottomBarScreen extends StatelessWidget {
@@ -35,7 +34,7 @@ class BottomBarScreen extends StatelessWidget {
     {
       'icon': Icons.person_rounded,
       'label': 'Profile',
-      'screen': ProfileScreen(),
+      'screen': IndividualSettingScreen(),
     },
   ];
 
@@ -167,7 +166,7 @@ class BottomBarScreen extends StatelessWidget {
                   onTap: () {
                     provider.navigateTo(
                       context,
-                      RouteNames.portfolioScreen,
+                      RouteNames.showCateSubcateDataScreen,
                     );
                   },
 

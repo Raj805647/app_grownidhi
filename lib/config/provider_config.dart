@@ -14,9 +14,10 @@ import 'package:app_grownidhi/features/screens/agent/agent_report/agent_report_p
 import 'package:app_grownidhi/features/screens/individual/calender/calender_provider.dart';
 import 'package:app_grownidhi/features/screens/individual/form_submit_details/form_submit_details_provider.dart';
 import 'package:app_grownidhi/features/screens/individual/home/home_provider.dart';
+import 'package:app_grownidhi/features/screens/individual/individivual_add_member/individivual_add_member_provider.dart';
+import 'package:app_grownidhi/features/screens/individual/individual_members/individual_members_provider.dart';
 import 'package:app_grownidhi/features/screens/individual/kyc_update/kyc_update_provider.dart';
 import 'package:app_grownidhi/features/screens/individual/portfolio/portfolio_provider.dart';
-import 'package:app_grownidhi/features/screens/individual/profile/profile_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../features/auth/onboarding/onboarding_provider.dart';
@@ -33,11 +34,12 @@ import '../features/screens/agent/agent_my_profile/agent_my_profile_provider.dar
 import '../features/screens/agent/agent_portfolio_product/agent_portfolio_product_provider.dart';
 import '../features/screens/individual/add_product/add_product_provider.dart';
 import '../features/screens/individual/add_product_details/add_product_details_provider.dart';
-import '../features/screens/individual/all_service/all_service_provider.dart';
 import '../features/screens/individual/bottom_bar/bottom_bar_provider.dart';
 import '../features/screens/individual/individual_profile_details/individual_profile_details_provider.dart';
+import '../features/screens/individual/individual_setting/individual_setting_provider.dart';
 import '../features/screens/individual/product/product_provider.dart';
 import '../features/screens/individual/product_details/product_details_provider.dart';
+import '../features/screens/individual/show_cate_subcate_data/show_cate_subcate_data_provider.dart';
 
 class ProviderConfig {
   static List<ChangeNotifierProvider> providers = [
@@ -52,15 +54,17 @@ class ProviderConfig {
     ChangeNotifierProvider<HomeProvider>(create: (_) => HomeProvider()),
     ChangeNotifierProvider<AddProductProvider>(create: (_) => AddProductProvider()),
     ChangeNotifierProvider<AddProductDetailsProvider>(create: (_) => AddProductDetailsProvider()),
-    ChangeNotifierProvider<AllServiceProvider>(create: (_) => AllServiceProvider()),
+    ChangeNotifierProvider<ShowCateSubcateDataProvider>(create: (_) => ShowCateSubcateDataProvider()),
     ChangeNotifierProvider<ProductDetailProvider>(create: (_) => ProductDetailProvider()),
     ChangeNotifierProvider<CalenderProvider>(create: (_) => CalenderProvider()),
-    ChangeNotifierProvider<ProfileProvider>(create: (_) => ProfileProvider()),
+    ChangeNotifierProvider<IndividualSettingProvider>(create: (_) => IndividualSettingProvider()),
     ChangeNotifierProvider<IndividualProfileDetailsProvider>(create: (_) => IndividualProfileDetailsProvider()),
     ChangeNotifierProvider<KycUpdateProvider>(create: (_) => KycUpdateProvider()),
     ChangeNotifierProvider<ProductProvider>(create: (_) => ProductProvider()),
     ChangeNotifierProvider<FormSubmitDetailsProvider>(create: (_) => FormSubmitDetailsProvider()),
     ChangeNotifierProvider<PortfolioProvider>(create: (_) => PortfolioProvider()),
+    ChangeNotifierProvider<IndividualAddMemberProvider>(create: (_) => IndividualAddMemberProvider()),
+    ChangeNotifierProvider<IndividualMembersProvider>(create: (_) => IndividualMembersProvider()),
 
     //individual provider
     ChangeNotifierProvider<AgentBottomBarProvider>(create: (_) => AgentBottomBarProvider()),

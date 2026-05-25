@@ -1,21 +1,18 @@
 import 'package:app_grownidhi/features/screens/individual/individual_profile_details/individual_profile_details_screen.dart';
-import 'package:app_grownidhi/features/screens/individual/profile/profile_provider.dart';
 import 'package:app_grownidhi/routes/route_names.dart';
 import 'package:app_grownidhi/widget/ui_design.dart';
 import 'package:base_module/core/app_dialog.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../widget/help_widget.dart';
-
-import 'package:flutter/material.dart';
+import 'individual_setting_provider.dart';
 
 enum SlideDirection { top, bottom, left, right }
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class IndividualSettingScreen extends StatelessWidget {
+  const IndividualSettingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -237,8 +234,8 @@ class ProfileScreen extends StatelessWidget {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
-      child: Consumer<ProfileProvider>(
-        builder: (context, provider, child) =>  Container(
+      child: Consumer<IndividualSettingProvider>(
+        builder: (context, provider, child) => Container(
           margin: const EdgeInsets.only(bottom: 12),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -260,9 +257,28 @@ class ProfileScreen extends StatelessWidget {
             ),
             title: Text(title),
             children: [
-              _buildTile(Icons.person, "My Profile", ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => IndividualProfileDetailsScreen(),))),
+              _buildTile(
+                Icons.person,
+                "My Profile",
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => IndividualProfileDetailsScreen(),
+                  ),
+                ),
+              ),
               _divider(),
-              _buildTile(Icons.verified_user, "KYC Documents", ()=> provider.navigateTo(context, RouteNames.kycScreen)),
+              _buildTile(
+                Icons.verified_user,
+                "KYC Documents",
+                () => provider.navigateTo(context, RouteNames.kycScreen),
+              ),
+              _divider(),
+              _buildTile(
+                Icons.supervised_user_circle,
+                "Add Members",
+                () => provider.navigateTo(context, RouteNames.individualMemberScreen),
+              ),
               _divider(),
               _buildTile(Icons.lock, "Change Password", () {}),
               _divider(),

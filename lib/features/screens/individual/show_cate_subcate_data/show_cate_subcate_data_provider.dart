@@ -2,7 +2,7 @@ import 'package:base_module/base_module.dart';
 import 'package:base_module/core/models/service_category_response.dart';
 import 'package:base_module/core/models/service_sub_category_response.dart';
 
-class AllServiceProvider extends BaseProvider {
+class ShowCateSubcateDataProvider extends BaseProvider {
   bool isLoading = false;
   bool isSubLoading = false;
   List<ServiceCategoryData> categoryList = [];

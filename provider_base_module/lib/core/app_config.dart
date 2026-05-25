@@ -25,6 +25,11 @@ class AppConfig {
   static const String actionPolicyDetails = '/policy-details';
   static const String actionUpdateProfile = '/profile/update';
   static const String actionSubmitFormDetails = '/individualKycAddOrUpdate';
+  static const String actionAddUpdateMembers = '/storeOrUpdateFamilyMember';
+  static const String actionIndividualKYC = '/storeOrUpdateIndividualKyc';
+  static const String actionIndividualKYCData = '/individualKyc';
+  static const String actionIndividuaFamilyMember = '/familyMembers';
+  static const String actionIndividualDeleteFamilyMember = '/deleteFamilyMember';
 
   // agents api endpoints
   static const String actionAgentDashboard = '/agent/dashboard_count';

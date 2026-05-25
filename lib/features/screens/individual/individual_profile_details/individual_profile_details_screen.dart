@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../widget/custom_textfield.dart';
 import '../../../../widget/ui_design.dart';
 import 'individual_profile_details_provider.dart';
 
@@ -62,7 +63,7 @@ class _IndividualProfileDetailsScreenState
                       backgroundColor: Colors.transparent,
                       elevation: 0,
                       pinned: true,
-                      expandedHeight: 110,
+                      expandedHeight: 80,
 
                       leading: Padding(
                         padding: const EdgeInsets.only(
@@ -89,47 +90,39 @@ class _IndividualProfileDetailsScreenState
                           ),
                         ),
                       ),
+                      title: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
 
-                      flexibleSpace: FlexibleSpaceBar(
-                        titlePadding: const EdgeInsets.only(
-                          left: 24,
-                          bottom: 18,
-                        ),
+                        children: const [
 
-                        title: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
-
-                          children: const [
-
-                            Text(
-                              "Profile Details",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          Text(
+                            "Profile Details",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
                             ),
+                          ),
 
-                            SizedBox(height: 4),
+                          SizedBox(height: 4),
 
-                            Text(
-                              "Manage your personal information",
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 12,
-                              ),
+                          Text(
+                            "Manage your personal information",
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 15,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
 
                     /// BODY
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(1),
 
                         child: Column(
                           children: [
@@ -267,7 +260,7 @@ class _IndividualProfileDetailsScreenState
                             _profileTile(
                               Icons.calendar_month,
                               "Date of Birth",
-                              profile?.dob ?? "-",
+                              formatDate(profile?.dob ?? "-"),
                             ),
 
                             _profileTile(
@@ -356,7 +349,7 @@ class _IndividualProfileDetailsScreenState
                               profile?.monthlyIncome ?? "-",
                             ),
 
-                            const SizedBox(height: 120),
+                            const SizedBox(height: 50),
                           ],
                         ),
                       ),
@@ -391,7 +384,7 @@ class _IndividualProfileDetailsScreenState
         Text(
           title,
           style: const TextStyle(
-            color: Color(0xff1E293B),
+            color: Colors.white,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -466,7 +459,7 @@ class _IndividualProfileDetailsScreenState
       padding: const EdgeInsets.all(18),
 
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.05),
         borderRadius: BorderRadius.circular(24),
 
         boxShadow: [
@@ -513,8 +506,8 @@ class _IndividualProfileDetailsScreenState
                 Text(
                   title,
                   style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
+                    color: Colors.white,
+                    fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -524,8 +517,8 @@ class _IndividualProfileDetailsScreenState
                 Text(
                   value,
                   style: const TextStyle(
-                    color: Color(0xff1E293B),
-                    fontSize: 15,
+                    color: Colors.white,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
