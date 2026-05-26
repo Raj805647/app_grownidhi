@@ -3,12 +3,13 @@ import 'dart:io';
 import 'package:app_grownidhi/features/screens/individual/form_submit_details/form_submit_details_provider.dart';
 import 'package:app_grownidhi/widget/custom_textfield.dart';
 import 'package:app_grownidhi/widget/ui_design.dart';
-import 'package:base_module/core/models/form_state_details_response.dart';
+import 'package:base_module/core/models/product_apply_form_response.dart';
 import 'package:base_module/core/models/service_products_response.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../widget/custom_appbat.dart';
+import '../../../../widget/custom_button.dart';
 import '../../../../widget/help_widget.dart';
 
 class FormSubmitDetailsScreen extends StatefulWidget {
@@ -23,385 +24,374 @@ class FormSubmitDetailsScreen extends StatefulWidget {
 class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
   @override
   void initState() {
-    super.initState();
-
+    // TODO: implement initState
     Future.microtask(() {
-      context.read<FormSubmitDetailsProvider>().fetchFormStateDetails(
+      context.read<FormSubmitDetailsProvider>().fetchApplyForm(
         widget.productDetails.id ?? 0,
       );
     });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<FormSubmitDetailsProvider>(
-      builder: (context, provider, child) => Scaffold(
-        extendBodyBehindAppBar: true,
+    return Scaffold(
+      body: Stack(
+        children: [
+          AppGradientBackground(),
+          Consumer<FormSubmitDetailsProvider>(
+            builder: (context, provider, child) {
+              if (provider.isLoading) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (provider.productApplyForm.formFields == null ||
+                  provider.productApplyForm.formFields!.isEmpty) {
+                return buildEmptyState(
+                  title: "No Members Found",
+                  subTitle: "Looks like there are no family members added yet.",
+                  icon: Icons.group_off_rounded,
+                );
+              }
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    buildProductHeader(provider.productApplyForm.product),
+                    spaceHeight(20),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: customMultiSelectDropdown(
+                              title: 'Company Data',
 
-        appBar: CustomAppBar(title: provider.appBarName),
+                              items: provider.companyData
+                                  .map((e) => e.companyName ?? '')
+                                  .toList(),
 
-        body: Stack(
-          children: [
-            /// BACKGROUND
-            const AppGradientBackground(),
+                              selectedItems: provider.selectedCompanyNames,
 
-            /// FORM UI
-            provider.isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : provider.formDataList.isEmpty
-                ? const Center(
-                    child: Text(
-                      'Data Not Available',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  )
-                : SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-                      vertical: 50,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                       spaceHeight( 10),
+                              onConfirm: (values) {
+                                provider.selectedCompanyNames = values;
 
-                        /// TITLE
-                        const Text(
-                          "Fill Your Details",
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-
-                       spaceHeight( 8),
-
-                        Text(
-                          "Please complete the form below",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.white.withOpacity(0.8),
-                          ),
-                        ),
-
-                       spaceHeight( 25),
-
-                        /// FORM CONTAINER
-                        Container(
-                          padding: const EdgeInsets.all(18),
-
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.12),
-
-                            borderRadius: BorderRadius.circular(28),
-
-                            border: Border.all(
-                              color: Colors.white.withOpacity(0.2),
-                            ),
-
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.08),
-                                blurRadius: 15,
-                                offset: const Offset(0, 8),
-                              ),
-                            ],
-                          ),
-
-                          child: Column(
-                            children: List.generate(
-                              provider.formDataList.length,
-                              (index) {
-                                final field = provider.formDataList[index];
-
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 18),
-                                  child: _buildField(context, provider, field),
-                                );
+                                provider.selectedCompanyIds = provider
+                                    .companyData
+                                    .where(
+                                      (e) => values.contains(e.companyName),
+                                    )
+                                    .map((e) => e.id ?? 0)
+                                    .toList();
+                                provider.fetchAgentData();
+                                provider.notifyListeners();
                               },
                             ),
                           ),
+                          spaceWidth(20),
+
+                          Expanded(
+                            child: customMultiSelectDropdown(
+                              title: 'Client Data',
+                              items: provider.agentData
+                                  .map((e) => e.name ?? '')
+                                  .toList(),
+                              selectedItems: provider.selectedClientNames,
+                              onConfirm: (values) {
+                                provider.selectedClientNames = values;
+
+                                provider.selectedAgentIds = provider
+                                    .agentData.where((e) => values.contains(e.name))
+                                    .map((e) => e.id ?? 0)
+                                    .toList();
+
+                                provider.notifyListeners();
+                              },
+                            ),
+                          )
+
+                        ],
+                      ),
+                    ),
+                    spaceHeight(10),
+                    ListView.builder(
+                      padding: EdgeInsets.all(11),
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: provider.productApplyForm.formFields?.length,
+                      itemBuilder: (context, index) => buildTextField(
+                        provider.productApplyForm.formFields![index],
+                        provider,
+                      ),
+                    ),
+                    spaceHeight(20),
+                    Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: CustomLoadingButton(
+                        isLoading: provider.isSubmitLoading,
+                        onTap: () => provider.productFormApply(
+                          context,
+                          provider.productApplyForm.product,
                         ),
+                        text: 'Apply Form',
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
-                       spaceHeight( 30),
+  Widget buildProductHeader(Product? product) {
+    return Stack(
+      children: [
+        Container(
+          height: 80,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+            ),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.3),
+                  Colors.black.withOpacity(0.7),
+                ],
+              ),
+            ),
+          ),
+        ),
 
-                        /// SUBMIT BUTTON
-                        provider.formDataList.isNotEmpty
-                            ? SizedBox(
-                                width: double.infinity,
-                                height: 58,
-
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white,
-                                    foregroundColor: const Color(0xFF2575FC),
-
-                                    elevation: 10,
-
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18),
-                                    ),
-                                  ),
-
-                                  onPressed: () {
-                                    provider.getFormValues(
-                                      context,
-                                      widget.productDetails,
-                                    );
-                                  },
-
-                                  child: const Text(
-                                    "Submit Form",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : SizedBox.shrink(),
+        // Back Button
+        Positioned(
+          top: 10,
+          left: 20,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(Icons.arrow_back_ios_new, size: 20),
+                ),
+              ),
+              spaceWidth(20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Category & Subcategory
+                  Row(
+                    children: [
+                      _buildTag(product?.categoryName?? 'Category'),
+                      const SizedBox(width: 10),
+                      if (product?.subcategoryName != null)
+                        _buildTag(
+                          product!.subcategoryName!,
+                          color: Colors.white.withOpacity(0.3),
+                        ),
+                    ],
+                  ),
+                  // Product Name
+                  Text(
+                    product?.productName ?? 'Product Name',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          blurRadius: 10,
+                          color: Colors.black26,
+                          offset: Offset(0, 2),
+                        ),
                       ],
                     ),
                   ),
-          ],
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTag(String text, {Color? color}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: color ?? Colors.white.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
         ),
       ),
     );
   }
 
-  Widget _buildField(
-    BuildContext context,
+  Widget buildTextField(
+    FormFields formField,
     FormSubmitDetailsProvider provider,
-    Fields field,
   ) {
-    switch (field.fieldType) {
-      /// TEXT
-      case "text":
-        return customTextField(
-          hintText: field.label ?? '',
-          controller: provider.controllers[field.fieldName],
-        );
-
-      /// NUMBER
-      case "number":
-        return customTextField(
-          hintText: field.label ?? '',
-          controller: provider.controllers[field.fieldName],
+    if (formField.fieldType == 'text') {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: customTextField(
+          hintText: formField.label ?? 'Not Defined',
+          controller: provider.controller.putIfAbsent(
+            formField.fieldName ?? '',
+            () => TextEditingController(),
+          ),
+        ),
+      );
+    }
+   else if (formField.fieldType == 'number') {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: customTextField(
+          hintText: formField.label ?? 'Not Defined',
           keyboardType: TextInputType.number,
-        );
-
-      /// DATE
-      case "date":
-        return customTextField(
-          controller: provider.controllers[field.fieldName],
-          hintText: field.label ?? '',
+          controller: provider.controller[formField.label],
+        ),
+      );
+    }
+    else if (formField.fieldType == 'date') {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: customTextField(
+          hintText: formField.label ?? 'Not Defined',
           isRead: true,
-          suffixIcon: const Icon(Icons.calendar_month),
-
-          onTap: () async {
-            DateTime? pickedDate = await showDatePicker(
-              context: context,
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2100),
-              initialDate: DateTime.now(),
-            );
-
-            if (pickedDate != null) {
-              String formattedDate =
-                  "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
-
-              provider.controllers[field.fieldName]?.text = formattedDate;
-
-              provider.notifyListeners();
-
-              print("Selected Date => $formattedDate");
-            }
-          },
-        );
-
-      /// TEXTAREA
-      case "textarea":
-        return customTextField(
-          hintText: field.label ?? '',
-          controller: provider.controllers[field.fieldName],
-          maxLines: 3,
-        );
-
-      /// SELECT
-      case "select":
-        return customDropdown(
-          label: field.label ?? '',
-
-          /// Selected value
-          value: provider.selectedDropdown[field.fieldName],
-
-          /// Dropdown items
-          items: field.options is List ? List<String>.from(field.options) : [],
-
-          onChanged: (value) {
-            provider.setDropdownValue(field.fieldName ?? '', value);
-
-            print("Selected => $value");
-          },
-        );
-
-      /// RADIO
-      case "radio":
-        return Container(
-          padding: const EdgeInsets.all(14),
-
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.08),
-            borderRadius: BorderRadius.circular(18),
-          ),
-
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                field.label ?? '',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-
-             spaceHeight( 10),
-
-              ...List.generate(
-                field.options.length,
-                (i) => RadioListTile(
-                  activeColor: Colors.white,
-
-                  value: field.options[i],
-
-                  groupValue: provider.selectedRadio[field.fieldName],
-
-                  onChanged: (value) {
-                    provider.setRadioValue(field.fieldName ?? '', value);
-                  },
-
-                  title: Text(
-                    field.options[i],
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-
-      /// CHECKBOX
-      case "checkbox":
-        return Container(
-          padding: const EdgeInsets.all(14),
-
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.08),
-            borderRadius: BorderRadius.circular(18),
-          ),
-
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                field.label ?? '',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-
-             spaceHeight( 10),
-
-              ...List.generate(
-                field.options.length,
-                (i) => CheckboxListTile(
-                  activeColor: Colors.white,
-
-                  value: provider.isChecked(
-                    field.fieldName ?? '',
-                    field.options[i],
-                  ),
-
-                  onChanged: (value) {
-                    provider.toggleCheckbox(
-                      field.fieldName ?? '',
-                      field.options[i],
-                    );
-                  },
-
-                  title: Text(
-                    field.options[i],
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-
-      /// IMAGE
-      case "image":
-        final image = provider.getImage(field.fieldName ?? '');
-
-        return GestureDetector(
-          onTap: () {
-            provider.pickImage(
-              context: context,
-              fieldName: field.fieldName ?? '',
-            );
-          },
-
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-
-            height: 150,
-            width: double.infinity,
-
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(22),
-
-              border: Border.all(color: Colors.white.withOpacity(0.3)),
-
-              color: Colors.white.withOpacity(0.08),
+          controller: provider.controller[formField.label],
+          onTap: () => pickDateTime(
+            context,
+            provider.controller.putIfAbsent(
+              formField.fieldName ?? '',
+              () => TextEditingController(),
             ),
-
-            child: image != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(22),
-
-                    child: Image.file(File(image.path), fit: BoxFit.cover),
-                  )
-                : const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-
-                    children: [
-                      Icon(
-                        Icons.cloud_upload_rounded,
-                        size: 42,
-                        color: Colors.white,
-                      ),
-
-                      SizedBox(height: 12),
-
-                      Text(
-                        "Upload Image",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
           ),
-        );
+        ),
+      );
+    }
+    else if (formField.fieldType == 'textarea') {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: customTextField(
+          hintText: formField.label ?? 'Not Defined',
+          maxLines: 3,
+          controller: provider.controller[formField.label],
+        ),
+      );
+    }
+    else if (formField.fieldType == 'select') {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: customDropdown(
+          hintText: formField.label ?? 'Not Defined',
+          label: formField.fieldName ?? 'Not Defined',
+          items: (formField.options ?? [])
+              .map((value) => value.toString())
+              .toList(),
+          onChanged: (value) {
+            provider.setDropdownValue(formField.fieldName ?? '', value ?? '');
+          },
+          value: provider.selectedDropdown[formField.fieldName],
+        ),
+      );
+    }
+    else if (formField.fieldType == 'radio') {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: customRadioGroup(
+          title: formField.label ?? '',
+          options: (formField.options ?? [])
+              .map((value) => value.toString())
+              .toList(),
+          groupValue: provider.selectedRadio[formField.fieldName] ?? '',
+          onChanged: (value) {
+            provider.setRadioValue(formField.fieldName ?? '', value);
+          },
+        ),
+      );
+    }
+   else if (formField.fieldType == 'checkbox') {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: customCheckboxGroup(
+          title: formField.label ?? '',
+          options: (formField.options ?? [])
+              .map((value) => value.toString())
+              .toList(),
+          isChecked: (value) {
+            return provider.isChecked(formField.fieldName ?? '', value);
+          },
+          onTap: (value) {
+            provider.toggleCheckbox(formField.fieldName ?? '', value);
+          },
+        ),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child:
+        documentUploadWidget(
+          label: formField.label ?? 'Upload Document',
 
-      default:
-        return const SizedBox();
+          imageFile: provider.selectedImages[formField.fieldName],
+
+          onPick: () async {
+            await provider.imagePicker.showImageSourceDialog(
+              context: context,
+
+              onImagePicked: (xFile) {
+                if (xFile != null) {
+                  provider.setImage(
+                    formField.fieldName ?? '',
+                    File(xFile.path),
+                  );
+                }
+              },
+            );
+          },
+
+          onRemove: () {
+            provider.setImage(
+              formField.fieldName ?? '',
+              null,
+            );
+          },
+        ),
+      );
     }
   }
 }

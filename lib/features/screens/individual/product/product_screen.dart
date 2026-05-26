@@ -34,37 +34,52 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Products'),
       body: Stack(
         children: [
           AppGradientBackground(),
-          Column(
-            children: [
-              // Search Field
-              _buildSearchField(),
+          CustomScrollView(
+            slivers: [
+              /// App Bar
+              const CustomSliverAppBar(title: "Products Details"),
 
-              // Products List
-              Expanded(
-                child: Consumer<ProductProvider>(
-                  builder: (context, provider, child) {
-                    if (provider.isLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    if (provider.products.isEmpty) {
-                      return const Center(child: Text('No products found'));
-                    }
+              SliverPadding(
+                padding: EdgeInsetsGeometry.all(16),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    _buildSearchField(),
 
-                    return ListView.builder(
-                      padding: const EdgeInsets.all(12),
-                      itemCount: provider.products.length,
-                      itemBuilder: (context, index) {
-                        return _buildProductCard(
-                          provider.products[index],
-                          provider,
-                        );
-                      },
-                    );
-                  },
+                    Expanded(
+                      child: Consumer<ProductProvider>(
+                        builder: (context, provider, child) {
+                          if (provider.isLoading) {
+                            return SizedBox(
+                              height: 400,
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          } else if (provider.products.isEmpty) {
+                            return buildEmptyState(
+                              title: 'No Products Found',
+                              subTitle:
+                                  "No products available for this category.",
+                              icon: Icons.inventory_2_outlined,
+                            );
+                          }
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: provider.products.length,
+                            itemBuilder: (context, index) {
+                              return _buildProductCard(
+                                provider.products[index],
+                                provider,
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ]),
                 ),
               ),
             ],
@@ -76,248 +91,733 @@ class _ProductScreenState extends State<ProductScreen> {
 
   Widget _buildSearchField() {
     return Consumer<ProductProvider>(
-      builder: (context, provider, child) => Padding(
-        padding: const EdgeInsets.all(16),
-        child: customTextField(
-          hintText: 'Search products by name or company...',
-          controller: provider.searchController,
-          suffixIcon: provider.searchController.text.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    provider.searchController.clear();
-                  },
-                )
-              : null,
-          prefixIcon: Icons.search,
-        ),
+      builder: (context, provider, child) => customTextField(
+        hintText: 'Search products by name or company...',
+        controller: provider.searchController,
+        suffixIcon: provider.searchController.text.isNotEmpty
+            ? IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  provider.searchController.clear();
+                },
+              )
+            : null,
+        prefixIcon: Icons.search,
       ),
     );
   }
 
   Widget _buildProductCard(
-    ServiceProductsData product,
-    ProductProvider provider,
-  ) {
+      ServiceProductsData product,
+      ProductProvider provider,
+      ) {
     final isActive = product.status == 1;
 
-    return Card(
-      color: Colors.white,
-      margin: const EdgeInsets.only(bottom: 14),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  FormSubmitDetailsScreen(productDetails: product),
-            ),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// Top Row
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  /// Title + Company
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          product.name ?? '',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                       spaceHeight( 4),
-                        Text(
-                          product.companyName ?? '',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
 
-                  /// Status Badge
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isActive
-                          ? Colors.green.shade50
-                          : Colors.red.shade50,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      isActive ? "Active" : "Inactive",
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: isActive
-                            ? Colors.green.shade700
-                            : Colors.red.shade700,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+
+          colors: [
+            Colors.white.withOpacity(0.08),
+            Colors.white.withOpacity(0.03),
+          ],
+        ),
+
+        border: Border.all(
+          color: Colors.white.withOpacity(0.08),
+        ),
+
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.12),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+
+      child: Material(
+        color: Colors.transparent,
+
+        child: InkWell(
+          borderRadius: BorderRadius.circular(24),
+
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FormSubmitDetailsScreen(
+                  productDetails: product,
+                ),
+              ),
+            );
+          },
+
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+
+              children: [
+
+                /// TOP SECTION
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+
+                    /// ICON
+                    Container(
+                      height: 58,
+                      width: 58,
+
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18),
+
+                        gradient: LinearGradient(
+                          colors: [
+                            const Color(0xff6C63FF).withOpacity(0.9),
+                            const Color(0xff8F67FF).withOpacity(0.8),
+                          ],
+                        ),
+                      ),
+
+                      child: const Icon(
+                        Icons.account_balance_wallet_rounded,
+                        color: Colors.white,
+                        size: 28,
                       ),
                     ),
+
+                    const SizedBox(width: 14),
+
+                    /// TITLE
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+
+                        children: [
+
+                          Text(
+                            product.name ?? '',
+
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+
+                          const SizedBox(height: 6),
+
+                          Text(
+                            product.companyName ?? '',
+
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.65),
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(width: 10),
+
+                    /// STATUS
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+
+                        color: isActive
+                            ? Colors.green.withOpacity(0.18)
+                            : Colors.red.withOpacity(0.18),
+                      ),
+
+                      child: Text(
+                        isActive ? "Active" : "Inactive",
+
+                        style: TextStyle(
+                          color: isActive
+                              ? Colors.greenAccent
+                              : Colors.redAccent,
+
+                          fontWeight: FontWeight.w600,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 18),
+
+                /// DESCRIPTION
+                if (product.description != null &&
+                    product.description!.isNotEmpty)
+                  Text(
+                    product.description ?? '',
+
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.70),
+                      fontSize: 13,
+                      height: 1.5,
+                    ),
                   ),
 
-                  const SizedBox(width: 6),
+                const SizedBox(height: 18),
 
-                  /// Details Icon
-                  InkWell(
-                    onTap: () {
-                      _showProductBottomSheet(product);
-                    },
-                    child: const Icon(Icons.info_outline, size: 18),
-                  ),
-                ],
-              ),
+                /// INFO CARDS
+                Row(
+                  children: [
 
-             spaceHeight( 12),
+                    Expanded(
+                      child: _historyInfoCard(
+                        icon: Icons.currency_rupee_rounded,
+                        title: "Amount",
+                        value:
+                        "₹${product.minAmount} - ₹${product.maxAmount}",
+                      ),
+                    ),
 
-              /// Divider
-              Divider(color: Colors.grey.shade200, height: 1),
+                    const SizedBox(width: 10),
 
-             spaceHeight( 10),
+                    Expanded(
+                      child: _historyInfoCard(
+                        icon: Icons.percent_rounded,
+                        title: "Interest",
+                        value:
+                        "${product.interestRate ?? '0'}%",
+                      ),
+                    ),
 
-              /// Info Row (Icons + Data)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _infoItem(
-                    Icons.currency_rupee,
-                    "${product.minAmount} - ${product.maxAmount}",
-                  ),
-                  _infoItem(Icons.percent, "${product.interestRate}%"),
-                  _infoItem(Icons.timer, "${product.tenure}m"),
-                ],
-              ),
-            ],
+                    const SizedBox(width: 10),
+
+                    Expanded(
+                      child: _historyInfoCard(
+                        icon: Icons.schedule_rounded,
+                        title: "Tenure",
+                        value:
+                        "${product.tenure ?? '0'} M",
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 16),
+
+                /// BOTTOM ACTIONS
+                Row(
+                  children: [
+
+                    /// TYPE CHIP
+                    if (product.companyName != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+
+                        decoration: BoxDecoration(
+                          borderRadius:
+                          BorderRadius.circular(20),
+
+                          color: Colors.blue.withOpacity(0.12),
+                        ),
+
+                        child: Text(
+                          product.companyName ?? '',
+
+                          style: const TextStyle(
+                            color: Colors.lightBlueAccent,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+
+                    const Spacer(),
+
+                    /// DETAILS BUTTON
+                    InkWell(
+                      borderRadius: BorderRadius.circular(14),
+
+                      onTap: () {
+                        _showProductBottomSheet(product);
+                      },
+
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+
+                        decoration: BoxDecoration(
+                          borderRadius:
+                          BorderRadius.circular(14),
+
+                          color: Colors.white.withOpacity(0.06),
+                        ),
+
+                        child: const Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _infoItem(IconData icon, String value) {
-    return Row(
-      children: [
-        Icon(icon, size: 14, color: Colors.grey.shade600),
-        const SizedBox(width: 4),
-        Text(
-          value,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+  Widget _historyInfoCard({
+    required IconData icon,
+    required String title,
+    required String value,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        vertical: 14,
+        horizontal: 10,
+      ),
+
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+
+        color: Colors.white.withOpacity(0.05),
+
+        border: Border.all(
+          color: Colors.white.withOpacity(0.05),
         ),
-      ],
+      ),
+
+      child: Column(
+        children: [
+
+          Icon(
+            icon,
+            color: Colors.white,
+            size: 20,
+          ),
+
+          const SizedBox(height: 8),
+
+          Text(
+            title,
+
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.60),
+              fontSize: 11,
+            ),
+          ),
+
+          const SizedBox(height: 4),
+
+          Text(
+            value,
+
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   void _showProductBottomSheet(ServiceProductsData product) {
+    final isActive = product.status == 1;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      backgroundColor: Colors.transparent,
+
       builder: (context) {
         return DraggableScrollableSheet(
           expand: false,
-          initialChildSize: 0.7,
+          initialChildSize: 0.82,
           maxChildSize: 0.95,
+          minChildSize: 0.55,
+
           builder: (_, controller) {
-            return SingleChildScrollView(
-              controller: controller,
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  /// Header
-                  Center(
-                    child: Container(
-                      height: 4,
-                      width: 40,
-                      margin: const EdgeInsets.only(bottom: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(10),
+            return Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(34),
+                ),
+
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+
+                  colors: [
+                    Color(0xff161A24),
+                    Color(0xff0F1117),
+                  ],
+                ),
+              ),
+
+              child: SingleChildScrollView(
+                controller: controller,
+
+                padding: const EdgeInsets.all(20),
+
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+
+                    /// DRAG HANDLE
+                    Center(
+                      child: Container(
+                        height: 5,
+                        width: 60,
+
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white24,
+                        ),
                       ),
                     ),
-                  ),
 
-                  Text(
-                    product.name ?? '',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                    const SizedBox(height: 24),
+
+                    /// HEADER CARD
+                    Container(
+                      width: double.infinity,
+
+                      padding: const EdgeInsets.all(22),
+
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(28),
+
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+
+                          colors: [
+                            const Color(0xff6C63FF)
+                                .withOpacity(0.35),
+
+                            Colors.white.withOpacity(0.05),
+                          ],
+                        ),
+
+                        border: Border.all(
+                          color: Colors.white10,
+                        ),
+                      ),
+
+                      child: Row(
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+
+                        children: [
+
+                          /// ICON
+                          Container(
+                            height: 62,
+                            width: 62,
+
+                            decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.circular(20),
+
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Color(0xff6C63FF),
+                                  Color(0xff8F67FF),
+                                ],
+                              ),
+                            ),
+
+                            child: const Icon(
+                              Icons.account_balance_wallet,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ),
+
+                          const SizedBox(width: 16),
+
+                          /// DETAILS
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+
+                              children: [
+
+                                Text(
+                                  product.name ?? '',
+
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight:
+                                    FontWeight.bold,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 6),
+
+                                Text(
+                                  product.companyName ?? '',
+
+                                  style: TextStyle(
+                                    color: Colors.white
+                                        .withOpacity(0.65),
+
+                                    fontSize: 14,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 14),
+
+                                Container(
+                                  padding:
+                                  const EdgeInsets.symmetric(
+                                    horizontal: 14,
+                                    vertical: 7,
+                                  ),
+
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                    BorderRadius.circular(
+                                      30,
+                                    ),
+
+                                    color: isActive
+                                        ? Colors.green
+                                        .withOpacity(0.18)
+                                        : Colors.red
+                                        .withOpacity(0.18),
+                                  ),
+
+                                  child: Text(
+                                    isActive
+                                        ? "Active"
+                                        : "Inactive",
+
+                                    style: TextStyle(
+                                      color: isActive
+                                          ? Colors.greenAccent
+                                          : Colors.redAccent,
+
+                                      fontWeight:
+                                      FontWeight.w600,
+
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
 
-                  Text(
-                    product.companyName ?? '',
-                    style: TextStyle(color: Colors.grey.shade600),
-                  ),
+                    const SizedBox(height: 24),
 
-                 spaceHeight( 16),
+                    /// QUICK STATS
+                    Row(
+                      children: [
 
-                  /// Info rows with icons
-                  _detailTile(
-                    Icons.currency_rupee,
-                    "Min Amount",
-                    "₹${product.minAmount}",
-                  ),
-                  _detailTile(
-                    Icons.currency_rupee,
-                    "Max Amount",
-                    "₹${product.maxAmount}",
-                  ),
-                  _detailTile(
-                    Icons.percent,
-                    "Interest",
-                    "${product.interestRate}%",
-                  ),
-                  _detailTile(
-                    Icons.timer,
-                    "Tenure",
-                    "${product.tenure} months",
-                  ),
-                  _detailTile(
-                    Icons.verified,
-                    "Status",
-                    product.status.toString(),
-                  ),
+                        Expanded(
+                          child: _bottomStatCard(
+                            icon:
+                            Icons.currency_rupee_rounded,
+                            title: "Min Amount",
+                            value:
+                            "₹${product.minAmount ?? '0'}",
+                          ),
+                        ),
 
-                  if (product.premium != null)
-                    _detailTile(Icons.star, "Premium", product.premium!),
+                        const SizedBox(width: 12),
 
-                  const Divider(),
+                        Expanded(
+                          child: _bottomStatCard(
+                            icon:
+                            Icons.percent_rounded,
+                            title: "Interest",
+                            value:
+                            "${product.interestRate ?? '0'}%",
+                          ),
+                        ),
+                      ],
+                    ),
 
-                  /// Expand sections
-                  if (product.description != null)
-                    _section("Description", product.description!),
+                    const SizedBox(height: 12),
 
-                  if (product.eligibility != null)
-                    _section("Eligibility", product.eligibility!),
+                    Row(
+                      children: [
 
-                  if (product.requiredDocuments != null)
-                    _section("Documents", product.requiredDocuments!),
+                        Expanded(
+                          child: _bottomStatCard(
+                            icon:
+                            Icons.account_balance_wallet,
+                            title: "Max Amount",
+                            value:
+                            "₹${product.maxAmount ?? '0'}",
+                          ),
+                        ),
 
-                 spaceHeight( 20),
-                ],
+                        const SizedBox(width: 12),
+
+                        Expanded(
+                          child: _bottomStatCard(
+                            icon:
+                            Icons.schedule_rounded,
+                            title: "Tenure",
+                            value:
+                            "${product.tenure ?? '0'} Months",
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 28),
+
+                    /// DETAILS SECTION
+                    _modernSection(
+                      title: "Product Details",
+
+                      child: Column(
+                        children: [
+
+                          _modernTile(
+                            icon: Icons.category_outlined,
+                            title: "Type",
+                            value: product.companyName ?? 'N/A',
+                          ),
+
+                          _modernTile(
+                            icon: Icons.workspace_premium,
+                            title: "Premium",
+                            value:
+                            product.premium ?? 'N/A',
+                          ),
+
+                          _modernTile(
+                            icon: Icons.verified_user,
+                            title: "Status",
+                            value: isActive
+                                ? "Active"
+                                : "Inactive",
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 22),
+
+                    /// DESCRIPTION
+                    if (product.description != null &&
+                        product.description!
+                            .trim()
+                            .isNotEmpty)
+                      _modernSection(
+                        title: "Description",
+
+                        child: Text(
+                          product.description ?? '',
+
+                          style: TextStyle(
+                            color:
+                            Colors.white.withOpacity(0.72),
+
+                            height: 1.7,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+
+                    if (product.description != null)
+                      const SizedBox(height: 22),
+
+                    /// ELIGIBILITY
+                    if (product.eligibility != null &&
+                        product.eligibility!
+                            .trim()
+                            .isNotEmpty)
+                      _modernSection(
+                        title: "Eligibility",
+
+                        child: Text(
+                          product.eligibility ?? '',
+
+                          style: TextStyle(
+                            color:
+                            Colors.white.withOpacity(0.72),
+
+                            height: 1.7,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+
+                    if (product.eligibility != null)
+                      const SizedBox(height: 22),
+
+                    /// DOCUMENTS
+                    if (product.requiredDocuments !=
+                        null &&
+                        product.requiredDocuments!
+                            .trim()
+                            .isNotEmpty)
+                      _modernSection(
+                        title: "Required Documents",
+
+                        child: Text(
+                          product.requiredDocuments ?? '',
+
+                          style: TextStyle(
+                            color:
+                            Colors.white.withOpacity(0.72),
+
+                            height: 1.7,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+
+                    const SizedBox(height: 30),
+                  ],
+                ),
               ),
             );
           },
@@ -326,32 +826,171 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  Widget _detailTile(IconData icon, String title, String value) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: Icon(icon, color: Theme.of(context).primaryColor),
-      title: Text(title, style: const TextStyle(fontSize: 13)),
-      subtitle: Text(
-        value,
-        style: const TextStyle(fontWeight: FontWeight.w600),
-      ),
-    );
-  }
+  /// STAT CARD
+  Widget _bottomStatCard({
+    required IconData icon,
+    required String title,
+    required String value,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
 
-  Widget _section(String title, String content) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(22),
+
+        color: Colors.white.withOpacity(0.05),
+
+        border: Border.all(
+          color: Colors.white10,
+        ),
+      ),
+
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+
+          Icon(
+            icon,
+            color: Colors.white,
+            size: 24,
+          ),
+
+          const SizedBox(height: 10),
+
           Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.60),
+              fontSize: 12,
+            ),
           ),
-         spaceHeight( 4),
-          Text(content, style: TextStyle(color: Colors.grey.shade700)),
+
+          const SizedBox(height: 5),
+
+          Text(
+            value,
+
+            textAlign: TextAlign.center,
+
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
         ],
       ),
     );
   }
+
+  /// SECTION
+  Widget _modernSection({
+    required String title,
+    required Widget child,
+  }) {
+    return Container(
+      width: double.infinity,
+
+      padding: const EdgeInsets.all(20),
+
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(26),
+
+        color: Colors.white.withOpacity(0.05),
+
+        border: Border.all(
+          color: Colors.white10,
+        ),
+      ),
+
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+
+        children: [
+
+          Text(
+            title,
+
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          const SizedBox(height: 18),
+
+          child,
+        ],
+      ),
+    );
+  }
+
+  /// TILE
+  Widget _modernTile({
+    required IconData icon,
+    required String title,
+    required String value,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 18),
+
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+
+        children: [
+
+          Container(
+            padding: const EdgeInsets.all(10),
+
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white10,
+            ),
+
+            child: Icon(
+              icon,
+              color: Colors.white,
+              size: 18,
+            ),
+          ),
+
+          const SizedBox(width: 14),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment:
+              CrossAxisAlignment.start,
+
+              children: [
+
+                Text(
+                  title,
+
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.55),
+                    fontSize: 12,
+                  ),
+                ),
+
+                const SizedBox(height: 5),
+
+                Text(
+                  value,
+
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
 }

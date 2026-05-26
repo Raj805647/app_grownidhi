@@ -45,7 +45,11 @@ class _AgentClientApplyFormScreenState
               }
               if (provider.productApplyForm.formFields == null ||
                   provider.productApplyForm.formFields!.isEmpty) {
-                return const Center(child: Text('Form Data Not Available'));
+                return buildEmptyState(
+                  title: "No Members Found",
+                  subTitle: "Looks like there are no family members added yet.",
+                  icon: Icons.group_off_rounded,
+                );
               }
               return SingleChildScrollView(
                 child: Column(
@@ -56,9 +60,7 @@ class _AgentClientApplyFormScreenState
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-
                           /// ================= CLIENT =================
-
                           Expanded(
                             child: customMultiSelectDropdown(
                               title: 'Client Data',
@@ -67,16 +69,14 @@ class _AgentClientApplyFormScreenState
                                   .toList(),
                               selectedItems: provider.selectedClientNames,
                               onConfirm: (values) {
-
                                 provider.selectedClientNames = values;
 
-                                provider.selectedClientIds =
-                                    provider.clientData.agentClientData
-                                        .where(
-                                          (e) => values.contains(e.name),
-                                    )
-                                        .map((e) => e.id ?? 0)
-                                        .toList();
+                                provider.selectedClientIds = provider
+                                    .clientData
+                                    .agentClientData
+                                    .where((e) => values.contains(e.name))
+                                    .map((e) => e.id ?? 0)
+                                    .toList();
 
                                 provider.notifyListeners();
                               },
@@ -86,10 +86,8 @@ class _AgentClientApplyFormScreenState
                           spaceWidth(20),
 
                           /// ================= COMPANY =================
-
                           Expanded(
                             child: customMultiSelectDropdown(
-
                               title: 'Company Data',
 
                               items: provider.companyData
@@ -99,16 +97,15 @@ class _AgentClientApplyFormScreenState
                               selectedItems: provider.selectedCompanyNames,
 
                               onConfirm: (values) {
-
                                 provider.selectedCompanyNames = values;
 
-                                provider.selectedCompanyIds =
-                                    provider.companyData
-                                        .where(
-                                          (e) => values.contains(e.companyName),
+                                provider.selectedCompanyIds = provider
+                                    .companyData
+                                    .where(
+                                      (e) => values.contains(e.companyName),
                                     )
-                                        .map((e) => e.id ?? 0)
-                                        .toList();
+                                    .map((e) => e.id ?? 0)
+                                    .toList();
 
                                 provider.notifyListeners();
                               },
@@ -277,7 +274,7 @@ class _AgentClientApplyFormScreenState
           hintText: formField.label ?? 'Not Defined',
           controller: provider.controller.putIfAbsent(
             formField.fieldName ?? '',
-                () => TextEditingController(),
+            () => TextEditingController(),
           ),
         ),
       );
@@ -299,13 +296,13 @@ class _AgentClientApplyFormScreenState
           hintText: formField.label ?? 'Not Defined',
           isRead: true,
           controller: provider.controller[formField.label],
-            onTap: () => pickDateTime(
-              context,
-              provider.controller.putIfAbsent(
-                formField.fieldName ?? '',
-                    () => TextEditingController(),
-              ),
+          onTap: () => pickDateTime(
+            context,
+            provider.controller.putIfAbsent(
+              formField.fieldName ?? '',
+              () => TextEditingController(),
             ),
+          ),
         ),
       );
     }

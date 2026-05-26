@@ -53,16 +53,36 @@ class AuthRepository extends BaseRepository {
   Future<Result<dynamic>> subCategory(int subId) {
     return safeApiCall(() async {
       final response = await apiClient
-          .getDio('${AppConfig.actionServiceSubsCategory}/$subId');
+          .getDio('${AppConfig.actionServiceSubsCategory}/category_id=$subId');
       return response.data;
     });
   }
 
   Future<Result<dynamic>> productDetails(
       int categoryId, int subCategoryId, int pageNo, pageLimit) {
+    final url =
+        '${AppConfig.actionServiceProductDetails}/service_id=$subCategoryId/service_type_id=$categoryId?page=$pageNo&limit=$pageLimit';
+    print('adkjfsbds=> $url');
     return safeApiCall(() async {
-      final response = await apiClient.getDio(
-          '${AppConfig.actionServiceProductDetails}/category_id=$categoryId/subCategory_id=$subCategoryId?page=$pageNo&limit=$pageLimit');
+      final response = await apiClient.getDio(url);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> individualCompanyData() {
+    return safeApiCall(() async {
+      final response =
+          await apiClient.getDio(AppConfig.actionIndividualCompany);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> individualAgentData(List companyId) {
+    final companyIds = companyId.join(',');
+
+    return safeApiCall(() async {
+      final response =
+          await apiClient.getDio('${AppConfig.actionIndividualAgent}=$companyIds');
       return response.data;
     });
   }
@@ -78,6 +98,13 @@ class AuthRepository extends BaseRepository {
   Future<Result<dynamic>> policyDetails() {
     return safeApiCall(() async {
       final response = await apiClient.getDio(AppConfig.actionPolicyDetails);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> individualNotification() {
+    return safeApiCall(() async {
+      final response = await apiClient.getDio(AppConfig.actionIndividualNotification);
       return response.data;
     });
   }
@@ -118,8 +145,8 @@ class AuthRepository extends BaseRepository {
 
   Future<Result<dynamic>> individualDeleteMembers(int id) {
     return safeApiCall(() async {
-      final response =
-          await apiClient.deleteDio('${AppConfig.actionIndividualDeleteFamilyMember}/familymember_id=$id');
+      final response = await apiClient.deleteDio(
+          '${AppConfig.actionIndividualDeleteFamilyMember}/familymember_id=$id');
       return response.data;
     });
   }
@@ -136,6 +163,14 @@ class AuthRepository extends BaseRepository {
     return safeApiCall(() async {
       final response =
           await apiClient.getDio(AppConfig.actionIndividualKYCData);
+      return response.data;
+    });
+  }
+
+  Future<Result<dynamic>> individualSubmitProduct(Map<String, dynamic> data) {
+    return safeApiCall(() async {
+      final response =
+          await apiClient.postDio(AppConfig.actionIndividualSubmitProduct, body: data, isFormData: true);
       return response.data;
     });
   }

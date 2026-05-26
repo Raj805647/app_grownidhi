@@ -3,10 +3,12 @@ import 'package:app_grownidhi/features/screens/individual/portfolio/portfolio_pr
 import 'package:app_grownidhi/widget/custom_appbat.dart';
 import 'package:app_grownidhi/widget/custom_loader.dart';
 import 'package:app_grownidhi/widget/ui_design.dart';
+import 'package:base_module/core/models/individual_product_policies_response.dart';
 import 'package:base_module/core/models/portfolio_details_response.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../widget/custom_textfield.dart';
 import '../../../../widget/help_widget.dart';
 
 class PortfolioScreen extends StatefulWidget {
@@ -45,6 +47,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                 child: Column(
                   children: [
                     _buildHeader(provider),
+                    spaceHeight(50),
                     ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -69,7 +72,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           children: [
             Text(
               "Portfolio",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             Text("${provider.portfolioList.length} products", style: TextStyle(color: Colors.grey)),
           ],
@@ -90,261 +93,225 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
   }
 
 
-  Widget buildPortfolioCard(PortfolioDetailsData portfolioData) {
-    return InkWell(
-      onTap: ()=> Navigator.push(context, MaterialPageRoute(builder:  (context) => PortfolioDetailsScreen(formDetails: portfolioData.formDetails ?? {},))),
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        margin: const EdgeInsets.symmetric( vertical: 8),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Colors.white,
-                Colors.grey.shade50,
-              ],
+  Widget buildPortfolioCard(ProductPoliciesData portfolioData) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => PortfolioDetailsScreen(
+              formDetails: portfolioData.formData ?? {},
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header Row with Status
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: _getStatusColor(portfolioData.status ?? '').withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: _getStatusColor(portfolioData.status ?? ''),
-                          width: 0.5,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            _getStatusIcon(portfolioData.status ?? ''),
-                            size: 14,
-                            color: _getStatusColor(portfolioData.status ?? ''),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            portfolioData.status!.toUpperCase(),
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              color: _getStatusColor(portfolioData.status ?? ''),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    // Policy ID Chip
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade50,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        'ID: ${portfolioData.policyId}',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Colors.blue.shade700,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-               spaceHeight( 10),
-      
-                // Product Name & Service Type
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            portfolioData.productName ?? '',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                         spaceHeight( 2),
-                          Text(
-                            portfolioData.serviceType ?? '',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey.shade600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: Colors.green.shade50,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        portfolioData.service ?? '',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.green.shade700,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-               spaceHeight( 10),
-      
-                // Application Number
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
+        );
+      },
+
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 14),
+
+        padding: const EdgeInsets.all(16),
+
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(26),
+
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+
+            colors: [
+              Colors.white.withOpacity(0.08),
+              Colors.white.withOpacity(0.03),
+            ],
+          ),
+
+          border: Border.all(
+            color: Colors.white10,
+          ),
+
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.15),
+              blurRadius: 18,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+
+          children: [
+
+            /// PRODUCT ICON
+            Container(
+              height: 68,
+              width: 68,
+
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+
+                color: Colors.white.withOpacity(0.06),
+              ),
+
+              child: Icon(
+                Icons.shield_outlined,
+                color: Colors.white,
+                size: 34,
+              ),
+            ),
+
+            const SizedBox(width: 14),
+
+            /// CONTENT
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+
+                children: [
+
+                  /// TITLE + STATUS
+                  Row(
                     children: [
-                      Icon(Icons.numbers, size: 14, color: Colors.grey.shade600),
-                      const SizedBox(width: 6),
+
                       Expanded(
                         child: Text(
-                          portfolioData.applicationNumber ?? '',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontFamily: 'monospace',
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey.shade800,
+                          portfolioData.productName ?? '',
+
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      Icon(Icons.copy, size: 14, color: Colors.grey.shade500),
+
+                      _statusBadge(
+                        (portfolioData.status ?? '').toLowerCase(),
+                      ),
                     ],
                   ),
-                ),
-               spaceHeight( 10),
-      
-                // User Info Row
-                Row(
-                  children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Icon(Icons.person_outline, size: 14, color: Colors.grey.shade500),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              portfolioData.filledBy ?? '',
-                              style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
+
+                  const SizedBox(height: 8),
+
+                  /// CATEGORY
+                  Text(
+                    portfolioData.categoryName ?? '',
+
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.70),
+                      fontSize: 13,
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Icon(Icons.email_outlined, size: 14, color: Colors.grey.shade500),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              portfolioData.userEmail ?? '',
-                              style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  /// CHIPS
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+
+                    children: [
+
+                      _glassChip(
+                        Icons.description_outlined,
+                        portfolioData.applicationNo ?? '',
                       ),
-                    ),
-                  ],
-                ),
-               spaceHeight( 8),
-      
-                // Phone & Date Row
-                Row(
-                  children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Icon(Icons.phone_outlined, size: 14, color: Colors.grey.shade500),
-                          const SizedBox(width: 4),
-                          Text(
-                            portfolioData.userPhone ?? '',
-                            style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
-                          ),
-                        ],
+
+                      _glassChip(
+                        Icons.calendar_today_outlined,
+                        formatDate(
+                          portfolioData.createdAt,
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Icon(Icons.access_time, size: 14, color: Colors.grey.shade500),
-                          const SizedBox(width: 4),
-                          Text(
-                            portfolioData.formFilledAt ?? '',
-                            style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _statusBadge(String status) {
+
+    final Color color = status == 'approved'
+        ? Colors.greenAccent
+        : status == 'rejected'
+        ? Colors.redAccent
+        : Colors.orangeAccent;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 6,
+      ),
+
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(
+          color: color.withOpacity(0.4),
+        ),
+      ),
+
+      child: Text(
+        status.toUpperCase(),
+
+        style: TextStyle(
+          color: color,
+          fontSize: 11,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
 
-// Helper methods for status styling
-  Color _getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'pending':
-        return Colors.orange;
-      case 'approved':
-        return Colors.green;
-      case 'rejected':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
-  }
+  Widget _glassChip(IconData icon, String title) {
 
-  IconData _getStatusIcon(String status) {
-    switch (status.toLowerCase()) {
-      case 'pending':
-        return Icons.pending;
-      case 'approved':
-        return Icons.check_circle;
-      case 'rejected':
-        return Icons.cancel;
-      default:
-        return Icons.info;
-    }
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 8,
+      ),
+
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+
+        color: Colors.white.withOpacity(0.06),
+
+        border: Border.all(
+          color: Colors.white10,
+        ),
+      ),
+
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+
+        children: [
+
+          Icon(
+            icon,
+            size: 14,
+            color: Colors.white70,
+          ),
+
+          const SizedBox(width: 6),
+
+          Text(
+            title,
+
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

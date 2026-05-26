@@ -136,7 +136,7 @@ class CustomSliverAppBar extends StatelessWidget {
       elevation: 0,
       backgroundColor: Colors.transparent,
       pinned: true,
-      expandedHeight: 90,
+      expandedHeight: 70,
       toolbarHeight: 78,
 
       flexibleSpace: Container(
@@ -171,13 +171,13 @@ class CustomSliverAppBar extends StatelessWidget {
         ),
       ),
 
-      leadingWidth: 78,
+      leadingWidth: 60,
 
       leading: Padding(
         padding: const EdgeInsets.only(
           left: 16,
           top: 12,
-          bottom: 12,
+          bottom: 16,
         ),
 
         child: GestureDetector(

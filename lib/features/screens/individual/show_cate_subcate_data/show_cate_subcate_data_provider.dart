@@ -12,6 +12,7 @@ class ShowCateSubcateDataProvider extends BaseProvider {
 
   void changeFilter(int value) {
     selectedFilter = value;
+    isSubLoading=true;
     fetchSubCategory(value);
     notifyListeners();
   }

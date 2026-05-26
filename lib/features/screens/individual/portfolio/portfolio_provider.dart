@@ -1,11 +1,10 @@
 import 'package:base_module/base_module.dart';
-import 'package:base_module/core/models/portfolio_details_response.dart';
+import 'package:base_module/core/models/individual_product_policies_response.dart';
 import 'package:provider/provider.dart';
 
 class PortfolioProvider extends BaseProvider{
   bool isLoading = false;
-  List<PortfolioDetailsData> portfolioList = [];
-  Map<String,dynamic> formDetails = {};
+  List<ProductPoliciesData> portfolioList = [];
 
 
   Future<void> fetchPortfolioData() async {
@@ -21,7 +20,7 @@ class PortfolioProvider extends BaseProvider{
       if (response.isSuccess == true && response.data != null) {
         final List data = response.data['data'] ?? [];
 
-        portfolioList = data.map((e) => PortfolioDetailsData.fromJson(e)).toList();
+        portfolioList = data.map((e) => ProductPoliciesData.fromJson(e)).toList();
         notifyListeners();
       }
     } catch (error, stackTrace) {

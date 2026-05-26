@@ -244,3 +244,46 @@ void showDeleteMemberDialog({
     },
   );
 }
+
+Widget buildEmptyState({required String title, required String  subTitle, required IconData icon}) {
+  return SizedBox(
+    height: 450,
+    child: Center(
+      child: Column(
+        mainAxisAlignment:
+        MainAxisAlignment.center,
+
+        children: [
+
+          Icon(
+            icon,
+            size: 72,
+            color: Colors.white.withOpacity(0.18),
+          ),
+
+          const SizedBox(height: 18),
+
+           Text(
+            title,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          const SizedBox(height: 8),
+
+          Text(
+            subTitle,
+
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.55),
+              fontSize: 13,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}

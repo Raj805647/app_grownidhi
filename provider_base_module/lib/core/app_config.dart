@@ -1,5 +1,5 @@
 class AppConfig {
-  static const String apiTestUrl = "https://192.168.1.12:8000/api";
+  static const String apiTestUrl = "http://10.11.135.156:8000/api";
   static const String apiProdUrl = "https://app.grownidhi.com/api";
   static const String imageUrl = "https://app.grownidhi.com";
   static const String apiTestKey = "";
@@ -21,8 +21,8 @@ class AppConfig {
   static const String actionServiceCategory = '/categories';
   static const String actionServiceSubsCategory = '/subcategories';
   static const String actionServiceProductDetails = '/products';
-  static const String actionFormStateDetails = '/apply-form';
-  static const String actionPolicyDetails = '/policy-details';
+  static const String actionFormStateDetails = '/individual/products/apply-form';
+  static const String actionPolicyDetails = '/individual/policies';
   static const String actionUpdateProfile = '/profile/update';
   static const String actionSubmitFormDetails = '/individualKycAddOrUpdate';
   static const String actionAddUpdateMembers = '/storeOrUpdateFamilyMember';
@@ -30,6 +30,10 @@ class AppConfig {
   static const String actionIndividualKYCData = '/individualKyc';
   static const String actionIndividuaFamilyMember = '/familyMembers';
   static const String actionIndividualDeleteFamilyMember = '/deleteFamilyMember';
+  static const String actionIndividualCompany = '/companies';
+  static const String actionIndividualAgent = '/company_id';
+  static const String actionIndividualSubmitProduct = '/individual/submit-product-application';
+  static const String actionIndividualNotification = '/individual/notifications';
 
   // agents api endpoints
   static const String actionAgentDashboard = '/agent/dashboard_count';

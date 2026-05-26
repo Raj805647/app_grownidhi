@@ -37,6 +37,7 @@ import '../features/screens/individual/add_product_details/add_product_details_p
 import '../features/screens/individual/bottom_bar/bottom_bar_provider.dart';
 import '../features/screens/individual/individual_profile_details/individual_profile_details_provider.dart';
 import '../features/screens/individual/individual_setting/individual_setting_provider.dart';
+import '../features/screens/individual/notification/notification_provider.dart';
 import '../features/screens/individual/product/product_provider.dart';
 import '../features/screens/individual/product_details/product_details_provider.dart';
 import '../features/screens/individual/show_cate_subcate_data/show_cate_subcate_data_provider.dart';
@@ -65,6 +66,7 @@ class ProviderConfig {
     ChangeNotifierProvider<PortfolioProvider>(create: (_) => PortfolioProvider()),
     ChangeNotifierProvider<IndividualAddMemberProvider>(create: (_) => IndividualAddMemberProvider()),
     ChangeNotifierProvider<IndividualMembersProvider>(create: (_) => IndividualMembersProvider()),
+    ChangeNotifierProvider<NotificationProvider>(create: (_) => NotificationProvider()),
 
     //individual provider
     ChangeNotifierProvider<AgentBottomBarProvider>(create: (_) => AgentBottomBarProvider()),

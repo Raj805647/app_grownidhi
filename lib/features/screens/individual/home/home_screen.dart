@@ -5,6 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 
 import '../../../../widget/help_widget.dart';
 import '../../../../widget/ui_design.dart';
+import '../notification/notification_screen.dart';
 import 'home_provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -93,22 +94,25 @@ class HomeScreen extends StatelessWidget {
 
                           const Spacer(),
 
-                          Container(
-                            padding: const EdgeInsets.all(12),
-
-                            decoration: BoxDecoration(
-                              color: cardColor,
-
-                              borderRadius: BorderRadius.circular(16),
-
-                              border: Border.all(
-                                color: Colors.white.withOpacity(0.05),
+                          InkWell(
+                            onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationScreen(),)),
+                            child: Container(
+                              padding: const EdgeInsets.all(12),
+                            
+                              decoration: BoxDecoration(
+                                color: cardColor,
+                            
+                                borderRadius: BorderRadius.circular(16),
+                            
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.05),
+                                ),
                               ),
-                            ),
-
-                            child: const Icon(
-                              Icons.notifications_none,
-                              color: Colors.white,
+                            
+                              child: const Icon(
+                                Icons.notifications_none,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ],

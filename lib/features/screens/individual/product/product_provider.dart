@@ -17,6 +17,7 @@ class ProductProvider extends BaseProvider {
       final response = await authRepository.productDetails(subCategoryId,categoryId,pageNo, pageLimit);
       print('akdbfkjabsdbf=>${response.isSuccess}');
       print('akdbfkjabsdbf=>${response.data}');
+      print('akdbfkjabsdbf=>${response.error}');
 
       if (response.isSuccess == true && response.data != null) {
         final List data = response.data['data'] ?? [];

@@ -6,6 +6,7 @@ import 'package:base_module/core/app_config.dart';
 import 'package:base_module/core/models/service_sub_category_response.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../widget/custom_textfield.dart';
 import '../../../../widget/help_widget.dart';
 import '../../../../widget/ui_design.dart';
 
@@ -17,17 +18,13 @@ class ShowCateSubcateDataScreen extends StatefulWidget {
       _ShowCateSubcateDataScreenState();
 }
 
-class _ShowCateSubcateDataScreenState
-    extends State<ShowCateSubcateDataScreen> {
-
+class _ShowCateSubcateDataScreenState extends State<ShowCateSubcateDataScreen> {
   @override
   void initState() {
     super.initState();
 
     Future.microtask(() {
-      context
-          .read<ShowCateSubcateDataProvider>()
-          .fetchServiceCategory();
+      context.read<ShowCateSubcateDataProvider>().fetchServiceCategory();
     });
   }
 
@@ -36,20 +33,15 @@ class _ShowCateSubcateDataScreenState
     return Scaffold(
       body: Stack(
         children: [
-
           /// Background
           AppGradientBackground(),
 
           Consumer<ShowCateSubcateDataProvider>(
             builder: (context, provider, child) {
-
               return CustomScrollView(
                 slivers: [
-
                   /// App Bar
-                  const CustomSliverAppBar(
-                    title: "Service History",
-                  ),
+                  const CustomSliverAppBar(title: "Service History"),
 
                   /// Content
                   SliverPadding(
@@ -57,63 +49,54 @@ class _ShowCateSubcateDataScreenState
 
                     sliver: SliverList(
                       delegate: SliverChildListDelegate([
-
                         /// Search
                         _buildSearchBar(),
 
                         const SizedBox(height: 18),
 
                         /// Filters
-                        _buildFilters(provider),
+                        _buildFilters(),
 
                         const SizedBox(height: 22),
 
                         /// Loading
-                        if (provider.isLoading &&
-                            provider.categoryList.isEmpty)
+                        /// Loading
+                        if (provider.isLoading || provider.isSubLoading)
                           const SizedBox(
                             height: 400,
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
+                            child: Center(child: CircularProgressIndicator()),
                           )
-
                         /// Empty
                         else if (provider.subCategoryList.isEmpty)
-                          _buildEmptyState()
-
+                          buildEmptyState(
+                            title: 'No History Found',
+                            subTitle: "Your service history will appear here.",
+                            icon: Icons.history_toggle_off_rounded,
+                          )
                         /// History List
                         else
                           ListView.builder(
                             shrinkWrap: true,
 
-                            physics:
-                            const NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
 
-                            itemCount:
-                            provider.subCategoryList.length,
+                            itemCount: provider.subCategoryList.length,
 
                             itemBuilder: (context, index) {
-
-                              final item =
-                              provider.subCategoryList[index];
+                              final item = provider.subCategoryList[index];
 
                               return TweenAnimationBuilder<double>(
                                 tween: Tween(begin: 0, end: 1),
 
                                 duration: Duration(
-                                  milliseconds:
-                                  350 + (index * 80),
+                                  milliseconds: 350 + (index * 80),
                                 ),
 
                                 curve: Curves.easeOutCubic,
 
-                                builder:
-                                    (context, value, child) {
-
+                                builder: (context, value, child) {
                                   return Transform.translate(
-                                    offset:
-                                    Offset(0, 40 * (1 - value)),
+                                    offset: Offset(0, 40 * (1 - value)),
 
                                     child: Opacity(
                                       opacity: value,
@@ -123,10 +106,7 @@ class _ShowCateSubcateDataScreenState
                                   );
                                 },
 
-                                child: _historyCard(
-                                  item,
-                                  context,
-                                ),
+                                child: _historyCard(item, context),
                               );
                             },
                           ),
@@ -153,9 +133,7 @@ class _ShowCateSubcateDataScreenState
 
         color: Colors.white.withOpacity(0.06),
 
-        border: Border.all(
-          color: Colors.white10,
-        ),
+        border: Border.all(color: Colors.white10),
       ),
 
       child: TextField(
@@ -166,14 +144,9 @@ class _ShowCateSubcateDataScreenState
 
           hintText: "Search services...",
 
-          hintStyle: TextStyle(
-            color: Colors.white.withOpacity(0.45),
-          ),
+          hintStyle: TextStyle(color: Colors.white.withOpacity(0.45)),
 
-          prefixIcon: const Icon(
-            Icons.search_rounded,
-            color: Colors.white70,
-          ),
+          prefixIcon: const Icon(Icons.search_rounded, color: Colors.white70),
         ),
       ),
     );
@@ -181,98 +154,83 @@ class _ShowCateSubcateDataScreenState
 
   /// ================= FILTER =================
 
-  Widget _buildFilters(
-      ShowCateSubcateDataProvider provider,
-      ) {
+  Widget _buildFilters() {
     return SizedBox(
       height: 42,
+      child: Consumer<ShowCateSubcateDataProvider>(
+        builder: (context, provider, child) => ListView.builder(
+          scrollDirection: Axis.horizontal,
 
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
+          itemCount: provider.categoryList.length,
 
-        itemCount: provider.categoryList.length,
+          itemBuilder: (context, index) {
+            final item = provider.categoryList[index];
 
-        itemBuilder: (context, index) {
+            final isSelected = provider.selectedFilter == item.id;
 
-          final item = provider.categoryList[index];
+            return GestureDetector(
+              onTap: () {
+                provider.changeFilter(item.id ?? 0);
+              },
 
-          final isSelected =
-              provider.selectedFilter == item.id;
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
 
-          return GestureDetector(
-            onTap: () {
-              provider.changeFilter(item.id ?? 0);
-            },
+                margin: const EdgeInsets.only(right: 12),
 
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-
-              margin: const EdgeInsets.only(right: 12),
-
-              padding: const EdgeInsets.symmetric(
-                horizontal: 18,
-                vertical: 10,
-              ),
-
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-
-                gradient: isSelected
-                    ? const LinearGradient(
-                  colors: [
-                    Color(0xff6C63FF),
-                    Color(0xff8B84FF),
-                  ],
-                )
-                    : null,
-
-                color: isSelected
-                    ? null
-                    : Colors.white.withOpacity(0.06),
-
-                border: Border.all(
-                  color: isSelected
-                      ? Colors.transparent
-                      : Colors.white10,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 10,
                 ),
-              ),
 
-              child: Center(
-                child: Text(
-                  item.name ?? '',
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
 
-                  style: TextStyle(
-                    color: Colors.white,
+                  gradient: isSelected
+                      ? const LinearGradient(
+                          colors: [Color(0xff6C63FF), Color(0xff8B84FF)],
+                        )
+                      : null,
 
-                    fontSize: 13,
+                  color: isSelected ? null : Colors.white.withOpacity(0.06),
 
-                    fontWeight: isSelected
-                        ? FontWeight.bold
-                        : FontWeight.w500,
+                  border: Border.all(
+                    color: isSelected ? Colors.transparent : Colors.white10,
+                  ),
+                ),
+
+                child: Center(
+                  child: Text(
+                    item.name ?? '',
+
+                    style: TextStyle(
+                      color: Colors.white,
+
+                      fontSize: 13,
+
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
 
   /// ================= HISTORY CARD =================
 
-  Widget _historyCard(
-      ServiceSubCategoryData item,
-      BuildContext context,
-      ) {
+  Widget _historyCard(ServiceSubCategoryData item, BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
 
-          MaterialPageRoute(
-            builder: (_) => ProductScreen(item: item),
-          ),
+          MaterialPageRoute(builder: (_) => ProductScreen(item: item)),
         );
       },
 
@@ -294,9 +252,7 @@ class _ShowCateSubcateDataScreenState
             ],
           ),
 
-          border: Border.all(
-            color: Colors.white10,
-          ),
+          border: Border.all(color: Colors.white10),
 
           boxShadow: [
             BoxShadow(
@@ -311,7 +267,6 @@ class _ShowCateSubcateDataScreenState
           crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-
             /// Icon
             Container(
               height: 74,
@@ -326,26 +281,24 @@ class _ShowCateSubcateDataScreenState
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
 
-                child: item.icon != null &&
-                    item.icon!.isNotEmpty
+                child: item.icon != null && item.icon!.isNotEmpty
                     ? Image.network(
-                  '${AppConfig.imageUrl}/${item.icon}',
-                  fit: BoxFit.cover,
+                        '${AppConfig.imageUrl}/${item.icon}',
+                        fit: BoxFit.cover,
 
-                  errorBuilder:
-                      (_, __, ___) {
-                    return const Icon(
-                      Icons.health_and_safety,
-                      color: Colors.white,
-                      size: 34,
-                    );
-                  },
-                )
+                        errorBuilder: (_, __, ___) {
+                          return const Icon(
+                            Icons.health_and_safety,
+                            color: Colors.white,
+                            size: 34,
+                          );
+                        },
+                      )
                     : const Icon(
-                  Icons.health_and_safety,
-                  color: Colors.white,
-                  size: 34,
-                ),
+                        Icons.health_and_safety,
+                        color: Colors.white,
+                        size: 34,
+                      ),
               ),
             ),
 
@@ -354,28 +307,23 @@ class _ShowCateSubcateDataScreenState
             /// Content
             Expanded(
               child: Column(
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
 
                 children: [
-
                   /// Title
                   Row(
                     children: [
-
                       Expanded(
                         child: Text(
                           item.name ?? '',
 
                           maxLines: 1,
-                          overflow:
-                          TextOverflow.ellipsis,
+                          overflow: TextOverflow.ellipsis,
 
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 17,
-                            fontWeight:
-                            FontWeight.bold,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -396,8 +344,7 @@ class _ShowCateSubcateDataScreenState
                       overflow: TextOverflow.ellipsis,
 
                       style: TextStyle(
-                        color: Colors.white
-                            .withOpacity(0.65),
+                        color: Colors.white.withOpacity(0.65),
 
                         fontSize: 13,
                         height: 1.5,
@@ -412,7 +359,6 @@ class _ShowCateSubcateDataScreenState
                     runSpacing: 10,
 
                     children: [
-
                       _glassChip(
                         Icons.category_outlined,
                         item.type ?? "Service",
@@ -420,7 +366,7 @@ class _ShowCateSubcateDataScreenState
 
                       _glassChip(
                         Icons.calendar_today_outlined,
-                        _formatDate(item.createdAt),
+                        formatDate(item.createdAt),
                       ),
                     ],
                   ),
@@ -435,36 +381,23 @@ class _ShowCateSubcateDataScreenState
 
   /// ================= CHIP =================
 
-  Widget _glassChip(
-      IconData icon,
-      String label,
-      ) {
+  Widget _glassChip(IconData icon, String label) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 6,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
 
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
 
         color: Colors.white.withOpacity(0.06),
 
-        border: Border.all(
-          color: Colors.white10,
-        ),
+        border: Border.all(color: Colors.white10),
       ),
 
       child: Row(
         mainAxisSize: MainAxisSize.min,
 
         children: [
-
-          Icon(
-            icon,
-            size: 13,
-            color: Colors.white70,
-          ),
+          Icon(icon, size: 13, color: Colors.white70),
 
           const SizedBox(width: 6),
 
@@ -486,10 +419,7 @@ class _ShowCateSubcateDataScreenState
 
   Widget _statusBadge(bool status) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 5,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
 
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
@@ -503,9 +433,7 @@ class _ShowCateSubcateDataScreenState
         status ? "ACTIVE" : "INACTIVE",
 
         style: TextStyle(
-          color: status
-              ? Colors.greenAccent
-              : Colors.redAccent,
+          color: status ? Colors.greenAccent : Colors.redAccent,
 
           fontSize: 10,
           fontWeight: FontWeight.bold,
@@ -513,66 +441,5 @@ class _ShowCateSubcateDataScreenState
         ),
       ),
     );
-  }
-
-  /// ================= EMPTY =================
-
-  Widget _buildEmptyState() {
-    return SizedBox(
-      height: 450,
-
-      child: Center(
-        child: Column(
-          mainAxisAlignment:
-          MainAxisAlignment.center,
-
-          children: [
-
-            Icon(
-              Icons.history_toggle_off_rounded,
-              size: 72,
-              color: Colors.white.withOpacity(0.18),
-            ),
-
-            const SizedBox(height: 18),
-
-            const Text(
-              "No History Found",
-
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
-            Text(
-              "Your service history will appear here.",
-
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.55),
-                fontSize: 13,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// ================= DATE =================
-
-  String _formatDate(String? dateString) {
-    if (dateString == null) return "N/A";
-
-    try {
-      final date = DateTime.parse(dateString);
-
-      return "${date.day}/${date.month}/${date.year}";
-    } catch (e) {
-      return dateString;
-    }
   }
 }

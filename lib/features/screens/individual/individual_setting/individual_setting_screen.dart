@@ -58,6 +58,8 @@ class IndividualSettingScreen extends StatelessWidget {
                   direction: SlideDirection.bottom,
                   child: _buildLogoutButton(context),
                 ),
+
+                spaceHeight(100),
               ],
             ),
           ),
