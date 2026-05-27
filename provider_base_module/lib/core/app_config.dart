@@ -31,6 +31,7 @@ class AppConfig {
   static const String actionIndividuaFamilyMember = '/familyMembers';
   static const String actionIndividualDeleteFamilyMember = '/deleteFamilyMember';
   static const String actionIndividualCompany = '/companies';
+  static const String actionIndividualDashboard = '/individual-dashboard';
   static const String actionIndividualAgent = '/company_id';
   static const String actionIndividualSubmitProduct = '/individual/submit-product-application';
   static const String actionIndividualNotification = '/individual/notifications';

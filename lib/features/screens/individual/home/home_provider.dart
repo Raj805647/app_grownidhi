@@ -1,11 +1,14 @@
 import 'package:base_module/base_module.dart';
-
+import 'package:base_module/core/models/individual_dashboard_response.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-class HomeProvider extends ChangeNotifier {
+class HomeProvider extends BaseProvider {
+  IndividualDashboardData individualDashboardData = IndividualDashboardData();
+  bool isLoad = false;
+
   String _userName = "Rimjhim Kumar";
 
   String get userName => _userName;
@@ -45,4 +48,25 @@ class HomeProvider extends ChangeNotifier {
       "color": Colors.orange,
     },
   ];
+
+  Future<void> fetchDashboard() async {
+    try {
+      isLoad = false;
+      notifyListeners();
+
+      final response = await authRepository.individualDashboard();
+      print('adskfjjkdsbf=> ${response.data}');
+      if (response.isSuccess == true) {
+        individualDashboardData = IndividualDashboardData.fromJson(
+          response.data['data'],
+        );
+        notifyListeners();
+      }
+    } catch (error) {
+      print('abdfkjbdskj=> $error');
+    } finally {
+      isLoad = false;
+      notifyListeners();
+    }
+  }
 }

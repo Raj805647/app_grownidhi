@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:base_module/core/models/company_data_response.dart';
-import 'package:base_module/core/models/product_apply_form_response.dart';
+import 'package:base_module/core/models/individual_product_form_response.dart';
 import 'package:base_module/core/models/individual_agent_response.dart';
 import 'package:dio/dio.dart';
 
@@ -14,7 +14,7 @@ class FormSubmitDetailsProvider extends BaseProvider{
   bool isLoading = false;
   bool isSubmitLoading = false;
 
-  ProductApplyFormData productApplyForm = ProductApplyFormData();
+  IndividualProductData productApplyForm = IndividualProductData();
 
   List<CompanyData> companyData = [];
   List<AgentData> agentData = [];
@@ -70,7 +70,7 @@ class FormSubmitDetailsProvider extends BaseProvider{
 
       final response = await authRepository.formStateDetails(productId);
       if (response.isSuccess == true) {
-        productApplyForm = ProductApplyFormData.fromJson(response.data['data']);
+        productApplyForm = IndividualProductData.fromJson(response.data['data']);
         fetchCompanyData();
         notifyListeners();
       } else {
@@ -118,7 +118,7 @@ class FormSubmitDetailsProvider extends BaseProvider{
     }
   }
 
-  Future<void> productFormApply(BuildContext context, Product? product) async {
+  Future<void> productFormApply(BuildContext context, InidividualProduct? product) async {
     try {
       isSubmitLoading = true;
       notifyListeners();

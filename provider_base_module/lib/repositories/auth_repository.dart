@@ -76,6 +76,13 @@ class AuthRepository extends BaseRepository {
       return response.data;
     });
   }
+  Future<Result<dynamic>> individualDashboard() {
+    return safeApiCall(() async {
+      final response =
+          await apiClient.getDio(AppConfig.actionIndividualDashboard);
+      return response.data;
+    });
+  }
 
   Future<Result<dynamic>> individualAgentData(List companyId) {
     final companyIds = companyId.join(',');

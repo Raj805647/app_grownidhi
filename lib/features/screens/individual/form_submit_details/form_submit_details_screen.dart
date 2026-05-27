@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app_grownidhi/features/screens/individual/form_submit_details/form_submit_details_provider.dart';
 import 'package:app_grownidhi/widget/custom_textfield.dart';
 import 'package:app_grownidhi/widget/ui_design.dart';
+import 'package:base_module/core/models/individual_product_form_response.dart';
 import 'package:base_module/core/models/product_apply_form_response.dart';
 import 'package:base_module/core/models/service_products_response.dart';
 import 'package:flutter/material.dart';
@@ -144,7 +145,7 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
     );
   }
 
-  Widget buildProductHeader(Product? product) {
+  Widget buildProductHeader(InidividualProduct? product) {
     return Stack(
       children: [
         Container(
@@ -261,7 +262,7 @@ class _FormSubmitDetailsScreenState extends State<FormSubmitDetailsScreen> {
   }
 
   Widget buildTextField(
-    FormFields formField,
+      IndividualFormFields formField,
     FormSubmitDetailsProvider provider,
   ) {
     if (formField.fieldType == 'text') {
